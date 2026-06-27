@@ -1,0 +1,25 @@
+<section class="panel">
+  <h1>About RendUX</h1>
+  <p>RendUX is a declarative UI shell runtime built on FastAPI, Jinja2, and HTMX.</p>
+</section>
+
+<section class="panel">
+  <h2>How it works</h2>
+  <ol class="about-list">
+    <li><strong>Declare</strong> — Write a <code>views.yaml</code> that describes your shell, views, and routes.</li>
+    <li><strong>Register</strong> — The runtime loads the config at startup and compiles the view models.</li>
+    <li><strong>Render</strong> — Each request resolves the shell context and renders the appropriate template.</li>
+    <li><strong>Inject</strong> — Your application routes and API endpoints plug into the shell via standard FastAPI.</li>
+  </ol>
+</section>
+
+<section class="panel">
+  <h2>Stack</h2>
+  <ul class="about-list">
+    <li>Python 3.12+</li>
+    <li>FastAPI — routing and dependency injection</li>
+    <li>Jinja2 — server-side template rendering</li>
+    <li>HTMX — hypermedia-driven partial swaps</li>
+    <li>PyYAML — view configuration</li>
+  </ul>
+</section>

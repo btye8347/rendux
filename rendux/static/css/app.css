@@ -1,0 +1,218 @@
+:root {
+  color-scheme: light dark;
+  font-family: "Segoe UI", Arial, sans-serif;
+}
+
+body {
+  margin: 0;
+  background: #f6f7f9;
+  color: #1e2329;
+}
+
+.app-shell {
+  background: #f4f6f8;
+  color: #1e2329;
+  display: grid;
+  grid-template-rows: auto minmax(0, 1fr);
+  height: 100vh;
+  overflow: hidden;
+}
+
+/* Nav */
+.shell-nav {
+  background: #1e2329;
+  display: flex;
+  gap: 0;
+  align-items: stretch;
+  padding: 0 1rem;
+  height: 2.75rem;
+}
+
+.nav-item {
+  color: #c8cdd4;
+  display: flex;
+  align-items: center;
+  padding: 0 1rem;
+  text-decoration: none;
+  font-size: 0.875rem;
+  border-bottom: 2px solid transparent;
+  transition: color 0.1s, border-color 0.1s;
+}
+
+.nav-item:hover {
+  color: #ffffff;
+}
+
+.nav-item.active {
+  color: #ffffff;
+  border-bottom-color: #4d9fff;
+}
+
+/* Workspace */
+.shell-workspace {
+  min-height: 0;
+  min-width: 0;
+  overflow: auto;
+  padding: 1.25rem;
+}
+
+/* Panels and cards */
+.panel {
+  background: #ffffff;
+  border: 1px solid #d9dee5;
+  border-radius: 8px;
+  padding: 1.25rem;
+  margin-bottom: 1rem;
+}
+
+.panel h1 {
+  font-size: 1.5rem;
+  margin: 0 0 0.5rem;
+}
+
+.panel h2 {
+  font-size: 1.15rem;
+  margin: 0 0 0.75rem;
+}
+
+.panel p {
+  color: #4a5563;
+  margin: 0 0 1rem;
+}
+
+.panel p:last-child {
+  margin-bottom: 0;
+}
+
+/* Feature grid on home view */
+.feature-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+  gap: 1rem;
+  margin-bottom: 1rem;
+}
+
+.feature-card {
+  background: #ffffff;
+  border: 1px solid #d9dee5;
+  border-radius: 8px;
+  padding: 1.25rem;
+}
+
+.feature-card h3 {
+  font-size: 1rem;
+  margin: 0 0 0.5rem;
+}
+
+.feature-card p {
+  color: #4a5563;
+  font-size: 0.875rem;
+  margin: 0;
+}
+
+/* Components list */
+.component-list {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: 1rem;
+  margin-bottom: 1rem;
+}
+
+.component-item {
+  background: #ffffff;
+  border: 1px solid #d9dee5;
+  border-radius: 8px;
+  padding: 1rem;
+}
+
+.component-item h3 {
+  font-size: 1rem;
+  margin: 0 0 0.4rem;
+}
+
+.component-item p {
+  color: #4a5563;
+  font-size: 0.85rem;
+  margin: 0 0 0.5rem;
+}
+
+.component-item code {
+  font-size: 0.8rem;
+  color: #6b7280;
+}
+
+/* About list */
+.about-list {
+  margin: 0;
+  padding-left: 1.5rem;
+  color: #374151;
+}
+
+.about-list li {
+  margin-bottom: 0.4rem;
+  font-size: 0.95rem;
+}
+
+/* Surfaces */
+.surface-header {
+  align-items: start;
+  display: flex;
+  gap: 1rem;
+  justify-content: space-between;
+  margin-bottom: 1rem;
+}
+
+.controlled-surface {
+  display: grid;
+  grid-template-rows: auto minmax(28rem, 1fr);
+  min-height: calc(100vh - 9rem);
+}
+
+.surface-header h1 {
+  margin-bottom: 0;
+}
+
+.surface-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.45rem;
+  justify-content: end;
+}
+
+.surface-action {
+  border: 1px solid #b8c5d3;
+  color: inherit;
+  padding: 0.35rem 0.55rem;
+  text-decoration: none;
+}
+
+.surface-frame {
+  background: #ffffff;
+  border: 1px solid #cdd6e1;
+  min-height: 28rem;
+  width: 100%;
+}
+
+.surface-fallback {
+  background: #ffffff;
+  border: 1px solid #cdd6e1;
+  display: grid;
+  gap: 0.6rem;
+  min-height: 18rem;
+  place-content: center;
+  text-align: center;
+}
+
+.surface-fallback h2,
+.surface-fallback p {
+  margin: 0;
+}
+
+.surface-fallback .surface-action {
+  justify-self: center;
+  margin-top: 0.4rem;
+}
+
+.empty-state {
+  color: #66707d;
+}

@@ -1,0 +1,13 @@
+{% extends "base.html" %}
+
+{% block styles %}
+  <link rel="stylesheet" href="{{ url_for('static', path='css/app.css') }}?v={{ static_version }}">
+{% endblock %}
+
+{% block content %}
+<div class="app-shell" data-shell="{{ view_shell.shell_id|default('blank') }}" data-active-view="{{ view_shell.active_view.id|default('') }}" style="grid-template-rows: minmax(0, 1fr);">
+  <main id="workspace" class="shell-workspace">
+    {% block shell_content %}{% endblock %}
+  </main>
+</div>
+{% endblock %}

@@ -1,0 +1,21 @@
+version: "1.0"
+shell:
+  id: default
+  template: chrome/shells/default.html
+views:
+  dashboard:
+    label: Dashboard
+    route: /
+    workspace:
+      contribution:
+        primitive: grid
+        source_url: /api/services
+surfaces:
+  defaults:
+    open_mode: controlled_wrapper
+    frame_mode: allow_declared
+    fallback: external_link
+  example:
+    label: Example Service
+    type: controlled_surface
+    frame_mode: external_only

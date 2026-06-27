@@ -1,0 +1,22 @@
+version: 0.1.0
+
+shell:
+  id: default
+  template: chrome/shells/default.html
+
+views:
+  home:
+    label: Home
+    route: /
+    workspace:
+      template: workspaces/home.html
+  components:
+    label: Components
+    route: /components
+    workspace:
+      template: workspaces/components.html
+  about:
+    label: About
+    route: /about
+    workspace:
+      template: workspaces/about.html

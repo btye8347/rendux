@@ -1,0 +1,15 @@
+version: "1.0"
+shell:
+  template: chrome/shells/default.html
+views:
+  dashboard:
+    label: Dashboard
+    workspace:
+      contribution:
+        primitive: invalid_primitive_type
+surfaces:
+  defaults: {}
+  example:
+    label: Example
+    type: invalid_surface_type
+    frame_mode: invalid_frame_mode_value
