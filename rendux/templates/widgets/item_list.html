@@ -1,0 +1,22 @@
+<div class="widget-item-list">
+  {% if title %}<h2 class="widget-title">{{ title }}</h2>{% endif %}
+  {% if items %}
+  <ul class="item-list">
+    {% for item in items %}
+    <li class="item-list-row{% if item.status %} item-status-{{ item.status }}{% endif %}">
+      <div class="item-main">
+        {% if item.link %}
+        <a class="item-title" href="{{ item.link }}">{{ item.title }}</a>
+        {% else %}
+        <span class="item-title">{{ item.title }}</span>
+        {% endif %}
+        {% if item.description %}<span class="item-description">{{ item.description }}</span>{% endif %}
+      </div>
+      {% if item.meta %}<span class="item-meta">{{ item.meta }}</span>{% endif %}
+    </li>
+    {% endfor %}
+  </ul>
+  {% else %}
+  <p class="empty-state">{{ empty_message | default("No items.") }}</p>
+  {% endif %}
+</div>

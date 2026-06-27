@@ -1,0 +1,15 @@
+<div class="widget-kv-table">
+  {% if title %}<h2 class="widget-title">{{ title }}</h2>{% endif %}
+  {% if rows %}
+  <table class="kv-table">
+    {% for row in rows %}
+    <tr class="kv-row{% if row.status %} kv-status-{{ row.status }}{% endif %}">
+      <td class="kv-label">{{ row.label }}</td>
+      <td class="kv-value">{{ row.value | default("—") }}</td>
+    </tr>
+    {% endfor %}
+  </table>
+  {% else %}
+  <p class="empty-state">No data.</p>
+  {% endif %}
+</div>

@@ -1,19 +1,34 @@
-<section class="panel">
-  <h1>Welcome to RendUX</h1>
-  <p>A config-driven UI shell runtime. Views are declared in YAML, rendered by the runtime, and extended with injectable application logic.</p>
-</section>
+<div class="workspace-stat-row">
+  {% with title="Views Registered", value="3", trend="+2", status="ok" %}
+    {% include "widgets/stat_card.html" %}
+  {% endwith %}
+  {% with title="Widgets Available", value="4", subtitle="stat · grid · list · kv" %}
+    {% include "widgets/stat_card.html" %}
+  {% endwith %}
+  {% with title="Runtime Status", value="Running", status="ok" %}
+    {% include "widgets/stat_card.html" %}
+  {% endwith %}
+  {% with title="Config Version", value="0.1.0" %}
+    {% include "widgets/stat_card.html" %}
+  {% endwith %}
+</div>
 
-<div class="feature-grid">
-  <div class="feature-card">
-    <h3>Config-driven</h3>
-    <p>Views, routes, and shell structure are declared in <code>config/views.yaml</code>. No code required to add a new view.</p>
-  </div>
-  <div class="feature-card">
-    <h3>HTMX-native</h3>
-    <p>Navigation swaps only the workspace content. Full pages served on direct load; partials served on HTMX requests.</p>
-  </div>
-  <div class="feature-card">
-    <h3>Injectable logic</h3>
-    <p>Application routes and data endpoints plug into the shell. The framework handles rendering; your code handles the data.</p>
-  </div>
+<div class="workspace-two-col">
+  {% with title="Active Views", items=[
+    {"title": "Home", "description": "Dashboard overview", "meta": "/", "status": "ok"},
+    {"title": "Components", "description": "Widget reference", "meta": "/components"},
+    {"title": "About", "description": "Stack and architecture", "meta": "/about"}
+  ] %}
+    {% include "widgets/item_list.html" %}
+  {% endwith %}
+
+  {% with title="Service Status", items=[
+    {"label": "Web server", "status": "ok", "detail": "uvicorn 0.49"},
+    {"label": "Template engine", "status": "ok", "detail": "Jinja2 3.x"},
+    {"label": "HTMX", "status": "ok", "detail": "v2.0"},
+    {"label": "Database", "status": "unknown", "detail": "not configured"},
+    {"label": "Static files", "status": "ok", "detail": "mounted at /static"}
+  ] %}
+    {% include "widgets/status_grid.html" %}
+  {% endwith %}
 </div>

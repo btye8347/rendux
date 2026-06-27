@@ -1,0 +1,10 @@
+<div class="widget-stat-card{% if status %} status-{{ status }}{% endif %}">
+  <div class="stat-label">{{ title }}</div>
+  <div class="stat-value">{{ value }}</div>
+  {% if trend %}
+  <div class="stat-trend{% if trend.startswith('+') %} trend-up{% elif trend.startswith('-') %} trend-down{% endif %}">{{ trend }}</div>
+  {% endif %}
+  {% if subtitle %}
+  <div class="stat-subtitle">{{ subtitle }}</div>
+  {% endif %}
+</div>

@@ -1,25 +1,25 @@
-<section class="panel">
-  <h1>About RendUX</h1>
-  <p>RendUX is a declarative UI shell runtime built on FastAPI, Jinja2, and HTMX.</p>
-</section>
+<h1 class="workspace-heading">About RendUX</h1>
 
-<section class="panel">
-  <h2>How it works</h2>
-  <ol class="about-list">
-    <li><strong>Declare</strong> — Write a <code>views.yaml</code> that describes your shell, views, and routes.</li>
-    <li><strong>Register</strong> — The runtime loads the config at startup and compiles the view models.</li>
-    <li><strong>Render</strong> — Each request resolves the shell context and renders the appropriate template.</li>
-    <li><strong>Inject</strong> — Your application routes and API endpoints plug into the shell via standard FastAPI.</li>
-  </ol>
-</section>
+<div class="workspace-two-col">
+  {% with title="Stack", rows=[
+    {"label": "Language", "value": "Python 3.12+"},
+    {"label": "Server", "value": "FastAPI + uvicorn"},
+    {"label": "Templates", "value": "Jinja2"},
+    {"label": "Interactivity", "value": "HTMX"},
+    {"label": "Config", "value": "PyYAML"},
+    {"label": "Tests", "value": "pytest"}
+  ] %}
+    {% include "widgets/kv_table.html" %}
+  {% endwith %}
 
-<section class="panel">
-  <h2>Stack</h2>
-  <ul class="about-list">
-    <li>Python 3.12+</li>
-    <li>FastAPI — routing and dependency injection</li>
-    <li>Jinja2 — server-side template rendering</li>
-    <li>HTMX — hypermedia-driven partial swaps</li>
-    <li>PyYAML — view configuration</li>
-  </ul>
-</section>
+  {% with title="Core Concepts", items=[
+    {"title": "Config-driven views", "description": "Views and routes declared in views.yaml. No code to add a new view."},
+    {"title": "Injectable logic", "description": "App routes and data endpoints plug into the shell via FastAPI."},
+    {"title": "HTMX-native", "description": "Nav swaps workspace content only. Partials served on HX-Request."},
+    {"title": "Widget primitives", "description": "Composable Jinja2 templates for common UI patterns."},
+    {"title": "DataMapper", "description": "Declarative field mapping from raw JSON to widget context."},
+    {"title": "TOON codec", "description": "Compact token-oriented format for structured data transport."}
+  ] %}
+    {% include "widgets/item_list.html" %}
+  {% endwith %}
+</div>

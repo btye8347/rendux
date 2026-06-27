@@ -59,7 +59,7 @@ def test_htmx_request_returns_partial_only():
     response = client.get("/", headers={"HX-Request": "true"})
     assert response.status_code == 200
     assert 'class="app-shell"' not in response.text
-    assert "Welcome to RendUX" in response.text
+    assert 'widget-stat-card' in response.text
 
 
 def test_htmx_components_returns_partial():
@@ -67,7 +67,7 @@ def test_htmx_components_returns_partial():
     response = client.get("/components", headers={"HX-Request": "true"})
     assert response.status_code == 200
     assert 'class="app-shell"' not in response.text
-    assert "Components" in response.text
+    assert "Widget Reference" in response.text
 
 
 def test_health_endpoint():

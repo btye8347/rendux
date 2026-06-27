@@ -1,27 +1,65 @@
-<section class="panel">
-  <h1>Components</h1>
-  <p>RendUX ships primitive templates for common UI patterns. Wire them to API data via the <code>DataMapper</code>.</p>
-</section>
+<h1 class="workspace-heading">Widget Reference</h1>
 
-<div class="component-list">
-  <div class="component-item">
-    <h3>List</h3>
-    <p>Flat list of items with title, description, meta, and tags. Maps from any JSON endpoint.</p>
-    <code>primitives/list.html</code>
+<div class="component-section">
+  <h2 class="section-label">stat_card</h2>
+  <p class="section-desc">Single metric with label, value, optional trend and status accent.</p>
+  <div class="workspace-stat-row">
+    {% with title="Requests Today", value="1,482", trend="+12%", status="ok" %}
+      {% include "widgets/stat_card.html" %}
+    {% endwith %}
+    {% with title="Error Rate", value="0.3%", trend="-0.1%", status="warn" %}
+      {% include "widgets/stat_card.html" %}
+    {% endwith %}
+    {% with title="Uptime", value="99.9%", subtitle="last 30 days" %}
+      {% include "widgets/stat_card.html" %}
+    {% endwith %}
+    {% with title="Queue Depth", value="7", trend="+7", status="error" %}
+      {% include "widgets/stat_card.html" %}
+    {% endwith %}
   </div>
-  <div class="component-item">
-    <h3>Grid</h3>
-    <p>Grouped grid of items with status tags. Useful for service or resource dashboards.</p>
-    <code>primitives/grid.html</code>
+</div>
+
+<div class="component-section">
+  <h2 class="section-label">status_grid</h2>
+  <p class="section-desc">Grid of named items each with a status indicator dot.</p>
+  {% with title="", items=[
+    {"label": "API", "status": "ok", "detail": "healthy"},
+    {"label": "Cache", "status": "ok", "detail": "warm"},
+    {"label": "Worker", "status": "warn", "detail": "high load"},
+    {"label": "Storage", "status": "ok", "detail": "72% used"},
+    {"label": "Mail", "status": "error", "detail": "unreachable"},
+    {"label": "Search", "status": "unknown", "detail": "not configured"}
+  ] %}
+    {% include "widgets/status_grid.html" %}
+  {% endwith %}
+</div>
+
+<div class="workspace-two-col">
+  <div class="component-section">
+    <h2 class="section-label">item_list</h2>
+    <p class="section-desc">Scrollable list with title, description, meta, and optional link.</p>
+    {% with title="", items=[
+      {"title": "rendux/views/service.py", "description": "ViewConfigService", "meta": "12 KB"},
+      {"title": "rendux/views/routes.py", "description": "API + fallback routes", "meta": "2 KB"},
+      {"title": "rendux/core/mapper.py", "description": "DataMapper", "meta": "6 KB"},
+      {"title": "rendux/core/toon.py", "description": "TOON codec", "meta": "2 KB"}
+    ], empty_message="No files." %}
+      {% include "widgets/item_list.html" %}
+    {% endwith %}
   </div>
-  <div class="component-item">
-    <h3>Detail List</h3>
-    <p>Key-value pairs for displaying structured entity data or runtime status.</p>
-    <code>primitives/detail_list.html</code>
-  </div>
-  <div class="component-item">
-    <h3>Surface</h3>
-    <p>Controlled iframe surface with trust levels, fallback modes, and action bar.</p>
-    <code>primitives/surface.html</code>
+
+  <div class="component-section">
+    <h2 class="section-label">kv_table</h2>
+    <p class="section-desc">Key-value pairs for entity detail or runtime info.</p>
+    {% with title="", rows=[
+      {"label": "Service", "value": "rendux-demo"},
+      {"label": "Version", "value": "0.1.0"},
+      {"label": "Python", "value": "3.12+"},
+      {"label": "Framework", "value": "FastAPI"},
+      {"label": "Templates", "value": "Jinja2"},
+      {"label": "Database", "value": "not configured", "status": "warn"}
+    ] %}
+      {% include "widgets/kv_table.html" %}
+    {% endwith %}
   </div>
 </div>
