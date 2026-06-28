@@ -258,3 +258,12 @@
     {"type": "checkbox", "name": "enabled",      "label": "Enable service on save", "checked": true}
   ] %}{% include "widgets/form.html" %}{% endwith %}
 </div>
+
+{% with %}{% set _ = "" %}{% include "widgets/divider.html" %}{% endwith %}
+
+{# ── theme_switcher ── #}
+<div class="component-section">
+  <h2 class="section-label">theme_switcher</h2>
+  <p class="section-desc">Light / System / Dark toggle plus any custom themes from <code>config/themes.yaml</code>. Persists to localStorage. Anti-FOUC applied on page load.</p>
+  {% include "widgets/theme_switcher.html" %}
+</div>

@@ -1,0 +1,125 @@
+/* RendUX Theme Variables
+   Applied via data-theme on <html>. :root provides light as default.
+   Custom themes from themes.yaml are injected as additional [data-theme] blocks. */
+
+:root,
+html[data-theme="light"] {
+  /* Surface */
+  --rx-bg:               #f6f7f9;
+  --rx-surface:          #ffffff;
+  --rx-surface-elevated: #f9fafb;
+  --rx-surface-subtle:   #f3f4f6;
+
+  /* Border */
+  --rx-border:           #d9dee5;
+  --rx-border-subtle:    #e5e7eb;
+
+  /* Text */
+  --rx-text:             #1e2329;
+  --rx-text-2:           #4a5563;
+  --rx-text-3:           #9ca3af;
+
+  /* Accent */
+  --rx-accent:           #4d9fff;
+  --rx-accent-hover:     #2f87f0;
+  --rx-accent-ring:      rgba(77, 159, 255, 0.18);
+
+  /* Nav chrome — stays dark in both modes */
+  --rx-nav-bg:           #1e2329;
+  --rx-nav-text:         #c8cdd4;
+  --rx-nav-text-hover:   #ffffff;
+  --rx-nav-text-active:  #ffffff;
+  --rx-nav-accent:       #4d9fff;
+
+  /* Status — solid */
+  --rx-ok:               #22c55e;
+  --rx-warn:             #f59e0b;
+  --rx-error:            #ef4444;
+  --rx-error-hover:      #dc2626;
+
+  /* Status — semantic sets (bg / border / text / strong) */
+  --rx-ok-bg:            #dcfce7;
+  --rx-ok-border:        #bbf7d0;
+  --rx-ok-text:          #15803d;
+  --rx-ok-text-strong:   #14532d;
+
+  --rx-warn-bg:          #fef3c7;
+  --rx-warn-border:      #fde68a;
+  --rx-warn-text:        #b45309;
+  --rx-warn-text-strong: #78350f;
+
+  --rx-error-bg:         #fee2e2;
+  --rx-error-border:     #fecaca;
+  --rx-error-text:       #b91c1c;
+  --rx-error-text-strong:#7f1d1d;
+
+  --rx-info-bg:          #dbeafe;
+  --rx-info-border:      #bfdbfe;
+  --rx-info-text:        #1d4ed8;
+  --rx-info-text-strong: #1e3a8a;
+
+  /* Code */
+  --rx-code-bg:          #1e2329;
+  --rx-code-text:        #e5e7eb;
+
+  /* Shadows & overlays */
+  --rx-shadow-sm:        0 1px 3px rgba(0, 0, 0, 0.08);
+  --rx-shadow-md:        0 4px 12px rgba(0, 0, 0, 0.12);
+  --rx-backdrop:         rgba(0, 0, 0, 0.45);
+}
+
+html[data-theme="dark"] {
+  --rx-bg:               #0f1117;
+  --rx-surface:          #1a1d24;
+  --rx-surface-elevated: #21252e;
+  --rx-surface-subtle:   #252930;
+
+  --rx-border:           #2d3340;
+  --rx-border-subtle:    #252930;
+
+  --rx-text:             #e5e7eb;
+  --rx-text-2:           #9ca3af;
+  --rx-text-3:           #4b5563;
+
+  --rx-accent:           #4d9fff;
+  --rx-accent-hover:     #6eb2ff;
+  --rx-accent-ring:      rgba(77, 159, 255, 0.22);
+
+  --rx-nav-bg:           #0d1017;
+  --rx-nav-text:         #6b7280;
+  --rx-nav-text-hover:   #e5e7eb;
+  --rx-nav-text-active:  #ffffff;
+  --rx-nav-accent:       #4d9fff;
+
+  --rx-ok:               #22c55e;
+  --rx-warn:             #f59e0b;
+  --rx-error:            #ef4444;
+  --rx-error-hover:      #dc2626;
+
+  --rx-ok-bg:            #052e16;
+  --rx-ok-border:        #14532d;
+  --rx-ok-text:          #4ade80;
+  --rx-ok-text-strong:   #86efac;
+
+  --rx-warn-bg:          #1c1400;
+  --rx-warn-border:      #78350f;
+  --rx-warn-text:        #fbbf24;
+  --rx-warn-text-strong: #fcd34d;
+
+  --rx-error-bg:         #1f0808;
+  --rx-error-border:     #7f1d1d;
+  --rx-error-text:       #f87171;
+  --rx-error-text-strong:#fca5a5;
+
+  --rx-info-bg:          #0c1f3a;
+  --rx-info-border:      #1d4ed8;
+  --rx-info-text:        #60a5fa;
+  --rx-info-text-strong: #93c5fd;
+
+  --rx-code-bg:          #0a0d12;
+  --rx-code-text:        #e5e7eb;
+
+  --rx-shadow-sm:        0 1px 3px rgba(0, 0, 0, 0.3);
+  --rx-shadow-md:        0 4px 16px rgba(0, 0, 0, 0.45);
+  --rx-backdrop:         rgba(0, 0, 0, 0.7);
+}

@@ -1,0 +1,46 @@
+themes:
+  ocean:
+    label: Ocean
+    variables:
+      --rx-bg: "#0a1929"
+      --rx-surface: "#0f2a45"
+      --rx-surface-elevated: "#143352"
+      --rx-surface-subtle: "#1a3d5c"
+      --rx-border: "#1e4a6e"
+      --rx-border-subtle: "#143352"
+      --rx-text: "#e0f0ff"
+      --rx-text-2: "#93c5e8"
+      --rx-text-3: "#4a7a9b"
+      --rx-accent: "#0ea5e9"
+      --rx-accent-hover: "#38bdf8"
+      --rx-accent-ring: "rgba(14, 165, 233, 0.22)"
+      --rx-nav-bg: "#071520"
+      --rx-nav-text: "#4a7a9b"
+      --rx-nav-text-hover: "#e0f0ff"
+      --rx-nav-text-active: "#ffffff"
+      --rx-nav-accent: "#0ea5e9"
+      --rx-code-bg: "#050f1a"
+      --rx-code-text: "#e0f0ff"
+
+  slate:
+    label: Slate
+    variables:
+      --rx-bg: "#0f172a"
+      --rx-surface: "#1e293b"
+      --rx-surface-elevated: "#253347"
+      --rx-surface-subtle: "#2d3f55"
+      --rx-border: "#334155"
+      --rx-border-subtle: "#253347"
+      --rx-text: "#f1f5f9"
+      --rx-text-2: "#94a3b8"
+      --rx-text-3: "#475569"
+      --rx-accent: "#818cf8"
+      --rx-accent-hover: "#a5b4fc"
+      --rx-accent-ring: "rgba(129, 140, 248, 0.22)"
+      --rx-nav-bg: "#0a1020"
+      --rx-nav-text: "#475569"
+      --rx-nav-text-hover: "#f1f5f9"
+      --rx-nav-text-active: "#ffffff"
+      --rx-nav-accent: "#818cf8"
+      --rx-code-bg: "#080e1a"
+      --rx-code-text: "#f1f5f9"

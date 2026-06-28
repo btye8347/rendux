@@ -5,11 +5,19 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>{% block title %}{{ title|default("RendUX") }}{% endblock %}</title>
     <link rel="icon" href="data:,">
+    <!-- Anti-FOUC: apply stored theme before first paint -->
+    <script>
+      (function(){var t=localStorage.getItem('rx-theme')||'system';var r=t==='system'?(window.matchMedia('(prefers-color-scheme: dark)').matches?'dark':'light'):t;document.documentElement.dataset.theme=r;document.documentElement.dataset.themePreference=t;})();
+    </script>
+    <link rel="stylesheet" href="/static/css/themes.css">
+    {% if custom_theme_css %}<style>{{ custom_theme_css }}</style>{% endif %}
+    <link rel="stylesheet" href="/static/css/app.css">
     {% block styles %}{% endblock %}
     {% block head_scripts %}{% endblock %}
   </head>
   <body>
     {% block content %}{% endblock %}
+    <script src="/static/js/theme.js"></script>
     {% block body_scripts %}{% endblock %}
   </body>
 </html>

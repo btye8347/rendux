@@ -1,9 +1,5 @@
 {% extends "base.html" %}
 
-{% block styles %}
-  <link rel="stylesheet" href="{{ url_for('static', path='css/app.css') }}?v={{ static_version }}">
-{% endblock %}
-
 {% block head_scripts %}
   <script src="{{ url_for('static', path='vendor/htmx.min.js') }}" defer></script>
 {% endblock %}
@@ -21,6 +17,18 @@
        hx-push-url="true"
        hx-swap="innerHTML">{{ item.label }}</a>
     {% endfor %}
+    <span class="nav-spacer"></span>
+    <div class="nav-theme-toggle">
+      <button class="nav-theme-btn" data-theme-btn="light" aria-pressed="false" onclick="RendUX.setTheme('light')" title="Light">L</button>
+      <button class="nav-theme-btn" data-theme-btn="system" aria-pressed="false" onclick="RendUX.setTheme('system')" title="System">S</button>
+      <button class="nav-theme-btn" data-theme-btn="dark" aria-pressed="false" onclick="RendUX.setTheme('dark')" title="Dark">D</button>
+      {% if theme_list %}
+      <span style="margin: 0 0.25rem; color: var(--rx-nav-text); font-size: 0.7rem; opacity: 0.4;">|</span>
+      {% for t in theme_list %}
+      <button class="nav-theme-btn" data-theme-btn="{{ t.id }}" aria-pressed="false" onclick="RendUX.setTheme('{{ t.id }}')" title="{{ t.label }}">{{ t.label }}</button>
+      {% endfor %}
+      {% endif %}
+    </div>
   </nav>
   {% endif %}
   <main id="workspace" class="shell-workspace">

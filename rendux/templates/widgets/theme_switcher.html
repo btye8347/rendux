@@ -1,0 +1,13 @@
+{% with _label=label|default("") %}
+<div class="widget-theme-switcher">
+  {% if _label %}<span class="widget-title" style="margin:0;">{{ _label }}</span>{% endif %}
+  <button class="theme-btn" data-theme-btn="light"  aria-pressed="false" onclick="RendUX.setTheme('light')">Light</button>
+  <button class="theme-btn" data-theme-btn="system" aria-pressed="false" onclick="RendUX.setTheme('system')">System</button>
+  <button class="theme-btn" data-theme-btn="dark"   aria-pressed="false" onclick="RendUX.setTheme('dark')">Dark</button>
+  {% if theme_list %}
+  {% for t in theme_list %}
+  <button class="theme-btn" data-theme-btn="{{ t.id }}" aria-pressed="false" onclick="RendUX.setTheme('{{ t.id }}')">{{ t.label }}</button>
+  {% endfor %}
+  {% endif %}
+</div>
+{% endwith %}

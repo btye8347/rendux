@@ -3,11 +3,12 @@ from __future__ import annotations
 from pathlib import Path
 
 from fastapi import FastAPI, Request
-from fastapi.responses import HTMLResponse
+from fastapi.responses import HTMLResponse, JSONResponse
 from fastapi.staticfiles import StaticFiles
 from fastapi.templating import Jinja2Templates
 
 from rendux.core.registries import register_core_services
+from rendux.core.themes import ThemeService
 from rendux.views.routes import router as views_router
 from rendux.views.service import ViewConfigService
 
@@ -43,6 +44,14 @@ def create_app() -> FastAPI:
     views_service.compile_models()
     app.state.services.register("views", views_service)
 
+    theme_service = ThemeService.from_yaml(PROJECT_ROOT / "config" / "themes.yaml")
+    app.state.services.register("themes", theme_service)
+
+    theme_list = theme_service.list_themes()
+    custom_theme_css = theme_service.generate_css()
+    templates.env.globals["theme_list"] = theme_list
+    templates.env.globals["custom_theme_css"] = custom_theme_css
+
     app.mount(
         "/static",
         StaticFiles(directory=RENDUX_ROOT / "static"),
@@ -54,6 +63,11 @@ def create_app() -> FastAPI:
     @app.get("/health")
     def health() -> dict[str, str]:
         return {"status": "ok", "service": "rendux-demo", "version": "0.1.0"}
+
+    @app.get("/api/themes", response_class=JSONResponse)
+    def api_themes(request: Request) -> JSONResponse:
+        svc: ThemeService = request.app.state.services.get("themes")
+        return JSONResponse({"themes": svc.list_themes()})
 
     @app.get("/", response_class=HTMLResponse)
     def home(request: Request) -> HTMLResponse:
