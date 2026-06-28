@@ -10,11 +10,141 @@ views:
     route: /
     workspace:
       template: workspaces/home.html
+
   components:
     label: Components
     route: /components
     workspace:
       template: workspaces/components.html
+
+  ops:
+    label: Ops
+    route: /ops
+    workspace:
+      # Fully declarative view — no template file needed.
+      # Rendered by LayoutRenderer using the RDL spec.
+      layout:
+
+        # ── KPI row ───────────────────────────────────────────
+        - type: grid
+          columns: 4
+          children:
+            - widget: stat_card
+              label: Active Services
+              value: "24"
+              status: ok
+              trend: "+2 today"
+
+            - widget: stat_card
+              label: Open Alerts
+              value: "3"
+              status: warn
+              trend: "↑1 this hour"
+
+            - widget: stat_card
+              label: Deployments Today
+              value: "7"
+              trend: "+3 vs yesterday"
+
+            - widget: stat_card
+              label: Uptime
+              value: "99.9%"
+              status: ok
+              subtitle: "30-day rolling"
+
+        # ── Health + Activity ──────────────────────────────────
+        - type: grid
+          columns: 2
+          children:
+            - widget: status_grid
+              title: Service Health
+              items:
+                - label: API Gateway
+                  status: ok
+                  detail: "p99 12ms"
+                - label: Auth Service
+                  status: ok
+                  detail: "p99 8ms"
+                - label: Job Queue
+                  status: warn
+                  detail: "queue backing up"
+                - label: Metrics Agent
+                  status: ok
+                  detail: "streaming live"
+                - label: Mail Relay
+                  status: error
+                  detail: "connection refused"
+
+            - widget: timeline
+              events:
+                - title: Deployment complete
+                  time: "09:22"
+                  status: ok
+                  body: "api-gateway v1.4.2 → all pods"
+                - title: High memory alert
+                  time: "08:51"
+                  status: warn
+                  body: "api-gateway exceeding 85% threshold"
+                - title: Scheduled maintenance
+                  time: "08:00"
+                  status: info
+                  body: "Database index rebuild started"
+                - title: Build failed
+                  time: "Yesterday"
+                  status: error
+                  body: "Test regression in auth-service — hotfix deployed"
+                - title: Config rotated
+                  time: "Yesterday"
+                  status: default
+                  body: "TLS certificate renewed, expires 2027-01-01"
+
+        - divider: true
+
+        # ── Recent changes + alerts ────────────────────────────
+        - type: grid
+          columns: 2
+          children:
+            - widget: item_list
+              title: Recent Changes
+              items:
+                - title: config/app.yaml updated
+                  description: "Log level: WARN → INFO"
+                  meta: "3m ago"
+                - title: auth-service scaled
+                  description: "2 → 4 replicas"
+                  meta: "1h ago"
+                - title: SSL certificate renewed
+                  description: "Expires 2027-01-01"
+                  meta: "2h ago"
+                - title: Job queue threshold raised
+                  description: "500 → 1000 pending jobs"
+                  meta: "4h ago"
+                - title: New operator added
+                  description: "ops-user@example.com"
+                  meta: "Yesterday"
+
+            - type: stack
+              children:
+                - widget: alert
+                  variant: warn
+                  title: Queue depth elevated
+                  message: "Job queue is processing slower than ingestion rate. Consider scaling workers."
+
+                - widget: alert
+                  variant: error
+                  title: Mail relay unreachable
+                  message: "SMTP connection to mail.internal:587 refused for 14 minutes. Check firewall rules."
+
+                - widget: progress_bar
+                  label: Disk usage — /data
+                  value: 73
+                  variant: warn
+
+                - widget: progress_bar
+                  label: CPU — api-gateway
+                  value: 41
+                  variant: default
+
   about:
     label: About
     route: /about

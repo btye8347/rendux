@@ -48,6 +48,26 @@ class ViewConfigService:
     def get_config(self) -> dict[str, Any]:
         return self._config
 
+    def workspace_template(self, view_id: str) -> str | None:
+        """Return the explicit template path for a view, or None."""
+        ws = self._workspace(view_id)
+        return ws.get("template") if ws else None
+
+    def workspace_layout(self, view_id: str) -> list | None:
+        """Return the RDL layout node list for a view, or None."""
+        ws = self._workspace(view_id)
+        if not ws:
+            return None
+        layout = ws.get("layout")
+        return layout if isinstance(layout, list) else None
+
+    def _workspace(self, view_id: str) -> dict[str, Any] | None:
+        view = self._views.get(view_id)
+        if not isinstance(view, dict):
+            return None
+        ws = view.get("workspace")
+        return ws if isinstance(ws, dict) else None
+
     def get_surface_defaults(self) -> dict[str, Any]:
         return _surface_defaults(self._surfaces())
 

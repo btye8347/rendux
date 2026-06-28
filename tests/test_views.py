@@ -17,7 +17,7 @@ def test_view_config_service_loads_configured_views():
 
     views = service.list_views()
 
-    assert {v["id"] for v in views} == {"home", "components", "about"}
+    assert {v["id"] for v in views} == {"home", "components", "ops", "about"}
     home = next(v for v in views if v["id"] == "home")
     assert home["label"] == "Home"
     assert home["route"] == "/"
@@ -79,7 +79,7 @@ def test_views_json_route_lists_views():
     assert payload["meta"]["mcp"]["tool_name"] == "rendux.views.list"
     assert payload["errors"] == []
     view_ids = {v["id"] for v in payload["data"]["views"]}
-    assert view_ids == {"home", "components", "about"}
+    assert view_ids == {"home", "components", "ops", "about"}
 
 
 def test_single_view_json_route_returns_view_config():
