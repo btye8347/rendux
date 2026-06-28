@@ -1,0 +1,12 @@
+<div class="alert alert-{{ variant|default('info') }}" role="alert">
+  <span class="alert-icon" aria-hidden="true">
+    {%- if variant == 'success' %}✓
+    {%- elif variant == 'warn' %}⚠
+    {%- elif variant == 'error' %}✕
+    {%- else %}ℹ{% endif -%}
+  </span>
+  <div class="alert-body">
+    {% if title %}<p class="alert-title">{{ title }}</p>{% endif %}
+    <p class="alert-message">{{ message }}</p>
+  </div>
+</div>

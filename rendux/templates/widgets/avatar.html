@@ -1,0 +1,9 @@
+{% set initials = (name.split()[:2] | map('first') | join | upper) if name else '?' %}
+<span class="avatar avatar-{{ size|default('md') }}{% if status %} avatar-status-{{ status }}{% endif %}"
+      aria-label="{{ name|default('User') }}">
+  {% if src %}
+  <img src="{{ src }}" alt="{{ name|default('') }}" class="avatar-img">
+  {% else %}
+  <span class="avatar-initials">{{ initials }}</span>
+  {% endif %}
+</span>

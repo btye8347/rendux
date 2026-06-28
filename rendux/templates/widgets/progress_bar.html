@@ -1,0 +1,14 @@
+{% set pct = ((value | float) / (max | default(100) | float) * 100) | round(1) %}
+<div class="progress-bar-widget">
+  {% if label or show_value != false %}
+  <div class="progress-header">
+    {% if label %}<span class="progress-label">{{ label }}</span>{% endif %}
+    {% if show_value != false %}<span class="progress-value">{{ value }}/{{ max|default(100) }}</span>{% endif %}
+  </div>
+  {% endif %}
+  <div class="progress-track" role="progressbar"
+       aria-valuenow="{{ value }}" aria-valuemin="0" aria-valuemax="{{ max|default(100) }}">
+    <div class="progress-fill progress-{{ variant|default('default') }}"
+         style="width: {{ [pct, 100] | min }}%"></div>
+  </div>
+</div>

@@ -1,0 +1,17 @@
+<section class="widget-panel">
+  <header class="panel-header">
+    <h2 class="panel-title">{{ title }}</h2>
+    {% if actions %}
+    <div class="panel-actions">
+      {% for action in actions %}
+      {% with label=action.label, href=action.href, variant=action.variant|default('ghost'), size='sm' %}
+        {% include "widgets/button.html" %}
+      {% endwith %}
+      {% endfor %}
+    </div>
+    {% endif %}
+  </header>
+  {% if body %}
+  <div class="panel-body">{{ body }}</div>
+  {% endif %}
+</section>

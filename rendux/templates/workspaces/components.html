@@ -1,65 +1,154 @@
-<h1 class="workspace-heading">Widget Reference</h1>
+<h1 class="workspace-heading">Widget Library — Tier 1</h1>
 
+{# ── button ── #}
 <div class="component-section">
-  <h2 class="section-label">stat_card</h2>
-  <p class="section-desc">Single metric with label, value, optional trend and status accent.</p>
-  <div class="workspace-stat-row">
-    {% with title="Requests Today", value="1,482", trend="+12%", status="ok" %}
-      {% include "widgets/stat_card.html" %}
-    {% endwith %}
-    {% with title="Error Rate", value="0.3%", trend="-0.1%", status="warn" %}
-      {% include "widgets/stat_card.html" %}
-    {% endwith %}
-    {% with title="Uptime", value="99.9%", subtitle="last 30 days" %}
-      {% include "widgets/stat_card.html" %}
-    {% endwith %}
-    {% with title="Queue Depth", value="7", trend="+7", status="error" %}
-      {% include "widgets/stat_card.html" %}
-    {% endwith %}
+  <h2 class="section-label">button</h2>
+  <p class="section-desc">Variants: primary, secondary, ghost, destructive. Sizes: sm, md, lg. Renders as &lt;a&gt; when href is set.</p>
+  <div class="layout-row">
+    {% with label="Primary", variant="primary" %}{% include "widgets/button.html" %}{% endwith %}
+    {% with label="Secondary", variant="secondary" %}{% include "widgets/button.html" %}{% endwith %}
+    {% with label="Ghost", variant="ghost" %}{% include "widgets/button.html" %}{% endwith %}
+    {% with label="Destructive", variant="destructive" %}{% include "widgets/button.html" %}{% endwith %}
+    {% with label="Disabled", variant="primary", disabled=true %}{% include "widgets/button.html" %}{% endwith %}
+    {% with label="Small", variant="secondary", size="sm" %}{% include "widgets/button.html" %}{% endwith %}
+    {% with label="Large", variant="primary", size="lg" %}{% include "widgets/button.html" %}{% endwith %}
+    {% with label="Link", variant="ghost", href="#" %}{% include "widgets/button.html" %}{% endwith %}
   </div>
 </div>
 
-<div class="component-section">
-  <h2 class="section-label">status_grid</h2>
-  <p class="section-desc">Grid of named items each with a status indicator dot.</p>
-  {% with title="", items=[
-    {"label": "API", "status": "ok", "detail": "healthy"},
-    {"label": "Cache", "status": "ok", "detail": "warm"},
-    {"label": "Worker", "status": "warn", "detail": "high load"},
-    {"label": "Storage", "status": "ok", "detail": "72% used"},
-    {"label": "Mail", "status": "error", "detail": "unreachable"},
-    {"label": "Search", "status": "unknown", "detail": "not configured"}
-  ] %}
-    {% include "widgets/status_grid.html" %}
-  {% endwith %}
-</div>
+{% with %}{% set _ = "" %}{% include "widgets/divider.html" %}{% endwith %}
 
+{# ── badge & tag ── #}
 <div class="workspace-two-col">
   <div class="component-section">
-    <h2 class="section-label">item_list</h2>
-    <p class="section-desc">Scrollable list with title, description, meta, and optional link.</p>
-    {% with title="", items=[
-      {"title": "rendux/views/service.py", "description": "ViewConfigService", "meta": "12 KB"},
-      {"title": "rendux/views/routes.py", "description": "API + fallback routes", "meta": "2 KB"},
-      {"title": "rendux/core/mapper.py", "description": "DataMapper", "meta": "6 KB"},
-      {"title": "rendux/core/toon.py", "description": "TOON codec", "meta": "2 KB"}
-    ], empty_message="No files." %}
-      {% include "widgets/item_list.html" %}
-    {% endwith %}
+    <h2 class="section-label">badge</h2>
+    <p class="section-desc">Pill-shaped label. Variants: default, info, success, warn, error. Optional dot prefix.</p>
+    <div class="layout-row">
+      {% with label="Default" %}{% include "widgets/badge.html" %}{% endwith %}
+      {% with label="Info", variant="info" %}{% include "widgets/badge.html" %}{% endwith %}
+      {% with label="Success", variant="success", dot=true %}{% include "widgets/badge.html" %}{% endwith %}
+      {% with label="Warning", variant="warn", dot=true %}{% include "widgets/badge.html" %}{% endwith %}
+      {% with label="Error", variant="error" %}{% include "widgets/badge.html" %}{% endwith %}
+    </div>
   </div>
-
   <div class="component-section">
-    <h2 class="section-label">kv_table</h2>
-    <p class="section-desc">Key-value pairs for entity detail or runtime info.</p>
-    {% with title="", rows=[
-      {"label": "Service", "value": "rendux-demo"},
-      {"label": "Version", "value": "0.1.0"},
-      {"label": "Python", "value": "3.12+"},
-      {"label": "Framework", "value": "FastAPI"},
-      {"label": "Templates", "value": "Jinja2"},
-      {"label": "Database", "value": "not configured", "status": "warn"}
-    ] %}
-      {% include "widgets/kv_table.html" %}
-    {% endwith %}
+    <h2 class="section-label">tag</h2>
+    <p class="section-desc">Rectangular inline label. Same variants as badge, distinct shape.</p>
+    <div class="layout-row">
+      {% with label="Default" %}{% include "widgets/tag.html" %}{% endwith %}
+      {% with label="info", variant="info" %}{% include "widgets/tag.html" %}{% endwith %}
+      {% with label="success", variant="success" %}{% include "widgets/tag.html" %}{% endwith %}
+      {% with label="warn", variant="warn" %}{% include "widgets/tag.html" %}{% endwith %}
+      {% with label="error", variant="error" %}{% include "widgets/tag.html" %}{% endwith %}
+    </div>
+  </div>
+</div>
+
+{% with %}{% set _ = "" %}{% include "widgets/divider.html" %}{% endwith %}
+
+{# ── alert ── #}
+<div class="component-section">
+  <h2 class="section-label">alert</h2>
+  <p class="section-desc">Inline banner with icon, optional title, and message. Variants: info, success, warn, error.</p>
+  <div class="layout-stack">
+    {% with message="This is an informational message.", variant="info" %}{% include "widgets/alert.html" %}{% endwith %}
+    {% with title="Operation complete", message="All services restarted successfully.", variant="success" %}{% include "widgets/alert.html" %}{% endwith %}
+    {% with title="Degraded service", message="Worker queue depth is above threshold.", variant="warn" %}{% include "widgets/alert.html" %}{% endwith %}
+    {% with title="Connection failed", message="Could not reach the database host.", variant="error" %}{% include "widgets/alert.html" %}{% endwith %}
+  </div>
+</div>
+
+{% with %}{% set _ = "" %}{% include "widgets/divider.html" %}{% endwith %}
+
+{# ── status_badge & avatar ── #}
+<div class="workspace-two-col">
+  <div class="component-section">
+    <h2 class="section-label">status_badge</h2>
+    <p class="section-desc">Dot + label for ok/warn/error/unknown states. Inline use.</p>
+    <div class="layout-stack-sm">
+      {% with status="ok", label="Healthy" %}{% include "widgets/status_badge.html" %}{% endwith %}
+      {% with status="warn", label="Degraded" %}{% include "widgets/status_badge.html" %}{% endwith %}
+      {% with status="error", label="Unreachable" %}{% include "widgets/status_badge.html" %}{% endwith %}
+      {% with status="unknown", label="Not configured" %}{% include "widgets/status_badge.html" %}{% endwith %}
+    </div>
+  </div>
+  <div class="component-section">
+    <h2 class="section-label">avatar</h2>
+    <p class="section-desc">User icon from image or initials. Sizes: sm, md, lg.</p>
+    <div class="layout-row">
+      {% with name="Bryan Tye", size="sm" %}{% include "widgets/avatar.html" %}{% endwith %}
+      {% with name="Bryan Tye", size="md" %}{% include "widgets/avatar.html" %}{% endwith %}
+      {% with name="Bryan Tye", size="lg" %}{% include "widgets/avatar.html" %}{% endwith %}
+      {% with name="Ada Lovelace", size="md" %}{% include "widgets/avatar.html" %}{% endwith %}
+      {% with name="Z", size="md" %}{% include "widgets/avatar.html" %}{% endwith %}
+    </div>
+  </div>
+</div>
+
+{% with %}{% set _ = "" %}{% include "widgets/divider.html" %}{% endwith %}
+
+{# ── progress_bar ── #}
+<div class="component-section">
+  <h2 class="section-label">progress_bar</h2>
+  <p class="section-desc">Labeled fill bar. Variants: default, ok, warn, error.</p>
+  <div class="layout-stack">
+    {% with label="Storage used", value=72, max=100 %}{% include "widgets/progress_bar.html" %}{% endwith %}
+    {% with label="Memory", value=3.1, max=8, variant="ok" %}{% include "widgets/progress_bar.html" %}{% endwith %}
+    {% with label="CPU", value=74, max=100, variant="warn" %}{% include "widgets/progress_bar.html" %}{% endwith %}
+    {% with label="Error budget", value=91, max=100, variant="error" %}{% include "widgets/progress_bar.html" %}{% endwith %}
+  </div>
+</div>
+
+{% with %}{% set _ = "" %}{% include "widgets/divider.html" %}{% endwith %}
+
+{# ── breadcrumb ── #}
+<div class="component-section">
+  <h2 class="section-label">breadcrumb</h2>
+  <p class="section-desc">Path trail with / separator. Last item has no link.</p>
+  {% with items=[
+    {"label": "Home", "href": "/"},
+    {"label": "Components", "href": "/components"},
+    {"label": "breadcrumb"}
+  ] %}{% include "widgets/breadcrumb.html" %}{% endwith %}
+</div>
+
+{% with %}{% set _ = "" %}{% include "widgets/divider.html" %}{% endwith %}
+
+{# ── card & panel ── #}
+<div class="workspace-two-col">
+  <div class="component-section">
+    <h2 class="section-label">card</h2>
+    <p class="section-desc">Surface container with optional title and body text.</p>
+    {% with title="Card title", body="A simple card with a title and body. Use as a base container for grouped content." %}{% include "widgets/card.html" %}{% endwith %}
+  </div>
+  <div class="component-section">
+    <h2 class="section-label">panel</h2>
+    <p class="section-desc">Titled panel with distinct header, optional action buttons in header.</p>
+    {% with title="Panel title", body="A panel with a shaded header row. Supports action buttons in the header.", actions=[
+      {"label": "Edit", "href": "#", "variant": "ghost"},
+      {"label": "Refresh", "href": "#", "variant": "secondary"}
+    ] %}{% include "widgets/panel.html" %}{% endwith %}
+  </div>
+</div>
+
+{% with %}{% set _ = "" %}{% include "widgets/divider.html" %}{% endwith %}
+
+{# ── empty_state ── #}
+<div class="component-section">
+  <h2 class="section-label">empty_state</h2>
+  <p class="section-desc">Zero-data placeholder with optional call-to-action.</p>
+  {% with title="No results found", message="Try adjusting your filters or add a new entry.", action_label="Add entry", action_href="#" %}{% include "widgets/empty_state.html" %}{% endwith %}
+</div>
+
+{% with label="Layout primitives below" %}{% include "widgets/divider.html" %}{% endwith %}
+
+{# ── layout helpers ── #}
+<div class="component-section">
+  <h2 class="section-label">layout helpers</h2>
+  <p class="section-desc">CSS classes only — no widget template. Apply directly to wrapper divs.</p>
+  <div class="layout-stack-sm" style="font-size:0.82rem; font-family: monospace; color: #6b7280;">
+    <span>.layout-grid-1 / -2 / -3 / -4 / -auto — CSS grid with gap</span>
+    <span>.layout-stack / -sm / -lg — vertical flex column with gap</span>
+    <span>.layout-row — horizontal flex row with wrap</span>
   </div>
 </div>

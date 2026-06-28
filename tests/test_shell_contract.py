@@ -67,7 +67,7 @@ def test_htmx_components_returns_partial():
     response = client.get("/components", headers={"HX-Request": "true"})
     assert response.status_code == 200
     assert 'class="app-shell"' not in response.text
-    assert "Widget Reference" in response.text
+    assert "Widget Library" in response.text
 
 
 def test_health_endpoint():

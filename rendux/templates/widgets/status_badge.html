@@ -1,0 +1,4 @@
+<span class="status-badge status-badge-{{ status|default('unknown') }}">
+  <span class="status-badge-dot"></span>
+  {{- label | default(status | default('unknown')) -}}
+</span>

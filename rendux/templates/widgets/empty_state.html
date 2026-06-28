@@ -1,0 +1,7 @@
+<div class="empty-state-block">
+  <p class="empty-state-title">{{ title }}</p>
+  {% if message %}<p class="empty-state-message">{{ message }}</p>{% endif %}
+  {% if action_label and action_href %}
+  <a href="{{ action_href }}" class="btn btn-secondary btn-sm">{{ action_label }}</a>
+  {% endif %}
+</div>
