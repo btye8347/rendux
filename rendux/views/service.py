@@ -2,9 +2,15 @@ from __future__ import annotations
 
 from copy import deepcopy
 from pathlib import Path
-from typing import Any
+from typing import Any, Literal, TypedDict
 
 import yaml
+
+
+class WorkspaceDescriptor(TypedDict):
+    """Discriminated union describing how a view's workspace is rendered."""
+    kind: Literal["layout", "template"]
+    value: Any  # list[node] for "layout", str path for "template"
 
 
 class ViewConfigError(ValueError):
@@ -60,6 +66,33 @@ class ViewConfigService:
             return None
         layout = ws.get("layout")
         return layout if isinstance(layout, list) else None
+
+    def resolve_workspace(self, view_id: str) -> WorkspaceDescriptor:
+        """Return a typed descriptor for how this view's workspace is rendered.
+
+        Resolution order:
+          1. workspace.layout → {"kind": "layout", "value": [nodes]}
+          2. workspace.template → {"kind": "template", "value": "path/to.html"}
+          3. fallback → {"kind": "template", "value": "workspaces/<id>.html"}
+        """
+        layout = self.workspace_layout(view_id)
+        if layout is not None:
+            return {"kind": "layout", "value": layout}
+        template = self.workspace_template(view_id) or f"workspaces/{view_id}.html"
+        return {"kind": "template", "value": template}
+
+    def view_data(self, view_id: str) -> dict[str, Any]:
+        """Return the static ``data:`` block declared in a view's config.
+
+        This is the mechanism for populating ``$ctx.*`` references in RDL
+        layouts without writing Python.  Dynamic data should be provided by
+        passing a ``view_ctx`` dict to the render call instead.
+        """
+        view = self._views.get(view_id, {})
+        if not isinstance(view, dict):
+            return {}
+        data = view.get("data", {})
+        return data if isinstance(data, dict) else {}
 
     def _workspace(self, view_id: str) -> dict[str, Any] | None:
         view = self._views.get(view_id)

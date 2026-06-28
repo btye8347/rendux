@@ -112,26 +112,36 @@ def create_app() -> FastAPI:
     return app
 
 
-def _render_view(request: Request, view_id: str, title: str) -> HTMLResponse:
+def _render_view(
+    request: Request,
+    view_id: str,
+    title: str,
+    view_ctx: dict | None = None,
+) -> HTMLResponse:
     """
     Render a view — auto-detects declarative layout vs explicit template.
 
-    Resolution order for the workspace:
-      1. workspace.layout  → LayoutRenderer (RDL declarative path)
-      2. workspace.template → explicit Jinja2 template path
-      3. fallback          → workspaces/<view_id>.html
+    ``view_ctx`` lets route handlers inject request-time data into the RDL
+    render context so that ``$ctx.*`` references resolve correctly.  It is
+    merged after ``view.data`` (static YAML data), so route-level data wins.
     """
     svc: ViewConfigService = request.app.state.services.get("views")
-    shell   = svc.get_shell_view(view_id)
-    layout  = svc.workspace_layout(view_id)
+    shell = svc.get_shell_view(view_id)
+    ws    = svc.resolve_workspace(view_id)
 
-    if layout is not None:
+    if ws["kind"] == "layout":
         renderer: LayoutRenderer = request.app.state.services.get("layout_renderer")
-        layout_html       = renderer.render(layout, dict(templates.env.globals))
+        # Build render context: template globals < YAML data: block < caller data
+        render_ctx = {
+            **dict(templates.env.globals),
+            **svc.view_data(view_id),
+            **(view_ctx or {}),
+        }
+        layout_html        = renderer.render(ws["value"], render_ctx)
         workspace_template = "workspaces/_declarative.html"
         ctx = {"view_shell": shell, "title": title, "layout_html": layout_html}
     else:
-        workspace_template = svc.workspace_template(view_id) or f"workspaces/{view_id}.html"
+        workspace_template = ws["value"]
         ctx = {"view_shell": shell, "title": title}
 
     if request.headers.get("HX-Request"):

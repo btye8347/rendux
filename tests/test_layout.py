@@ -4,7 +4,7 @@ from __future__ import annotations
 import pytest
 from jinja2 import DictLoader, Environment
 
-from rendux.core.layout import LayoutRenderer, _deep_get
+from rendux.core.layout import LayoutConfigError, LayoutRenderer, MAX_DEPTH, _deep_get
 
 
 # ── minimal Jinja2 env with stub widget templates ────────────────────────────
@@ -18,10 +18,13 @@ def _env(extra: dict[str, str] | None = None) -> Environment:
         "widgets/item_list.html": (
             '<ul>{% for i in items|default([]) %}<li>{{ i.title }}</li>{% endfor %}</ul>'
         ),
+        "widgets/split_pane.html": (
+            '<div class="split-pane">{{ primary | safe }}{{ secondary | safe }}</div>'
+        ),
     }
     if extra:
         templates.update(extra)
-    return Environment(loader=DictLoader(templates))
+    return Environment(loader=DictLoader(templates), autoescape=True)
 
 
 def _renderer(extra: dict[str, str] | None = None) -> LayoutRenderer:
@@ -289,3 +292,208 @@ def test_ops_htmx_returns_partial():
     assert r.status_code == 200
     assert "app-shell" not in r.text   # no shell wrapper
     assert "stat" in r.text
+
+
+# ── split container ───────────────────────────────────────────────────────────
+
+def test_split_container_renders_both_panes():
+    r = _renderer()
+    html = r.render([{
+        "type": "split",
+        "primary":   [{"widget": "badge", "label": "Left"}],
+        "secondary": [{"widget": "badge", "label": "Right"}],
+    }], {})
+    assert "Left" in html
+    assert "Right" in html
+    assert "split-pane" in html
+
+
+def test_split_empty_panes():
+    r = _renderer()
+    html = r.render([{"type": "split", "primary": [], "secondary": []}], {})
+    assert "split-pane" in html
+
+
+# ── XSS / HTML escaping ───────────────────────────────────────────────────────
+
+def test_heading_shorthand_escapes_html():
+    r = _renderer()
+    html = r.render([{"heading": "<script>alert(1)</script>"}], {})
+    assert "<script>" not in html
+    assert "&lt;script&gt;" in html
+
+
+def test_section_heading_escapes_html():
+    r = _renderer()
+    html = r.render([{
+        "type":    "section",
+        "heading": '<img src=x onerror="pwned">',
+        "children": [],
+    }], {})
+    assert "<img" not in html
+    assert "&lt;img" in html
+
+
+def test_section_description_escapes_html():
+    r = _renderer()
+    html = r.render([{
+        "type":        "section",
+        "heading":     "Safe",
+        "description": '"><script>evil()</script>',
+        "children":    [],
+    }], {})
+    assert "<script>" not in html
+    assert "&lt;script&gt;" in html
+
+
+# ── unknown container type ────────────────────────────────────────────────────
+
+def test_unknown_container_type_emits_comment():
+    r = _renderer()
+    html = r.render([{"type": "carousel", "children": []}], {})
+    assert "<!--" in html
+    assert "carousel" in html
+
+
+def test_unknown_container_type_with_injection_escapes():
+    r = _renderer()
+    html = r.render([{"type": '"><script>bad()</script>', "children": []}], {})
+    assert "<script>" not in html
+
+
+# ── each: with non-iterable collection ───────────────────────────────────────
+
+def test_each_int_collection_renders_nothing():
+    r = _renderer()
+    html = r.render([{"widget": "badge", "each": "$ctx.count", "label": "$item"}], {"count": 42})
+    assert html == ""
+
+
+def test_each_none_collection_renders_nothing():
+    r = _renderer()
+    html = r.render([{"widget": "badge", "each": "$ctx.nothing", "label": "$item"}], {})
+    assert html == ""
+
+
+# ── heading level edge cases ──────────────────────────────────────────────────
+
+def test_heading_level_non_numeric_defaults_to_2():
+    r = _renderer()
+    html = r.render([{"heading": "Title", "level": "abc"}], {})
+    assert "<h2" in html
+
+
+def test_heading_level_clamped_above_6():
+    r = _renderer()
+    html = r.render([{"heading": "Title", "level": 99}], {})
+    assert "<h6" in html
+
+
+def test_heading_level_clamped_below_1():
+    r = _renderer()
+    html = r.render([{"heading": "Title", "level": -3}], {})
+    assert "<h1" in html
+
+
+# ── widget: null / missing name ───────────────────────────────────────────────
+
+def test_widget_null_name_renders_nothing():
+    r = _renderer()
+    html = r.render([{"widget": None}], {})
+    assert html == ""
+
+
+def test_widget_non_string_name_renders_nothing():
+    r = _renderer()
+    html = r.render([{"widget": 42}], {})
+    assert html == ""
+
+
+# ── missing widget template → error placeholder ───────────────────────────────
+
+def test_missing_widget_template_renders_error_placeholder():
+    r = _renderer()
+    html = r.render([{"widget": "nonexistent_widget_xyz"}], {})
+    assert "alert" in html
+    assert "nonexistent_widget_xyz" in html
+
+
+# ── when: YAML boolean ────────────────────────────────────────────────────────
+
+def test_when_yaml_true_renders():
+    r = _renderer()
+    html = r.render([{"widget": "badge", "label": "Yes", "when": True}], {})
+    assert "badge" in html
+
+
+def test_when_yaml_false_suppresses():
+    r = _renderer()
+    html = r.render([{"widget": "badge", "label": "No", "when": False}], {})
+    assert html == ""
+
+
+# ── depth guard ───────────────────────────────────────────────────────────────
+
+def test_depth_guard_raises_at_limit():
+    r = _renderer()
+    with pytest.raises(LayoutConfigError, match="depth"):
+        r.render([], {}, _depth=MAX_DEPTH + 1)
+
+
+def test_depth_guard_allows_at_limit():
+    r = _renderer()
+    result = r.render([], {}, _depth=MAX_DEPTH)
+    assert result == ""
+
+
+# ── $item.* outside each: → empty string ─────────────────────────────────────
+
+def test_item_ref_outside_each_returns_empty():
+    r = _renderer()
+    html = r.render([{"widget": "badge", "label": "$item.name"}], {})
+    assert "$item" not in html  # raw sigil must not appear
+
+
+def test_item_bare_outside_each_returns_empty():
+    r = _renderer()
+    html = r.render([{"widget": "badge", "label": "$item"}], {})
+    assert "$item" not in html
+
+
+# ── protected context keys cannot be overwritten by widget params ─────────────
+
+def test_protected_key_url_for_not_overwritten():
+    sentinel = object()
+    r = _renderer()
+    ctx = {"url_for": sentinel}
+    # widget param tries to overwrite url_for — it should be stripped
+    r.render([{"widget": "badge", "label": "ok", "url_for": "hacked"}], ctx)
+    assert ctx["url_for"] is sentinel  # original untouched
+
+
+# ── grid gap emits inline style ───────────────────────────────────────────────
+
+def test_grid_gap_sm_emits_inline_style():
+    r = _renderer()
+    html = r.render([{"type": "grid", "gap": "sm", "children": []}], {})
+    assert "0.5rem" in html
+
+
+def test_grid_gap_lg_emits_inline_style():
+    r = _renderer()
+    html = r.render([{"type": "grid", "gap": "lg", "children": []}], {})
+    assert "1.5rem" in html
+
+
+def test_grid_invalid_columns_falls_back_to_auto():
+    r = _renderer()
+    html = r.render([{"type": "grid", "columns": 99, "children": []}], {})
+    assert 'class="layout-grid-auto"' in html
+
+
+# ── non-dict node skipped gracefully ─────────────────────────────────────────
+
+def test_non_dict_node_is_skipped():
+    r = _renderer()
+    html = r.render(["string_node", 42, None, {"widget": "badge", "label": "ok"}], {})
+    assert "badge" in html
