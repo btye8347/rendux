@@ -1,0 +1,57 @@
+{% with _id = table_id|default("tbl") %}
+{% with _sort_col = sort_col|default("") %}
+{% with _sort_dir = sort_dir|default("asc") %}
+<div class="widget-data-table">
+  {% if title or searchable %}
+  <div class="data-table-toolbar">
+    {% if title %}<h3 class="data-table-title">{{ title }}</h3>{% endif %}
+    {% if searchable %}
+    <input class="data-table-search form-input"
+           placeholder="Search…"
+           oninput="(function(v){document.querySelectorAll('#{{ _id }} tbody tr').forEach(function(r){r.style.display=r.textContent.toLowerCase().includes(v.toLowerCase())?'':'none'})})(this.value)">
+    {% endif %}
+  </div>
+  {% endif %}
+  <div class="data-table-scroll">
+    <table id="{{ _id }}" class="data-table">
+      <thead>
+        <tr>
+          {% for col in columns %}
+          <th class="data-th{% if col.sortable %} data-th-sort{% endif %}{% if _sort_col == col.key %} data-th-active{% endif %}"
+              {% if col.sortable and sort_url %}
+                hx-get="{{ sort_url }}?sort={{ col.key }}&dir={% if _sort_col == col.key and _sort_dir == 'asc' %}desc{% else %}asc{% endif %}"
+                hx-target="#{{ _id }}"
+                hx-swap="outerHTML"
+              {% endif %}>
+            {{ col.label }}
+            {% if col.sortable %}
+            <span class="sort-indicator">{% if _sort_col == col.key %}{% if _sort_dir == 'asc' %}↑{% else %}↓{% endif %}{% else %}↕{% endif %}</span>
+            {% endif %}
+          </th>
+          {% endfor %}
+        </tr>
+      </thead>
+      <tbody>
+        {% if rows %}
+        {% for row in rows %}
+        <tr class="data-row{% if loop.index is odd %} data-row-odd{% endif %}">
+          {% for col in columns %}
+          <td class="data-td{% if col.align %} align-{{ col.align }}{% endif %}">
+            {% set val = row[col.key]|default("") %}
+            {% if col.badge %}
+              {% with label=val, variant=col.badge_map[val]|default("default") %}{% include "widgets/badge.html" %}{% endwith %}
+            {% else %}
+            {{ val }}
+            {% endif %}
+          </td>
+          {% endfor %}
+        </tr>
+        {% endfor %}
+        {% else %}
+        <tr><td class="data-td data-td-empty" colspan="{{ columns|length }}">No data.</td></tr>
+        {% endif %}
+      </tbody>
+    </table>
+  </div>
+</div>
+{% endwith %}{% endwith %}{% endwith %}

@@ -1,0 +1,70 @@
+{% with _id = "cp-" ~ palette_id|default("main") %}
+<div class="widget-command-palette">
+  <button class="btn btn-secondary btn-md cmd-palette-open"
+          onclick="document.getElementById('{{ _id }}').showModal();document.getElementById('{{ _id }}-input').focus()">
+    {{ trigger_label|default("Open palette") }}
+    <kbd class="cmd-kbd">⌘K</kbd>
+  </button>
+
+  <dialog id="{{ _id }}" class="cmd-palette-dialog"
+          onclick="if(event.target===this)this.close()">
+    <div class="cmd-palette-inner">
+      <input id="{{ _id }}-input"
+             class="cmd-palette-input"
+             placeholder="{{ placeholder|default('Type a command…') }}"
+             autocomplete="off"
+             oninput="(function(v,id){
+               var q=v.toLowerCase();
+               document.querySelectorAll('#'+id+' .cmd-item').forEach(function(el){
+                 el.style.display=(q===''||el.dataset.label.toLowerCase().includes(q))?'':'none'
+               });
+               var vis=document.querySelectorAll('#'+id+' .cmd-item:not([style*=none])');
+               vis.forEach(function(el){el.classList.remove('cmd-item-focus')});
+               if(vis.length)vis[0].classList.add('cmd-item-focus');
+             })(this.value,'{{ _id }}')"
+             onkeydown="(function(e,id){
+               var vis=Array.from(document.querySelectorAll('#'+id+' .cmd-item:not([style*=none])'));
+               var cur=vis.findIndex(function(el){return el.classList.contains('cmd-item-focus')});
+               if(e.key==='ArrowDown'){e.preventDefault();var n=(cur+1)%vis.length;vis.forEach(function(el){el.classList.remove('cmd-item-focus')});if(vis[n])vis[n].classList.add('cmd-item-focus');}
+               else if(e.key==='ArrowUp'){e.preventDefault();var n=(cur-1+vis.length)%vis.length;vis.forEach(function(el){el.classList.remove('cmd-item-focus')});if(vis[n])vis[n].classList.add('cmd-item-focus');}
+               else if(e.key==='Enter'){e.preventDefault();var f=document.querySelector('#'+id+' .cmd-item-focus a');if(f)f.click();}
+               else if(e.key==='Escape'){document.getElementById(id).close();}
+             })(event,'{{ _id }}')">
+      <ul class="cmd-list">
+        {% for group in groups|default([]) %}
+        {% if group.label %}<li class="cmd-group-label">{{ group.label }}</li>{% endif %}
+        {% set outer_loop = loop %}
+        {% for item in group['items']|default([]) %}
+        <li class="cmd-item{% if loop.first and outer_loop.first %} cmd-item-focus{% endif %}"
+            data-label="{{ item.label }}">
+          <a href="{{ item.href|default('#') }}"
+             onclick="document.getElementById('{{ _id }}').close()"
+             class="cmd-item-link">
+            {% if item.icon %}<span class="cmd-item-icon">{{ item.icon }}</span>{% endif %}
+            <span class="cmd-item-label">{{ item.label }}</span>
+            {% if item.description %}<span class="cmd-item-desc">{{ item.description }}</span>{% endif %}
+            {% if item.shortcut %}<kbd class="cmd-kbd">{{ item.shortcut }}</kbd>{% endif %}
+          </a>
+        </li>
+        {% endfor %}
+        {% endfor %}
+      </ul>
+      {% if not groups %}
+      <p class="cmd-empty">No commands configured.</p>
+      {% endif %}
+    </div>
+  </dialog>
+</div>
+
+<script>
+(function(){
+  document.addEventListener('keydown', function(e) {
+    if ((e.metaKey || e.ctrlKey) && e.key === 'k') {
+      e.preventDefault();
+      var d = document.getElementById('{{ _id }}');
+      if (d) { d.showModal(); document.getElementById('{{ _id }}-input').focus(); }
+    }
+  });
+})();
+</script>
+{% endwith %}

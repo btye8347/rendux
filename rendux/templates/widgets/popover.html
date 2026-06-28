@@ -1,0 +1,26 @@
+{% with _pos = position|default("bottom-start") %}
+<details class="widget-popover popover-{{ _pos }}">
+  <summary class="popover-trigger btn btn-secondary btn-md">{{ trigger|default("Options") }}</summary>
+  <div class="popover-content">
+    {% if items %}
+    <ul class="popover-menu">
+      {% for item in items %}
+      {% if item.divider %}
+      <li class="popover-divider"></li>
+      {% else %}
+      <li>
+        <a href="{{ item.href|default('#') }}"
+           class="popover-item{% if item.danger %} popover-item-danger{% endif %}">
+          {% if item.icon %}<span class="popover-item-icon">{{ item.icon }}</span>{% endif %}
+          {{ item.label }}
+        </a>
+      </li>
+      {% endif %}
+      {% endfor %}
+    </ul>
+    {% else %}
+    <div class="popover-body">{{ body|default("") }}</div>
+    {% endif %}
+  </div>
+</details>
+{% endwith %}

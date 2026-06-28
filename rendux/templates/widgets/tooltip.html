@@ -1,0 +1,3 @@
+{% with _pos = position|default("top") %}
+<span class="tooltip-wrap tooltip-{{ _pos }}" data-tip="{{ tip|default('') }}">{{ slot|default("hover me") }}</span>
+{% endwith %}

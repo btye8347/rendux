@@ -267,3 +267,147 @@
   <p class="section-desc">Light / System / Dark toggle plus any custom themes from <code>config/themes.yaml</code>. Persists to localStorage. Anti-FOUC applied on page load.</p>
   {% include "widgets/theme_switcher.html" %}
 </div>
+
+{% with %}{% set _ = "" %}{% include "widgets/divider.html" %}{% endwith %}
+
+<h1 class="workspace-heading" style="margin-top:0.5rem;">Widget Library — Tier 3</h1>
+
+{# ── code_block ── #}
+<div class="component-section">
+  <h2 class="section-label">code_block</h2>
+  <p class="section-desc">Syntax-labeled code block with one-click copy. Language label from <code>language</code> param. Copy button resets after 1.5s.</p>
+  {% with language="python", code="from rendux.core.themes import ThemeService
+
+svc = ThemeService.from_yaml(Path('config/themes.yaml'))
+css = svc.generate_css()
+themes = svc.list_themes()  # [{id, label}, ...]" %}{% include "widgets/code_block.html" %}{% endwith %}
+</div>
+
+{% with %}{% set _ = "" %}{% include "widgets/divider.html" %}{% endwith %}
+
+{# ── tooltip ── #}
+<div class="component-section">
+  <h2 class="section-label">tooltip</h2>
+  <p class="section-desc">Pure-CSS tooltip via <code>data-tip</code> + pseudo-elements. Positions: top (default), bottom, left, right. No JS.</p>
+  <div class="layout-row">
+    {% with tip="Default top tooltip", slot="Hover (top)" %}{% include "widgets/tooltip.html" %}{% endwith %}
+    {% with tip="Appears below", slot="Hover (bottom)", position="bottom" %}{% include "widgets/tooltip.html" %}{% endwith %}
+    {% with tip="Appears right", slot="Hover (right)", position="right" %}{% include "widgets/tooltip.html" %}{% endwith %}
+    {% with tip="Appears left", slot="Hover (left)", position="left" %}{% include "widgets/tooltip.html" %}{% endwith %}
+  </div>
+</div>
+
+{% with %}{% set _ = "" %}{% include "widgets/divider.html" %}{% endwith %}
+
+{# ── popover ── #}
+<div class="component-section">
+  <h2 class="section-label">popover</h2>
+  <p class="section-desc">Positioned dropdown using native <code>&lt;details&gt;</code>. Supports menu items list or free-form body. Positions: bottom-start (default), bottom-end, top-start, top-end.</p>
+  <div class="layout-row">
+    {% with trigger="Actions", items=[
+      {"label": "Edit",   "icon": "✏️", "href": "#"},
+      {"label": "Duplicate", "icon": "📋", "href": "#"},
+      {"divider": true},
+      {"label": "Delete", "icon": "🗑️", "href": "#", "danger": true}
+    ] %}{% include "widgets/popover.html" %}{% endwith %}
+
+    {% with trigger="Settings ▾", position="bottom-end", items=[
+      {"label": "Profile",      "href": "#"},
+      {"label": "Preferences",  "href": "#"},
+      {"divider": true},
+      {"label": "Sign out",     "href": "#"}
+    ] %}{% include "widgets/popover.html" %}{% endwith %}
+  </div>
+</div>
+
+{% with %}{% set _ = "" %}{% include "widgets/divider.html" %}{% endwith %}
+
+{# ── data_table ── #}
+<div class="component-section">
+  <h2 class="section-label">data_table</h2>
+  <p class="section-desc">Sortable, searchable table. Client-side search via JS; server-side sort via HTMX when <code>sort_url</code> is set. Supports badge columns via <code>badge_map</code>.</p>
+  {% with title="Services", searchable=true, columns=[
+    {"key": "name",    "label": "Name",    "sortable": true},
+    {"key": "host",    "label": "Host"},
+    {"key": "status",  "label": "Status",  "sortable": true, "badge": true, "badge_map": {"ok": "success", "warn": "warn", "error": "error"}},
+    {"key": "latency", "label": "Latency", "align": "right"}
+  ], rows=[
+    {"name": "api-gateway",   "host": "gw.internal:8080",  "status": "ok",    "latency": "12ms"},
+    {"name": "auth-service",  "host": "auth.internal:8081", "status": "ok",    "latency": "8ms"},
+    {"name": "job-queue",     "host": "queue.internal:5672","status": "warn",  "latency": "45ms"},
+    {"name": "metrics-agent", "host": "metrics.internal",   "status": "ok",    "latency": "3ms"},
+    {"name": "mail-relay",    "host": "smtp.internal:587",  "status": "error", "latency": "—"}
+  ] %}{% include "widgets/data_table.html" %}{% endwith %}
+</div>
+
+{% with %}{% set _ = "" %}{% include "widgets/divider.html" %}{% endwith %}
+
+{# ── multi_select ── #}
+<div class="component-section">
+  <h2 class="section-label">multi_select</h2>
+  <p class="section-desc">Filterable checkbox list. Filter input narrows options client-side. Works as a standard form field via <code>name</code> param.</p>
+  {% with name="tags", label="Tags", selected=["python", "htmx"], options=[
+    {"value": "python",     "label": "Python"},
+    {"value": "fastapi",    "label": "FastAPI"},
+    {"value": "htmx",      "label": "HTMX"},
+    {"value": "jinja2",    "label": "Jinja2"},
+    {"value": "postgres",  "label": "PostgreSQL"},
+    {"value": "redis",     "label": "Redis"},
+    {"value": "docker",    "label": "Docker"}
+  ], hint="Select all that apply" %}{% include "widgets/multi_select.html" %}{% endwith %}
+</div>
+
+{% with %}{% set _ = "" %}{% include "widgets/divider.html" %}{% endwith %}
+
+{# ── nav_rail ── #}
+<div class="component-section">
+  <h2 class="section-label">nav_rail</h2>
+  <p class="section-desc">Vertical sidebar navigation. Full and compact (icon-only) variants. Supports badges, dividers, and HTMX partial loading via <code>hx_get</code>.</p>
+  <div class="layout-row" style="align-items:flex-start; gap:1.5rem;">
+    {% with active_id="dash", items=[
+      {"id": "dash",    "label": "Dashboard",  "icon": "▦",  "href": "#"},
+      {"id": "svcs",    "label": "Services",   "icon": "⬡",  "href": "#", "badge": "3"},
+      {"id": "logs",    "label": "Logs",       "icon": "≡",  "href": "#"},
+      {"divider": true},
+      {"id": "config",  "label": "Config",     "icon": "⚙",  "href": "#"},
+      {"id": "users",   "label": "Users",      "icon": "◉",  "href": "#"}
+    ] %}{% include "widgets/nav_rail.html" %}{% endwith %}
+
+    {% with compact=true, active_id="dash", items=[
+      {"id": "dash",   "label": "Dashboard", "icon": "▦", "href": "#"},
+      {"id": "svcs",   "label": "Services",  "icon": "⬡", "href": "#"},
+      {"id": "logs",   "label": "Logs",      "icon": "≡", "href": "#"},
+      {"divider": true},
+      {"id": "config", "label": "Config",    "icon": "⚙", "href": "#"}
+    ] %}{% include "widgets/nav_rail.html" %}{% endwith %}
+  </div>
+</div>
+
+{% with %}{% set _ = "" %}{% include "widgets/divider.html" %}{% endwith %}
+
+{# ── file_drop ── #}
+<div class="component-section">
+  <h2 class="section-label">file_drop</h2>
+  <p class="section-desc">Drag-and-drop file zone backed by a native <code>&lt;input type="file"&gt;</code>. Highlights on drag-over. Shows selected filenames. No external deps.</p>
+  {% with name="upload", label="Drop a config file here or click to browse", hint="YAML or JSON, max 1MB", accept=".yaml,.yml,.json" %}{% include "widgets/file_drop.html" %}{% endwith %}
+</div>
+
+{% with %}{% set _ = "" %}{% include "widgets/divider.html" %}{% endwith %}
+
+{# ── command_palette ── #}
+<div class="component-section">
+  <h2 class="section-label">command_palette</h2>
+  <p class="section-desc">Keyboard-driven command search. Opens on ⌘K or the trigger button. Arrow keys navigate, Enter follows the link, Escape closes. Filtered client-side.</p>
+  {% with palette_id="demo", placeholder="Search commands…", groups=[
+    {"label": "Navigation", "items": [
+      {"label": "Go to Home",       "icon": "🏠", "href": "/",          "shortcut": "G H"},
+      {"label": "Go to Components", "icon": "⬡",  "href": "/components","shortcut": "G C"},
+      {"label": "Go to About",      "icon": "ℹ",  "href": "/about",     "shortcut": "G A"}
+    ]},
+    {"label": "Theme", "items": [
+      {"label": "Switch to Light",  "icon": "☀",  "href": "#", "description": "RendUX.setTheme('light')"},
+      {"label": "Switch to Dark",   "icon": "☾",  "href": "#", "description": "RendUX.setTheme('dark')"},
+      {"label": "System default",   "icon": "◑",  "href": "#", "description": "Follows OS preference"}
+    ]}
+  ] %}{% include "widgets/command_palette.html" %}{% endwith %}
+</div>

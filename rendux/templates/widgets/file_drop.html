@@ -1,0 +1,21 @@
+{% with _id = "fd-" ~ name|default("file") %}
+<div class="widget-file-drop" id="{{ _id }}">
+  <input type="file"
+         id="{{ _id }}-input"
+         name="{{ name|default('file') }}"
+         class="file-input-hidden"
+         {% if accept %}accept="{{ accept }}"{% endif %}
+         {% if multiple %}multiple{% endif %}
+         onchange="(function(inp,zone){var names=Array.from(inp.files).map(function(f){return f.name});zone.querySelector('.file-drop-selected').textContent=names.length?names.join(', '):''})(this,document.getElementById('{{ _id }}'))">
+  <label for="{{ _id }}-input"
+         class="file-drop-zone"
+         ondragover="event.preventDefault();this.classList.add('drag-over')"
+         ondragleave="this.classList.remove('drag-over')"
+         ondrop="event.preventDefault();this.classList.remove('drag-over');document.getElementById('{{ _id }}-input').files=event.dataTransfer.files;var names=Array.from(event.dataTransfer.files).map(function(f){return f.name});this.querySelector('.file-drop-selected').textContent=names.join(', ')">
+    <span class="file-drop-icon">↑</span>
+    <span class="file-drop-primary">{{ label|default("Drop files here or click to browse") }}</span>
+    <span class="file-drop-hint">{{ hint|default("Any file type accepted") }}</span>
+    <span class="file-drop-selected"></span>
+  </label>
+</div>
+{% endwith %}

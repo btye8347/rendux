@@ -1,0 +1,24 @@
+{% with _compact = compact|default(false) %}
+<nav class="widget-nav-rail{% if _compact %} nav-rail-compact{% endif %}">
+  {% if brand %}
+  <div class="rail-brand">{{ brand }}</div>
+  {% endif %}
+  {% for item in items|default([]) %}
+  {% if item.divider %}
+  <div class="rail-divider"></div>
+  {% else %}
+  <a href="{{ item.href|default('#') }}"
+     class="rail-item{% if active_id is defined and active_id == item.id %} active{% endif %}"
+     {% if item.hx_get %}
+       hx-get="{{ item.hx_get }}"
+       hx-target="{{ item.hx_target|default('#workspace') }}"
+       hx-push-url="true"
+     {% endif %}>
+    {% if item.icon %}<span class="rail-icon">{{ item.icon }}</span>{% endif %}
+    <span class="rail-label">{{ item.label }}</span>
+    {% if item.badge %}<span class="rail-badge">{{ item.badge }}</span>{% endif %}
+  </a>
+  {% endif %}
+  {% endfor %}
+</nav>
+{% endwith %}

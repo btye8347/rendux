@@ -1,0 +1,12 @@
+{% with _id = id|default("cb-0") %}
+{% with _lang = language|default("") %}
+{% with _label = label|default(_lang) %}
+<div class="widget-code-block">
+  <div class="code-block-header">
+    {% if _label %}<span class="code-block-lang">{{ _label }}</span>{% endif %}
+    <button class="code-block-copy"
+            onclick="(function(b){var pre=b.closest('.widget-code-block').querySelector('code');navigator.clipboard.writeText(pre.innerText).then(function(){b.textContent='Copied';setTimeout(function(){b.textContent='Copy'},1500)});})(this)">Copy</button>
+  </div>
+  <pre class="code-pre"><code>{{ code|default("") }}</code></pre>
+</div>
+{% endwith %}{% endwith %}{% endwith %}

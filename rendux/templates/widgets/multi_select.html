@@ -1,0 +1,21 @@
+{% with _id = "ms-" ~ name|default("field") %}
+<div class="widget-multi-select" id="{{ _id }}">
+  {% if label %}<div class="form-label">{{ label }}</div>{% endif %}
+  <input class="multi-select-filter form-input"
+         placeholder="{{ filter_placeholder|default('Filter…') }}"
+         oninput="(function(v,id){document.querySelectorAll('#'+id+' .ms-item').forEach(function(el){el.style.display=el.querySelector('span').textContent.toLowerCase().includes(v.toLowerCase())?'':'none'})})(this.value,'{{ _id }}')">
+  <div class="multi-select-list">
+    {% for opt in options|default([]) %}
+    <label class="ms-item">
+      <input type="checkbox"
+             name="{{ name|default('field') }}"
+             value="{{ opt.value }}"
+             {% if selected and opt.value in selected %}checked{% endif %}
+             class="ms-checkbox">
+      <span>{{ opt.label }}</span>
+    </label>
+    {% endfor %}
+  </div>
+  {% if hint %}<p class="form-hint">{{ hint }}</p>{% endif %}
+</div>
+{% endwith %}
