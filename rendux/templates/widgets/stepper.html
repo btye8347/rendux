@@ -1,0 +1,19 @@
+{% with _orient = orientation|default("horizontal") %}
+<div class="widget-stepper stepper-{{ _orient }}">
+  {% for step in steps|default([]) %}
+  {% set _status = step.status|default("pending") %}
+  <div class="stepper-step step-{{ _status }}">
+    <div class="step-node">
+      {% if _status == "done" %}✓{% else %}{{ loop.index }}{% endif %}
+    </div>
+    <div class="step-content">
+      <div class="step-label">{{ step.label }}</div>
+      {% if step.description %}<div class="step-desc">{{ step.description }}</div>{% endif %}
+    </div>
+    {% if not loop.last %}
+    <div class="step-connector"></div>
+    {% endif %}
+  </div>
+  {% endfor %}
+</div>
+{% endwith %}

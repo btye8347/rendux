@@ -1,0 +1,28 @@
+{% with _id = "dr-" ~ drawer_id|default("0") %}
+{% with _side = side|default("right") %}
+{% with _width = width|default("360px") %}
+<div class="widget-drawer-trigger">
+  <button class="btn btn-secondary btn-md"
+          onclick="document.getElementById('{{ _id }}').showModal()">
+    {{ trigger_label|default("Open") }}
+  </button>
+</div>
+
+<dialog id="{{ _id }}"
+        class="widget-drawer drawer-{{ _side }}"
+        style="--drawer-size: {{ _width }}"
+        onclick="if(event.target===this)this.close()">
+  <div class="drawer-inner">
+    <div class="drawer-header">
+      <span class="drawer-title">{{ title|default("") }}</span>
+      <button class="drawer-close" onclick="document.getElementById('{{ _id }}').close()" aria-label="Close">✕</button>
+    </div>
+    <div class="drawer-body">
+      {{ body|default("Drawer content goes here.") }}
+    </div>
+    {% if footer %}
+    <div class="drawer-footer">{{ footer }}</div>
+    {% endif %}
+  </div>
+</dialog>
+{% endwith %}{% endwith %}{% endwith %}

@@ -1,0 +1,20 @@
+{% with _variant = variant|default("underline") %}
+<div class="widget-tab-bar tab-bar-{{ _variant }}" role="tablist">
+  {% for tab in tabs|default([]) %}
+  <button class="tbar-btn{% if active_tab is defined and active_tab == tab.id %} active{% endif %}"
+          role="tab"
+          aria-selected="{% if active_tab is defined and active_tab == tab.id %}true{% else %}false{% endif %}"
+          {% if tab.hx_get %}
+            hx-get="{{ tab.hx_get }}"
+            hx-target="{{ hx_target|default('#workspace') }}"
+            hx-swap="{{ hx_swap|default('innerHTML') }}"
+            {% if hx_push_url is defined and hx_push_url %}hx-push-url="true"{% endif %}
+          {% endif %}
+          {% if tab.href %}onclick="window.location='{{ tab.href }}'"{% endif %}>
+    {% if tab.icon %}<span class="tbar-icon">{{ tab.icon }}</span>{% endif %}
+    {{ tab.label }}
+    {% if tab.badge %}<span class="tbar-badge">{{ tab.badge }}</span>{% endif %}
+  </button>
+  {% endfor %}
+</div>
+{% endwith %}

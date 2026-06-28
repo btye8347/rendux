@@ -1,0 +1,53 @@
+{% with _id = "sp-" ~ pane_id|default("0") %}
+{% with _min = min_primary|default(120) %}
+{% with _max = max_primary|default(0) %}
+{% with _init = initial_primary|default("50%") %}
+<div class="widget-split-pane" id="{{ _id }}"
+     data-min-primary="{{ _min }}"
+     data-max-primary="{{ _max }}">
+  <div class="split-primary" style="flex-basis: {{ _init }}">
+    {{ primary|default("") }}
+    {% block split_primary %}{% endblock %}
+  </div>
+  <div class="split-handle" title="Drag to resize"></div>
+  <div class="split-secondary">
+    {{ secondary|default("") }}
+    {% block split_secondary %}{% endblock %}
+  </div>
+</div>
+
+<script>
+(function () {
+  var pane    = document.getElementById('{{ _id }}');
+  var primary = pane.querySelector('.split-primary');
+  var handle  = pane.querySelector('.split-handle');
+  var dragging = false, startX = 0, startW = 0;
+
+  handle.addEventListener('mousedown', function (e) {
+    dragging = true;
+    startX   = e.clientX;
+    startW   = primary.offsetWidth;
+    document.body.style.cursor     = 'col-resize';
+    document.body.style.userSelect = 'none';
+    e.preventDefault();
+  });
+
+  document.addEventListener('mousemove', function (e) {
+    if (!dragging) return;
+    var minW  = parseInt(pane.dataset.minPrimary) || 80;
+    var maxW  = parseInt(pane.dataset.maxPrimary) || (pane.offsetWidth - 80);
+    if (maxW <= 0) maxW = pane.offsetWidth - 80;
+    var newW  = Math.max(minW, Math.min(maxW, startW + e.clientX - startX));
+    primary.style.flexBasis = newW + 'px';
+  });
+
+  document.addEventListener('mouseup', function () {
+    if (dragging) {
+      dragging = false;
+      document.body.style.cursor     = '';
+      document.body.style.userSelect = '';
+    }
+  });
+})();
+</script>
+{% endwith %}{% endwith %}{% endwith %}{% endwith %}

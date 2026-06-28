@@ -1,0 +1,53 @@
+{% with _id = "ctx-" ~ menu_id|default("0") %}
+<div class="widget-context-menu" id="{{ _id }}">
+  <div class="ctx-target">
+    {{ slot|default("Right-click anywhere in this area") }}
+  </div>
+  <ul class="ctx-menu" id="{{ _id }}-menu" role="menu">
+    {% for item in items|default([]) %}
+    {% if item.divider %}
+    <li class="ctx-divider" role="separator"></li>
+    {% else %}
+    <li role="none">
+      <a href="{{ item.href|default('#') }}"
+         class="ctx-item{% if item.danger %} ctx-item-danger{% endif %}"
+         role="menuitem"
+         onclick="document.getElementById('{{ _id }}-menu').classList.remove('ctx-visible')">
+        {% if item.icon %}<span class="ctx-item-icon">{{ item.icon }}</span>{% endif %}
+        {{ item.label }}
+        {% if item.shortcut %}<span class="ctx-shortcut">{{ item.shortcut }}</span>{% endif %}
+      </a>
+    </li>
+    {% endif %}
+    {% endfor %}
+  </ul>
+</div>
+
+<script>
+(function () {
+  var wrap   = document.getElementById('{{ _id }}');
+  var target = wrap.querySelector('.ctx-target');
+  var menu   = document.getElementById('{{ _id }}-menu');
+
+  target.addEventListener('contextmenu', function (e) {
+    e.preventDefault();
+    var x = e.clientX, y = e.clientY;
+    menu.style.left = x + 'px';
+    menu.style.top  = y + 'px';
+    menu.classList.add('ctx-visible');
+    /* Keep menu inside viewport */
+    var rect = menu.getBoundingClientRect();
+    if (rect.right  > window.innerWidth)  menu.style.left = (x - rect.width)  + 'px';
+    if (rect.bottom > window.innerHeight) menu.style.top  = (y - rect.height) + 'px';
+  });
+
+  document.addEventListener('click', function (e) {
+    if (!menu.contains(e.target)) menu.classList.remove('ctx-visible');
+  });
+
+  document.addEventListener('keydown', function (e) {
+    if (e.key === 'Escape') menu.classList.remove('ctx-visible');
+  });
+})();
+</script>
+{% endwith %}

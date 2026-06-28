@@ -411,3 +411,117 @@ themes = svc.list_themes()  # [{id, label}, ...]" %}{% include "widgets/code_blo
     ]}
   ] %}{% include "widgets/command_palette.html" %}{% endwith %}
 </div>
+
+{% with %}{% set _ = "" %}{% include "widgets/divider.html" %}{% endwith %}
+
+{# ── tab_bar ── #}
+<div class="component-section">
+  <h2 class="section-label">tab_bar</h2>
+  <p class="section-desc">Standalone tab bar, decoupled from content. Underline (default) and pill variants. HTMX partial-swap or href routing.</p>
+  <div class="layout-stack-sm">
+    {% with active_tab="logs", tabs=[
+      {"id": "overview", "label": "Overview",  "icon": "▦"},
+      {"id": "logs",     "label": "Logs",      "icon": "≡", "badge": "12"},
+      {"id": "metrics",  "label": "Metrics",   "icon": "⬡"},
+      {"id": "alerts",   "label": "Alerts",    "icon": "⚠"}
+    ] %}{% include "widgets/tab_bar.html" %}{% endwith %}
+
+    {% with variant="pill", active_tab="week", tabs=[
+      {"id": "day",   "label": "Day"},
+      {"id": "week",  "label": "Week"},
+      {"id": "month", "label": "Month"},
+      {"id": "year",  "label": "Year"}
+    ] %}{% include "widgets/tab_bar.html" %}{% endwith %}
+  </div>
+</div>
+
+{% with %}{% set _ = "" %}{% include "widgets/divider.html" %}{% endwith %}
+
+{# ── stepper ── #}
+<div class="component-section">
+  <h2 class="section-label">stepper</h2>
+  <p class="section-desc">Multi-step progress indicator. Horizontal (default) and vertical orientations. Step statuses: done, active, pending, error.</p>
+  <div class="layout-stack">
+    {% with steps=[
+      {"label": "Account",   "status": "done",   "description": "Email & password"},
+      {"label": "Profile",   "status": "done",   "description": "Display name"},
+      {"label": "Configure", "status": "active", "description": "Settings & preferences"},
+      {"label": "Review",    "status": "pending"},
+      {"label": "Confirm",   "status": "pending"}
+    ] %}{% include "widgets/stepper.html" %}{% endwith %}
+
+    {% with orientation="vertical", steps=[
+      {"label": "Deploy initiated",   "status": "done",  "description": "2026-06-28 09:14"},
+      {"label": "Build passed",       "status": "done",  "description": "3m 42s"},
+      {"label": "Integration tests",  "status": "active","description": "Running…"},
+      {"label": "Production cutover", "status": "pending"}
+    ] %}{% include "widgets/stepper.html" %}{% endwith %}
+  </div>
+</div>
+
+{% with %}{% set _ = "" %}{% include "widgets/divider.html" %}{% endwith %}
+
+{# ── timeline ── #}
+<div class="component-section">
+  <h2 class="section-label">timeline</h2>
+  <p class="section-desc">Vertical event stream. Status nodes: ok, warn, error, info, default. Optional tags via <code>tag</code> widget inclusion.</p>
+  {% with events=[
+    {"title": "Deployment complete",    "time": "09:22",  "status": "ok",
+     "body": "v1.4.2 rolled out to all instances.", "tags": ["prod", "v1.4.2"]},
+    {"title": "High memory alert",      "time": "08:51",  "status": "warn",
+     "body": "api-gateway exceeding 85% memory threshold."},
+    {"title": "Scheduled maintenance",  "time": "08:00",  "status": "info",
+     "body": "Database index rebuild started."},
+    {"title": "Build failed",           "time": "Yesterday", "status": "error",
+     "body": "Test suite failure in auth-service. Hotfix deployed."},
+    {"title": "Config updated",         "time": "Yesterday", "status": "default"}
+  ] %}{% include "widgets/timeline.html" %}{% endwith %}
+</div>
+
+{% with %}{% set _ = "" %}{% include "widgets/divider.html" %}{% endwith %}
+
+{# ── drawer ── #}
+<div class="component-section">
+  <h2 class="section-label">drawer</h2>
+  <p class="section-desc">Slide-in side panel using native <code>&lt;dialog&gt;</code>. Click outside or ✕ to close. Left and right variants. Animated entry.</p>
+  <div class="layout-row">
+    {% with drawer_id="demo-right", title="Service Details", trigger_label="Open Right Drawer",
+       body="Configuration, logs, and service metadata would appear here. The drawer body scrolls independently." %}
+    {% include "widgets/drawer.html" %}{% endwith %}
+
+    {% with drawer_id="demo-left", side="left", title="Navigation", trigger_label="Open Left Drawer",
+       body="A left drawer is useful for navigation panels or contextual menus." %}
+    {% include "widgets/drawer.html" %}{% endwith %}
+  </div>
+</div>
+
+{% with %}{% set _ = "" %}{% include "widgets/divider.html" %}{% endwith %}
+
+{# ── split_pane ── #}
+<div class="component-section">
+  <h2 class="section-label">split_pane</h2>
+  <p class="section-desc">Draggable two-panel layout. Drag the center handle to resize. Min/max constraints via <code>min_primary</code> / <code>max_primary</code> params.</p>
+  {% with pane_id="demo", initial_primary="45%", min_primary=140,
+     primary="<h3 style='margin:0 0 0.5rem;font-size:0.95rem;'>Primary Panel</h3><p style='color:var(--rx-text-2);font-size:0.85rem;margin:0;'>Drag the handle to resize. This side can hold a file tree, nav list, config form, or any widget.</p>",
+     secondary="<h3 style='margin:0 0 0.5rem;font-size:0.95rem;'>Secondary Panel</h3><p style='color:var(--rx-text-2);font-size:0.85rem;margin:0;'>Detail view, preview, or output goes here. Scrolls independently of the primary side.</p>"
+  %}{% include "widgets/split_pane.html" %}{% endwith %}
+</div>
+
+{% with %}{% set _ = "" %}{% include "widgets/divider.html" %}{% endwith %}
+
+{# ── context_menu ── #}
+<div class="component-section">
+  <h2 class="section-label">context_menu</h2>
+  <p class="section-desc">Right-click positioned menu. Stays within viewport. Escape or click-outside to dismiss. Supports danger items and keyboard shortcuts.</p>
+  {% with menu_id="demo", slot="Right-click anywhere in this zone to open the context menu",
+     items=[
+       {"label": "Open",      "icon": "↗",  "href": "#"},
+       {"label": "Edit",      "icon": "✏",  "href": "#", "shortcut": "E"},
+       {"label": "Duplicate", "icon": "⧉",  "href": "#", "shortcut": "D"},
+       {"divider": true},
+       {"label": "Copy path", "icon": "⎘",  "href": "#"},
+       {"divider": true},
+       {"label": "Delete",    "icon": "🗑", "href": "#", "danger": true, "shortcut": "⌫"}
+     ]
+  %}{% include "widgets/context_menu.html" %}{% endwith %}
+</div>
