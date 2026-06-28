@@ -152,3 +152,109 @@
     <span>.layout-row — horizontal flex row with wrap</span>
   </div>
 </div>
+
+{% with label="Tier 2 — HTMX-assisted" %}{% include "widgets/divider.html" %}{% endwith %}
+
+{# ── collapsible ── #}
+<div class="component-section">
+  <h2 class="section-label">collapsible</h2>
+  <p class="section-desc">Native &lt;details&gt;/&lt;summary&gt; — no JS, no HTMX. Open state persists on page.</p>
+  <div class="layout-stack-sm">
+    {% with title="Collapsed by default", body="This content is hidden until the header is clicked. Uses the native HTML details element — zero JavaScript." %}{% include "widgets/collapsible.html" %}{% endwith %}
+    {% with title="Open by default", body="Pass open=true to start expanded. The browser preserves toggle state natively.", open=true %}{% include "widgets/collapsible.html" %}{% endwith %}
+  </div>
+</div>
+
+{% with %}{% set _ = "" %}{% include "widgets/divider.html" %}{% endwith %}
+
+{# ── tabs ── #}
+<div class="component-section">
+  <h2 class="section-label">tabs</h2>
+  <p class="section-desc">HTMX tab bar — each tab loads its panel from a partial URL on demand.</p>
+  {% with tabs=[
+    {"id": "overview", "label": "Overview", "url": "/partials/tab/overview", "active": true},
+    {"id": "config",   "label": "Config",   "url": "/partials/tab/config"},
+    {"id": "code",     "label": "Code",     "url": "/partials/tab/code"}
+  ], target="tab-demo-content",
+     initial_content="<p style='padding:0.75rem 0; font-size:0.875rem; color:#4a5563; margin:0;'>Loading overview…</p>"
+  %}{% include "widgets/tabs.html" %}{% endwith %}
+</div>
+
+{% with %}{% set _ = "" %}{% include "widgets/divider.html" %}{% endwith %}
+
+{# ── toast ── #}
+<div class="component-section">
+  <h2 class="section-label">toast</h2>
+  <p class="section-desc">Ephemeral notification injected into the shell's toast container via HTMX OOB swap.</p>
+  <div class="layout-row">
+    {% with label="Success toast", variant="secondary",
+            hx_get="/partials/toast?variant=success&title=Done&message=Operation+completed+successfully." %}
+      <button class="btn btn-secondary btn-sm"
+              hx-get="/partials/toast?variant=success&title=Done&message=Operation+completed."
+              hx-target="#toast-container"
+              hx-swap="beforeend">Success</button>
+    {% endwith %}
+    <button class="btn btn-secondary btn-sm"
+            hx-get="/partials/toast?variant=warn&title=Warning&message=Queue+depth+is+high."
+            hx-target="#toast-container"
+            hx-swap="beforeend">Warning</button>
+    <button class="btn btn-secondary btn-sm"
+            hx-get="/partials/toast?variant=error&title=Error&message=Connection+failed."
+            hx-target="#toast-container"
+            hx-swap="beforeend">Error</button>
+    <button class="btn btn-secondary btn-sm"
+            hx-get="/partials/toast?variant=info&message=Nothing+has+changed."
+            hx-target="#toast-container"
+            hx-swap="beforeend">Info</button>
+  </div>
+</div>
+
+{% with %}{% set _ = "" %}{% include "widgets/divider.html" %}{% endwith %}
+
+{# ── modal ── #}
+<div class="component-section">
+  <h2 class="section-label">modal</h2>
+  <p class="section-desc">Native HTML &lt;dialog&gt; element. No JS framework needed — just showModal() on trigger click.</p>
+  {% with id="demo-modal", title="Confirm action", trigger_label="Open modal",
+          body="Are you sure you want to proceed? This will apply your changes to the active configuration.",
+          confirm_label="Apply", cancel_label="Cancel" %}
+    {% include "widgets/modal.html" %}
+  {% endwith %}
+</div>
+
+{% with %}{% set _ = "" %}{% include "widgets/divider.html" %}{% endwith %}
+
+{# ── skeleton ── #}
+<div class="component-section">
+  <h2 class="section-label">skeleton</h2>
+  <p class="section-desc">Animated loading placeholder. Use as a placeholder while HTMX loads real content.</p>
+  <div class="workspace-two-col">
+    {% with lines=3 %}{% include "widgets/skeleton.html" %}{% endwith %}
+    {% with lines=5 %}{% include "widgets/skeleton.html" %}{% endwith %}
+  </div>
+</div>
+
+{% with %}{% set _ = "" %}{% include "widgets/divider.html" %}{% endwith %}
+
+{# ── pagination ── #}
+<div class="component-section">
+  <h2 class="section-label">pagination</h2>
+  <p class="section-desc">Prev/next + numbered pages. HTMX-optional via target param. Ellipsis at range edges.</p>
+  {% with current=4, total=12, url_pattern="/items?page={page}" %}{% include "widgets/pagination.html" %}{% endwith %}
+</div>
+
+{% with %}{% set _ = "" %}{% include "widgets/divider.html" %}{% endwith %}
+
+{# ── form ── #}
+<div class="component-section">
+  <h2 class="section-label">form</h2>
+  <p class="section-desc">Form wrapper with labeled fields. Types: text, email, password, textarea, select, checkbox. HTMX-submittable via hx_post.</p>
+  {% with action="#", submit_label="Save settings", cancel_href="#", fields=[
+    {"type": "text",     "name": "service_name", "label": "Service name",  "placeholder": "my-service", "required": true, "hint": "Lowercase letters, numbers and hyphens only."},
+    {"type": "email",    "name": "alert_email",  "label": "Alert email",   "placeholder": "ops@example.com"},
+    {"type": "select",   "name": "log_level",    "label": "Log level",     "value": "INFO",
+     "options": [{"value":"DEBUG","label":"DEBUG"},{"value":"INFO","label":"INFO"},{"value":"WARN","label":"WARN"},{"value":"ERROR","label":"ERROR"}]},
+    {"type": "textarea", "name": "notes",        "label": "Notes",         "placeholder": "Optional notes…", "rows": 3},
+    {"type": "checkbox", "name": "enabled",      "label": "Enable service on save", "checked": true}
+  ] %}{% include "widgets/form.html" %}{% endwith %}
+</div>

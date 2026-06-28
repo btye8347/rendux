@@ -1,0 +1,8 @@
+<div id="toast-container" hx-swap-oob="beforeend">
+  <div class="widget-toast toast-{{ variant|default('info') }}" role="alert"
+       _="on load wait 4s then transition opacity to 0 over 0.3s then remove me">
+    {% if title %}<p class="toast-title">{{ title }}</p>{% endif %}
+    <p class="toast-message">{{ message }}</p>
+    <button class="toast-close" onclick="this.parentElement.remove()" aria-label="Dismiss">✕</button>
+  </div>
+</div>

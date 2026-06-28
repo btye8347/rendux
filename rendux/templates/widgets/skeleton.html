@@ -1,0 +1,5 @@
+<div class="widget-skeleton">
+  {% for _ in range(lines|default(3)) %}
+  <div class="skeleton-line{% if loop.last and lines|default(3) > 1 %} skeleton-line-short{% endif %}"></div>
+  {% endfor %}
+</div>

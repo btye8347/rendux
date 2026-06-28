@@ -9,6 +9,7 @@
 {% endblock %}
 
 {% block content %}
+<div id="toast-container" class="toast-container"></div>
 <div class="app-shell" data-shell="{{ view_shell.shell_id|default('default') }}" data-active-view="{{ view_shell.active_view.id|default('') }}">
   {% if view_shell.nav_items %}
   <nav class="shell-nav">

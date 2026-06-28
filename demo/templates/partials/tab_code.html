@@ -1,0 +1,10 @@
+<div style="padding: 0.75rem 0;">
+  <p style="margin:0 0 0.5rem; font-size:0.875rem; color:#4a5563;">This is the <strong>Code</strong> tab.</p>
+  <pre class="code-pre"><code>{% with tabs=[
+  {"id":"overview","label":"Overview","url":"/partials/tab/overview","active":true},
+  {"id":"config","label":"Config","url":"/partials/tab/config"},
+  {"id":"code","label":"Code","url":"/partials/tab/code"}
+], target="tab-demo-content", initial_content="..." %}
+  include "widgets/tabs.html"
+{% endwith %}</code></pre>
+</div>

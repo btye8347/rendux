@@ -1,0 +1,23 @@
+{% with label=trigger_label|default('Open'), variant=trigger_variant|default('secondary') %}
+  {% include "widgets/button.html" %}
+{% endwith %}
+
+<dialog id="{{ id }}" class="widget-modal">
+  <form method="dialog">
+    <header class="modal-header">
+      <h2 class="modal-title">{{ title }}</h2>
+      <button class="modal-close btn btn-ghost btn-sm" aria-label="Close">✕</button>
+    </header>
+    <div class="modal-body">{{ body }}</div>
+    <footer class="modal-footer">
+      <button class="btn btn-ghost btn-sm" value="cancel">{{ cancel_label|default('Cancel') }}</button>
+      <button class="btn btn-primary btn-sm" value="confirm">{{ confirm_label|default('Confirm') }}</button>
+    </footer>
+  </form>
+</dialog>
+
+<script>
+  document.currentScript.previousElementSibling.previousElementSibling.addEventListener('click', () =>
+    document.getElementById('{{ id }}').showModal()
+  );
+</script>

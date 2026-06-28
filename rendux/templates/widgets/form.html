@@ -1,0 +1,63 @@
+<form class="widget-form"
+      action="{{ action|default('#') }}"
+      method="{{ method|default('post') }}"
+      {% if hx_post %}hx-post="{{ hx_post }}" hx-target="{{ hx_target|default('this') }}"{% endif %}>
+  {% for field in fields|default([]) %}
+  <div class="form-field{% if field.required %} form-required{% endif %}">
+    {% if field.type != 'checkbox' %}
+    <label class="form-label" for="field-{{ field.name }}">{{ field.label }}</label>
+    {% endif %}
+
+    {% if field.type == 'textarea' %}
+    <textarea id="field-{{ field.name }}" name="{{ field.name }}"
+              class="form-input form-textarea"
+              placeholder="{{ field.placeholder|default('') }}"
+              {% if field.required %}required{% endif %}
+              rows="{{ field.rows|default(4) }}">{{ field.value|default('') }}</textarea>
+
+    {% elif field.type == 'select' %}
+    <select id="field-{{ field.name }}" name="{{ field.name }}"
+            class="form-input form-select"
+            {% if field.required %}required{% endif %}>
+      {% if field.placeholder %}
+      <option value="" disabled {% if not field.value %}selected{% endif %}>{{ field.placeholder }}</option>
+      {% endif %}
+      {% for opt in field.options|default([]) %}
+      <option value="{{ opt.value }}" {% if opt.value == field.value %}selected{% endif %}>{{ opt.label }}</option>
+      {% endfor %}
+    </select>
+
+    {% elif field.type == 'checkbox' %}
+    <label class="form-checkbox-label" for="field-{{ field.name }}">
+      <input type="checkbox" id="field-{{ field.name }}" name="{{ field.name }}"
+             value="{{ field.value|default('1') }}"
+             {% if field.checked %}checked{% endif %}
+             {% if field.required %}required{% endif %}>
+      {{ field.label }}
+    </label>
+
+    {% else %}
+    <input type="{{ field.type|default('text') }}"
+           id="field-{{ field.name }}" name="{{ field.name }}"
+           class="form-input"
+           placeholder="{{ field.placeholder|default('') }}"
+           value="{{ field.value|default('') }}"
+           {% if field.required %}required{% endif %}>
+    {% endif %}
+
+    {% if field.hint %}<p class="form-hint">{{ field.hint }}</p>{% endif %}
+    {% if field.error %}<p class="form-error">{{ field.error }}</p>{% endif %}
+  </div>
+  {% endfor %}
+
+  <div class="form-actions">
+    {% with label=submit_label|default('Submit'), variant='primary', type='submit' %}
+      {% include "widgets/button.html" %}
+    {% endwith %}
+    {% if cancel_href %}
+    {% with label=cancel_label|default('Cancel'), variant='ghost', href=cancel_href %}
+      {% include "widgets/button.html" %}
+    {% endwith %}
+    {% endif %}
+  </div>
+</form>

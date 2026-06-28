@@ -1,0 +1,30 @@
+{% set prev = current - 1 %}
+{% set next = current + 1 %}
+<nav class="widget-pagination" aria-label="Pagination">
+  <a href="{{ url_pattern.replace('{page}', prev|string) }}"
+     class="page-btn{% if current <= 1 %} page-disabled{% endif %}"
+     {% if current <= 1 %}aria-disabled="true" tabindex="-1"{% endif %}
+     {% if target %}hx-get="{{ url_pattern.replace('{page}', prev|string) }}" hx-target="#{{ target }}" hx-push-url="true"{% endif %}>
+    ‹ Prev
+  </a>
+
+  {% for p in range(1, total + 1) %}
+    {% if p == 1 or p == total or (p >= current - 2 and p <= current + 2) %}
+      {% if loop.changed(p > 1 and p < current - 2) %}
+        <span class="page-gap">…</span>
+      {% endif %}
+      <a href="{{ url_pattern.replace('{page}', p|string) }}"
+         class="page-btn{% if p == current %} page-active{% endif %}"
+         {% if target %}hx-get="{{ url_pattern.replace('{page}', p|string) }}" hx-target="#{{ target }}" hx-push-url="true"{% endif %}>
+        {{ p }}
+      </a>
+    {% endif %}
+  {% endfor %}
+
+  <a href="{{ url_pattern.replace('{page}', next|string) }}"
+     class="page-btn{% if current >= total %} page-disabled{% endif %}"
+     {% if current >= total %}aria-disabled="true" tabindex="-1"{% endif %}
+     {% if target %}hx-get="{{ url_pattern.replace('{page}', next|string) }}" hx-target="#{{ target }}" hx-push-url="true"{% endif %}>
+    Next ›
+  </a>
+</nav>

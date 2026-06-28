@@ -67,6 +67,28 @@ def create_app() -> FastAPI:
     def about(request: Request) -> HTMLResponse:
         return _render_view(request, "about", "workspaces/about.html", "About")
 
+    @app.get("/partials/tab/{tab_id}", response_class=HTMLResponse)
+    def tab_partial(request: Request, tab_id: str) -> HTMLResponse:
+        template_map = {
+            "overview": "partials/tab_overview.html",
+            "config":   "partials/tab_config.html",
+            "code":     "partials/tab_code.html",
+        }
+        template_name = template_map.get(tab_id)
+        if not template_name:
+            return HTMLResponse("<p>Tab not found.</p>", status_code=404)
+        return templates.TemplateResponse(request, template_name, {})
+
+    @app.get("/partials/toast", response_class=HTMLResponse)
+    def toast_partial(request: Request) -> HTMLResponse:
+        message = request.query_params.get("message", "Action complete.")
+        variant = request.query_params.get("variant", "success")
+        title   = request.query_params.get("title", "")
+        return templates.TemplateResponse(
+            request, "widgets/toast.html",
+            {"message": message, "variant": variant, "title": title},
+        )
+
     return app
 
 

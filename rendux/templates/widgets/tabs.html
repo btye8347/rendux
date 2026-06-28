@@ -1,0 +1,18 @@
+<div class="widget-tabs">
+  <div class="tab-bar" role="tablist">
+    {% for tab in tabs %}
+    <button class="tab-btn{% if tab.active %} active{% endif %}"
+            role="tab"
+            aria-selected="{{ 'true' if tab.active else 'false' }}"
+            hx-get="{{ tab.url }}"
+            hx-target="#{{ target }}"
+            hx-swap="innerHTML"
+            hx-on:click="this.closest('.tab-bar').querySelectorAll('.tab-btn').forEach(b=>b.classList.remove('active')); this.classList.add('active')">
+      {{ tab.label }}
+    </button>
+    {% endfor %}
+  </div>
+  <div id="{{ target }}" class="tab-content">
+    {{ initial_content|default('') }}
+  </div>
+</div>
