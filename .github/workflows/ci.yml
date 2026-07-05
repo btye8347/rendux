@@ -29,6 +29,9 @@ jobs:
       - name: Run tests
         run: uv run pytest tests/ -q
 
+      - name: Agent RDL eval harness
+        run: uv run python scripts/vibe_test.py
+
       - name: Strict render smoke (ops layout)
         run: RENDUX_STRICT=1 uv run python -c "
         import os, yaml

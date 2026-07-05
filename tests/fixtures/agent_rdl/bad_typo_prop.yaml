@@ -1,0 +1,7 @@
+# Agent-style RDL output: typo prop (should fail lint + strict render)
+layout:
+  - widget: stat_card
+    labl: CPU
+    value: "82%"
+
+context: {}

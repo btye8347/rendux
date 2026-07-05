@@ -19,10 +19,10 @@ different stack. Python/FastAPI/Jinja is reference implementation #1, not the mo
 | 3 — Strict render mode | **Done** | `LayoutRenderer(strict=True)`, `RENDUX_STRICT=1`, verified-widget prop checks at render |
 | 4 — Grammar spec | **Done** | `docs/rdl-spec-v0.1.md` |
 | 5 — Conformance | **Partial** | Excerpt fixtures + full ops layout from `views.yaml`; collect/render parity test |
-| 6 — Agent eval | **Not started** | Blocked on bandwidth, not dependencies |
-| 7 — Config precedence | **Not started** | Low effort, still open |
+| 6 — Agent eval | **Done (fixture-based)** | `scripts/vibe_test.py` — 3 scenarios; LLM integration optional later |
+| 7 — Config precedence | **Done** | `tests/test_config_precedence.py` |
 
-**Test count:** 110 (run `uv run pytest tests/ -q`)
+**Test count:** 119 (run `uv run pytest tests/ -q`)
 
 **CI:** `.github/workflows/ci.yml` — lint + pytest + strict ops smoke on push/PR
 
@@ -121,13 +121,18 @@ Phase 7 (Config Precedence)           ✗
 
 ## Phase 6 — Agent Eval Harness
 
-- [ ] `scripts/vibe_test.py` — not started
+- [x] `scripts/vibe_test.py` — fixture-based eval (good + bad agent outputs)
+- [x] Runs strict lint + strict render per scenario
+- [x] CI step + `tests/test_vibe_test.py`
+- [ ] Live LLM prompts (optional — requires API key; fixtures prove the pipeline)
+
+**Pass rate:** 3/3 fixture scenarios (`uv run python scripts/vibe_test.py`)
 
 ---
 
 ## Phase 7 — Config Precedence Tests
 
-- [ ] `tests/test_config_precedence.py` — not started
+- [x] `tests/test_config_precedence.py` — shell→view merge, surface defaults, render context order, layout vs template
 
 ---
 
@@ -141,7 +146,8 @@ Alternate-language renderer — only after Phase 5 is complete for all targeted 
 
 ```bash
 cd ~/dev/rendux
-uv run pytest tests/ -q                                    # 110 tests
+uv run pytest tests/ -q                                    # 119 tests
 uv run python scripts/lint_rdl.py config/views.yaml        # must exit 0
+uv run python scripts/vibe_test.py                         # agent eval fixtures
 RENDUX_STRICT=1 uv run pytest tests/conformance/ tests/test_layout_strict.py -q
 ```

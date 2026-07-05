@@ -1,0 +1,19 @@
+# Agent-style RDL output: valid KPI row
+layout:
+  - type: grid
+    columns: 3
+    children:
+      - widget: stat_card
+        each: "$ctx.kpi"
+        label: "$item.label"
+        value: "$item.value"
+        status: "$item.status"
+
+context:
+  kpi:
+    - label: CPU
+      value: "82%"
+      status: ok
+    - label: Memory
+      value: "64%"
+      status: warn

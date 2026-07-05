@@ -1,0 +1,8 @@
+# Agent-style RDL output: invalid container type
+layout:
+  - type: carousel
+    children:
+      - widget: alert
+        message: "hello"
+
+context: {}

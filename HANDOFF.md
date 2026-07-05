@@ -4,9 +4,9 @@
 **Host:** dev-01 (Linux, Python 3.12)  
 **Path:** `~/dev/rendux` (NFS — `10.10.10.10:/mnt/huron/axym/dev`)  
 **Branch:** `master` — `a1ea2c0` (1 commit ahead of `origin/master`)  
-**Test count:** 110 passing (linter, contracts, conformance, strict mode)
+**Test count:** 119 passing (linter, contracts, conformance, strict mode, precedence, agent eval)
 
-**CI:** GitHub Actions runs `lint_rdl.py` + `pytest` on push/PR (`.github/workflows/ci.yml`).
+**CI:** GitHub Actions runs `lint_rdl.py` + `pytest` + `vibe_test.py` on push/PR.
 
 **Strict mode:** `RENDUX_STRICT=1` enables fail-fast render checks in dev/CI. Production default remains permissive.
 
@@ -27,6 +27,7 @@ uv run uvicorn demo.main:app --reload --host 0.0.0.0 --port 8001
 # tests
 uv run pytest tests/ -q
 uv run python scripts/lint_rdl.py config/views.yaml   # strict lint — also run in CI
+uv run python scripts/vibe_test.py                    # agent RDL eval fixtures
 ```
 
 Or run `~/rendux/setup-dev-01.sh` once TrueNAS permissions are fixed.
