@@ -1,0 +1,8 @@
+{
+  "name": "dom-dialog",
+  "description": "Native dialog opened via DOM click handler.",
+  "requires": ["id", "title"],
+  "optional": ["body", "trigger_label", "trigger_variant", "cancel_label", "confirm_label"],
+  "triggers": ["click"],
+  "side_effects": ["open_dialog"]
+}

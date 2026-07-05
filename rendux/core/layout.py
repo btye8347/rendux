@@ -96,6 +96,8 @@ from typing import Any
 from jinja2 import Environment, TemplateNotFound
 from markupsafe import Markup, escape
 
+from rendux.core.contracts import normalize_widget_props
+
 # ── constants ────────────────────────────────────────────────────────────────
 
 MAX_DEPTH = 50
@@ -212,7 +214,9 @@ class LayoutRenderer:
         extra: dict[str, Any],
     ) -> str:
         # Strip protected keys so widget params cannot overwrite globals
-        safe_extra = {k: v for k, v in extra.items() if k not in _PROTECTED_CTX}
+        safe_extra = normalize_widget_props(widget, {
+            k: v for k, v in extra.items() if k not in _PROTECTED_CTX
+        })
         try:
             tmpl = self._env.get_template(f"widgets/{widget}.html")
             return tmpl.render({**ctx, **safe_extra})

@@ -1,0 +1,6 @@
+{
+  "name": "static",
+  "description": "No HTMX or DOM scripting required.",
+  "requires": [],
+  "optional": []
+}

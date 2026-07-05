@@ -1,0 +1,22 @@
+{
+  "name": "status_grid",
+  "status": "verified",
+  "interaction": { "profile": "static" },
+  "accepts_each": false,
+  "props": {
+    "title": { "type": "string", "required": false },
+    "items": { "type": "list", "required": true }
+  },
+  "item_schema": {
+    "required": {
+      "label": { "type": "string" },
+      "status": {
+        "type": "enum",
+        "enum": ["ok", "warn", "error", "info", "default", "unknown"]
+      }
+    },
+    "optional": {
+      "detail": { "type": "string" }
+    }
+  }
+}

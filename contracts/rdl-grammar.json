@@ -1,0 +1,15 @@
+{
+  "version": "0.1.0",
+  "description": "RDL grammar — machine-readable spec anchor for linters and alternate renderers.",
+  "node_kinds": ["widget", "container", "divider", "heading"],
+  "container_types": ["stack", "row", "grid", "section", "split"],
+  "grid_columns": [1, 2, 3, 4, "auto"],
+  "gap_values": ["sm", "lg"],
+  "sigils": ["$ctx", "$item"],
+  "reserved_widget_keys": ["widget", "when", "each"],
+  "naming": {
+    "section_heading": "title",
+    "scalar_descriptor": "label",
+    "scalar_value": "value"
+  }
+}

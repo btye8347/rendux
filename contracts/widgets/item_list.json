@@ -1,0 +1,25 @@
+{
+  "name": "item_list",
+  "status": "verified",
+  "interaction": { "profile": "static" },
+  "accepts_each": false,
+  "props": {
+    "title": { "type": "string", "required": false },
+    "items": { "type": "list", "required": true },
+    "empty_message": { "type": "string", "required": false }
+  },
+  "item_schema": {
+    "required": {
+      "title": { "type": "string" }
+    },
+    "optional": {
+      "description": { "type": "string" },
+      "meta": { "type": "string" },
+      "status": {
+        "type": "enum",
+        "enum": ["ok", "warn", "error", "info", "default"]
+      },
+      "link": { "type": "string" }
+    }
+  }
+}

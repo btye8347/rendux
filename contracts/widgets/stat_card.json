@@ -1,0 +1,21 @@
+{
+  "name": "stat_card",
+  "status": "verified",
+  "interaction": { "profile": "static" },
+  "accepts_each": true,
+  "props": {
+    "label": {
+      "type": "string",
+      "required": true,
+      "aliases": ["title"]
+    },
+    "value": { "type": "string", "required": true },
+    "status": {
+      "type": "enum",
+      "enum": ["ok", "warn", "error", "info", "default"],
+      "required": false
+    },
+    "trend": { "type": "string", "required": false },
+    "subtitle": { "type": "string", "required": false }
+  }
+}

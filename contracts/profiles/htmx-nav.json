@@ -1,0 +1,10 @@
+{
+  "name": "htmx-nav",
+  "description": "HTMX GET navigation into a target region.",
+  "requires": ["hx_get"],
+  "optional": ["hx_target", "hx_swap", "hx_push_url"],
+  "defaults": {
+    "hx_target": "#workspace",
+    "hx_swap": "innerHTML"
+  }
+}

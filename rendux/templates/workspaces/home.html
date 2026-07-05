@@ -1,14 +1,14 @@
 <div class="workspace-stat-row">
-  {% with title="Views Registered", value="3", trend="+2", status="ok" %}
+  {% with label="Views Registered", value="3", trend="+2", status="ok" %}
     {% include "widgets/stat_card.html" %}
   {% endwith %}
-  {% with title="Widgets Available", value="4", subtitle="stat · grid · list · kv" %}
+  {% with label="Widgets Available", value="4", subtitle="stat · grid · list · kv" %}
     {% include "widgets/stat_card.html" %}
   {% endwith %}
-  {% with title="Runtime Status", value="Running", status="ok" %}
+  {% with label="Runtime Status", value="Running", status="ok" %}
     {% include "widgets/stat_card.html" %}
   {% endwith %}
-  {% with title="Config Version", value="0.1.0" %}
+  {% with label="Config Version", value="0.1.0" %}
     {% include "widgets/stat_card.html" %}
   {% endwith %}
 </div>

@@ -1,0 +1,23 @@
+{
+  "name": "timeline",
+  "status": "verified",
+  "interaction": { "profile": "static" },
+  "accepts_each": false,
+  "props": {
+    "events": { "type": "list", "required": true }
+  },
+  "item_schema": {
+    "required": {
+      "title": { "type": "string" }
+    },
+    "optional": {
+      "time": { "type": "string" },
+      "body": { "type": "string" },
+      "tags": { "type": "list" },
+      "status": {
+        "type": "enum",
+        "enum": ["ok", "warn", "error", "info", "default"]
+      }
+    }
+  }
+}

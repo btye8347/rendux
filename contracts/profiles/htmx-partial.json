@@ -1,0 +1,6 @@
+{
+  "name": "htmx-partial",
+  "description": "HTMX partial swap (GET + explicit target).",
+  "requires": ["hx_get", "hx_target"],
+  "optional": ["hx_swap", "hx_push_url"]
+}

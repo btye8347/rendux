@@ -1,0 +1,9 @@
+{
+  "name": "htmx-form",
+  "description": "HTMX POST form submission.",
+  "requires": ["hx_post"],
+  "optional": ["hx_target", "hx_swap"],
+  "defaults": {
+    "hx_target": "this"
+  }
+}

@@ -4,7 +4,7 @@
 **Host:** dev-01 (Linux, Python 3.12)  
 **Path:** `~/dev/rendux` (NFS — `10.10.10.10:/mnt/huron/axym/dev`)  
 **Branch:** `master` — `a1ea2c0` (1 commit ahead of `origin/master`)  
-**Test count:** 88 passing (verified after Linux venv setup)
+**Test count:** 95 passing (includes RDL linter + contract registry tests)
 
 ---
 
@@ -35,6 +35,10 @@ The tree was copied from macOS with a Homebrew Python 3.14 `.venv` that does not
 ## What exists
 
 RendUX is a config-driven UI shell runtime: FastAPI + Jinja2 + HTMX + PyYAML. No database. No CCC references.
+
+**Scope (v1):** internal ops/admin dashboard shell — not a general app framework. Widget additions should serve monitoring, status, configuration, and operator workflows. The ops view (`/ops`) is the baseline RDL reference.
+
+**Contracts:** JSON widget contracts in `contracts/widgets/` (machine); YAML in `config/views.yaml` (human authoring). Lint with `uv run python scripts/lint_rdl.py config/views.yaml`.
 
 ### Stack
 

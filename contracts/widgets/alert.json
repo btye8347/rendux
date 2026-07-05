@@ -1,0 +1,15 @@
+{
+  "name": "alert",
+  "status": "verified",
+  "interaction": { "profile": "static" },
+  "accepts_each": false,
+  "props": {
+    "message": { "type": "string", "required": true },
+    "title": { "type": "string", "required": false },
+    "variant": {
+      "type": "enum",
+      "enum": ["info", "success", "warn", "error"],
+      "required": false
+    }
+  }
+}
