@@ -4,7 +4,7 @@
 **Host:** dev-01 (Linux, Python 3.12)  
 **Path:** `~/dev/rendux` (NFS — `10.10.10.10:/mnt/huron/axym/dev`)  
 **Branch:** `master` — `a1ea2c0` (1 commit ahead of `origin/master`)  
-**Test count:** 119 passing (linter, contracts, conformance, strict mode, precedence, agent eval)
+**Test count:** 121 passing (linter, contracts, conformance, strict mode, precedence, agent eval)
 
 **CI:** GitHub Actions runs `lint_rdl.py` + `pytest` + `vibe_test.py` on push/PR.
 
@@ -150,7 +150,7 @@ Public API: `window.RendUX.setTheme("light"|"dark"|"system")` — updates DOM, f
 | View ID | Route | Workspace kind |
 |---|---|---|
 | `home` | `/` | template: `workspaces/home.html` |
-| `components` | `/components` | template: `workspaces/components.html` |
+| `components` | `/components` | **layout** (RDL — full widget showcase) |
 | `ops` | `/ops` | **layout** (RDL — full declarative) |
 | `about` | `/about` | template: `workspaces/about.html` |
 

@@ -111,3 +111,29 @@ def test_view_fallback_renders_shell_for_unknown_view():
     assert response.status_code == 404
     assert 'class="app-shell"' in response.text
     assert 'id="workspace"' in response.text
+
+
+def test_components_resolve_workspace_kind_is_layout():
+    service = ViewConfigService.from_yaml(CONFIG_PATH)
+
+    ws = service.resolve_workspace("components")
+
+    assert ws["kind"] == "layout"
+    assert isinstance(ws["value"], list)
+    assert len(ws["value"]) > 0
+    assert service.view_data("components")  # data block loaded via include
+
+
+def test_view_include_merges_fragment(tmp_path):
+    inc = tmp_path / "frag.yaml"
+    inc.write_text("data:\n  sample: true\nworkspace:\n  layout: []\n")
+    main = tmp_path / "views.yaml"
+    main.write_text(
+        "version: '0.1.0'\n"
+        "shell:\n  id: default\n"
+        "views:\n  demo:\n    label: Demo\n    route: /demo\n"
+        "    include: frag.yaml\n"
+    )
+    service = ViewConfigService.from_yaml(main)
+    assert service.view_data("demo") == {"sample": True}
+    assert service.resolve_workspace("demo")["kind"] == "layout"

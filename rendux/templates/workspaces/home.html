@@ -1,8 +1,8 @@
 <div class="workspace-stat-row">
-  {% with label="Views Registered", value="3", trend="+2", status="ok" %}
+  {% with label="Views Registered", value="4", trend="+1", status="ok" %}
     {% include "widgets/stat_card.html" %}
   {% endwith %}
-  {% with label="Widgets Available", value="4", subtitle="stat · grid · list · kv" %}
+  {% with label="Widgets Available", value="38", subtitle="RDL showcase on /components" %}
     {% include "widgets/stat_card.html" %}
   {% endwith %}
   {% with label="Runtime Status", value="Running", status="ok" %}
@@ -16,7 +16,8 @@
 <div class="workspace-two-col">
   {% with title="Active Views", items=[
     {"title": "Home", "description": "Dashboard overview", "meta": "/", "status": "ok"},
-    {"title": "Components", "description": "Widget reference", "meta": "/components"},
+    {"title": "Components", "description": "RDL widget showcase", "meta": "/components"},
+    {"title": "Ops", "description": "Declarative ops dashboard", "meta": "/ops", "status": "ok"},
     {"title": "About", "description": "Stack and architecture", "meta": "/about"}
   ] %}
     {% include "widgets/item_list.html" %}

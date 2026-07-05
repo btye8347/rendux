@@ -38,6 +38,7 @@ class ViewConfigService:
         data = yaml.safe_load(path.read_text(encoding="utf-8")) or {}
         if not isinstance(data, dict):
             raise ViewConfigError("View config must be a mapping.")
+        _resolve_view_includes(data, path.parent)
         _validate_top_level(data)
         return cls(data)
 
@@ -221,6 +222,30 @@ def _validate_top_level(data: dict[str, Any]) -> None:
         if key not in data:
             raise ViewConfigError(f"View config missing required section: {key}")
     _require_mapping(data, "views")
+
+
+def _resolve_view_includes(config: dict[str, Any], base: Path) -> None:
+    """Merge optional ``include: <file>`` fragments into view declarations."""
+    views = config.get("views")
+    if not isinstance(views, dict):
+        return
+    for view_id, view in views.items():
+        if not isinstance(view, dict):
+            continue
+        include = view.pop("include", None)
+        if not include:
+            continue
+        inc_path = base / str(include)
+        if not inc_path.is_file():
+            raise ViewConfigError(f"View {view_id!r} include not found: {include}")
+        fragment = yaml.safe_load(inc_path.read_text(encoding="utf-8")) or {}
+        if not isinstance(fragment, dict):
+            raise ViewConfigError(f"View include must be a mapping: {include}")
+        for key, value in fragment.items():
+            if key in view and isinstance(view[key], dict) and isinstance(value, dict):
+                view[key] = deep_merge(value, view[key])
+            else:
+                view[key] = deepcopy(value)
 
 
 def _require_mapping(data: dict[str, Any], key: str) -> dict[str, Any]:

@@ -15,8 +15,7 @@ views:
   components:
     label: Components
     route: /components
-    workspace:
-      template: workspaces/components.html
+    include: components_showcase.yaml
 
   ops:
     label: Ops
