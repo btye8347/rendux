@@ -1,0 +1,17 @@
+layout:
+  - type: stack
+    children:
+      - widget: alert
+        variant: warn
+        title: Queue depth elevated
+        message: "Job queue processing slower than ingestion."
+      - widget: alert
+        variant: error
+        title: Mail relay unreachable
+        message: "SMTP connection refused."
+      - widget: progress_bar
+        label: "Disk usage — /data"
+        value: 73
+        variant: warn
+
+context: {}

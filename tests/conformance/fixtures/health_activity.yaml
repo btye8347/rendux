@@ -1,0 +1,27 @@
+layout:
+  - type: grid
+    columns: 2
+    children:
+      - widget: status_grid
+        title: Service Health
+        items: "$ctx.service_health"
+      - widget: timeline
+        events: "$ctx.recent_events"
+
+context:
+  service_health:
+    - label: API Gateway
+      status: ok
+      detail: "p99 12ms"
+    - label: Mail Relay
+      status: error
+      detail: "connection refused"
+  recent_events:
+    - title: Deployment complete
+      time: "09:22"
+      status: ok
+      body: "api-gateway v1.4.2 → all pods"
+    - title: Build failed
+      time: Yesterday
+      status: error
+      body: "Test regression"

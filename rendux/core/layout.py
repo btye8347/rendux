@@ -1,96 +1,13 @@
 """
-RendUX Declarative Layout (RDL) renderer — v0.2
+RendUX Declarative Layout (RDL) renderer.
 
-Language spec
-=============
-
-A layout is a list of *nodes*. Nodes are evaluated top-to-bottom and rendered
-into an HTML string. Every node may carry an optional ``when:`` guard.
-
-Node types
-----------
-
-Widget node::
-
-    widget: <name>              # required — resolves to widgets/<name>.html
-    <param>: <value>            # flat widget params (see Value types below)
-    when:  <cond>               # optional — suppress node if falsy
-    each:  "$ctx.list"          # optional — repeat for each item in collection
-                                #            also accepts an inline YAML list
-
-Container node::
-
-    type: stack | row | grid | section | split
-    children: [<node>, ...]     # required for stack / row / grid
-    when: <cond>
-
-    # grid extras:
-    columns: 1 | 2 | 3 | 4 | auto   # default: auto; other values are errors
-    gap: sm | lg                      # emits inline style="gap:..." on the div
-
-    # stack / row extras:
-    gap: sm | lg                      # appended to CSS class: layout-stack-sm
-
-    # section extras:
-    heading: "Section title"
-    description: "Subtitle text"
-    children: [<node>, ...]
-
-    # split extras — uses named slots, not children:
-    primary:   [<node>, ...]    # left / top panel
-    secondary: [<node>, ...]    # right / bottom panel
-    initial: "40%"              # initial primary width
-    min: 120                    # minimum primary width in px
-
-Shorthand nodes::
-
-    { divider: true }
-    { heading: "Text", level: 2 }    # level defaults to 2; clamped 1–6
-
-Value types
------------
-
-``"$ctx.key"``
-    Resolved from the render context dict. Supports dotted paths:
-    ``"$ctx.stats.cpu"`` → ``ctx["stats"]["cpu"]``.
-
-``"$item.key"``
-    Current iteration item inside an ``each:`` loop. Dotted paths supported.
-    Outside an ``each:`` block, ``$item.*`` resolves to an empty string.
-
-``"$item"`` (bare)
-    The entire current item when it is a plain value (not a dict).
-
-Literal values
-    Strings, ints, booleans, lists, and dicts are passed through unchanged.
-    A list of dicts is recursively resolved.
-
-``when:`` values
-    Accepts a ``$ctx.*`` reference, a YAML boolean (``true`` / ``false``),
-    or any Python-truthy/falsy value. Plain non-sigil strings are always
-    truthy — use ``$ctx.*`` or a boolean literal instead.
-
-Nesting limit
--------------
-Layout trees may not exceed ``MAX_DEPTH`` (50) levels. Deeper trees raise
-``LayoutConfigError``. This prevents runaway recursion from malformed YAML.
-
-Security model
---------------
-* Widget params are prevented from overwriting protected context keys
-  (``url_for``, ``request``, ``view_shell``, and theme/static globals).
-* Container ``type`` and ``columns`` values are allowlisted; unknown values
-  emit an HTML comment rather than injecting raw text.
-* ``heading`` and ``description`` text is HTML-escaped before insertion.
-* Pre-rendered HTML strings passed to the ``split`` container are wrapped in
-  ``markupsafe.Markup`` so Jinja2 does not double-escape them.
-* Missing widget templates render a visible error placeholder rather than
-  raising a 500.
+Implements RDL grammar v0.1 — see docs/rdl-spec-v0.1.md.
 """
 
 from __future__ import annotations
 
 import re
+from dataclasses import dataclass
 from typing import Any
 
 from jinja2 import Environment, TemplateNotFound
@@ -126,6 +43,14 @@ class LayoutConfigError(ValueError):
     """Raised for structural errors in a layout definition."""
 
 
+@dataclass(frozen=True)
+class WidgetInvocation:
+    """Resolved widget dispatch — portable conformance assertion unit."""
+
+    widget: str
+    params: dict[str, Any]
+
+
 # ── renderer ─────────────────────────────────────────────────────────────────
 
 class LayoutRenderer:
@@ -155,6 +80,23 @@ class LayoutRenderer:
                 parts.append(html)
         return "\n".join(parts)
 
+    def collect_invocations(
+        self,
+        nodes: list[Any] | None,
+        ctx: dict[str, Any],
+        _depth: int = 0,
+    ) -> list[WidgetInvocation]:
+        """Return resolved widget dispatches without rendering HTML."""
+        if _depth > MAX_DEPTH:
+            raise LayoutConfigError(
+                f"Layout nesting exceeds the maximum depth ({MAX_DEPTH}). "
+                "Check for runaway recursion in your layout definition."
+            )
+        out: list[WidgetInvocation] = []
+        for node in nodes or []:
+            self._collect_node(node, ctx, item=None, depth=_depth, out=out)
+        return out
+
     # ── dispatch ─────────────────────────────────────────────────────────────
 
     def _dispatch(
@@ -183,6 +125,95 @@ class LayoutRenderer:
             text = escape(str(node["heading"]))
             return f'<h{level} class="workspace-heading">{text}</h{level}>'
         return ""
+
+    def _collect_node(
+        self,
+        node: Any,
+        ctx: dict[str, Any],
+        item: Any,
+        depth: int,
+        out: list[WidgetInvocation],
+    ) -> None:
+        if not isinstance(node, dict):
+            return
+        if not self._check_when(node, ctx, item):
+            return
+
+        if "widget" in node:
+            self._collect_widget(node, ctx, item, out)
+            return
+        if "type" in node:
+            self._collect_container(node, ctx, depth, out)
+            return
+        if node.get("divider"):
+            out.append(WidgetInvocation("divider", {}))
+            return
+        if "heading" in node:
+            out.append(WidgetInvocation("_heading", {
+                "heading": node.get("heading"),
+                "level": node.get("level", 2),
+            }))
+            return
+
+    def _collect_widget(
+        self,
+        node: dict,
+        ctx: dict[str, Any],
+        item: Any,
+        out: list[WidgetInvocation],
+    ) -> None:
+        name = node.get("widget")
+        if not name or not isinstance(name, str):
+            return
+
+        params = {k: v for k, v in node.items() if k not in _RESERVED}
+        each_ref = node.get("each")
+
+        if each_ref is not None:
+            collection = self._resolve(each_ref, ctx, item)
+            if not isinstance(collection, (list, tuple)):
+                collection = []
+            for entry in collection:
+                resolved = self._resolve_all(params, ctx, item=entry)
+                safe = normalize_widget_props(name, {
+                    k: v for k, v in resolved.items() if k not in _PROTECTED_CTX
+                })
+                out.append(WidgetInvocation(name, safe))
+            return
+
+        resolved = self._resolve_all(params, ctx, item)
+        safe = normalize_widget_props(name, {
+            k: v for k, v in resolved.items() if k not in _PROTECTED_CTX
+        })
+        out.append(WidgetInvocation(name, safe))
+
+    def _collect_container(
+        self,
+        node: dict,
+        ctx: dict[str, Any],
+        depth: int,
+        out: list[WidgetInvocation],
+    ) -> None:
+        t = node.get("type", "")
+        if t == "split":
+            primary = node.get("primary", [])
+            secondary = node.get("secondary", [])
+            for child in primary if isinstance(primary, list) else []:
+                self._collect_node(child, ctx, None, depth + 1, out)
+            for child in secondary if isinstance(secondary, list) else []:
+                self._collect_node(child, ctx, None, depth + 1, out)
+            # split dispatches split_pane widget at render time
+            out.append(WidgetInvocation("split_pane", {
+                "initial_primary": node.get("initial", "50%"),
+                "min_primary": node.get("min", 120),
+                "pane_id": str(node.get("id", "rdl-0")),
+            }))
+            return
+
+        children = node.get("children", [])
+        if isinstance(children, list):
+            for child in children:
+                self._collect_node(child, ctx, None, depth + 1, out)
 
     # ── widget ───────────────────────────────────────────────────────────────
 

@@ -4,7 +4,7 @@
 **Host:** dev-01 (Linux, Python 3.12)  
 **Path:** `~/dev/rendux` (NFS — `10.10.10.10:/mnt/huron/axym/dev`)  
 **Branch:** `master` — `a1ea2c0` (1 commit ahead of `origin/master`)  
-**Test count:** 95 passing (includes RDL linter + contract registry tests)
+**Test count:** 99 passing (includes RDL linter, contracts, conformance suite)
 
 ---
 
