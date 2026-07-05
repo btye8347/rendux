@@ -14,6 +14,8 @@ from rendux.core.themes import ThemeService
 from rendux.views.routes import router as views_router
 from rendux.views.service import ViewConfigService
 
+from demo.ops_context import build_ops_view_ctx
+
 PACKAGE_ROOT = Path(__file__).resolve().parent
 RENDUX_ROOT  = PACKAGE_ROOT.parent / "rendux"
 PROJECT_ROOT = PACKAGE_ROOT.parent
@@ -82,7 +84,14 @@ def create_app() -> FastAPI:
 
     @app.get("/ops", response_class=HTMLResponse)
     def ops(request: Request) -> HTMLResponse:
-        return _render_view(request, "ops", "Operations")
+        views: ViewConfigService = request.app.state.services.get("views")
+        static = views.view_data("ops")
+        return _render_view(
+            request,
+            "ops",
+            "Operations",
+            view_ctx=build_ops_view_ctx(static),
+        )
 
     @app.get("/about", response_class=HTMLResponse)
     def about(request: Request) -> HTMLResponse:

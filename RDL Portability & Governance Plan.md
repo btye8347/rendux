@@ -18,11 +18,11 @@ different stack. Python/FastAPI/Jinja is reference implementation #1, not the mo
 | 2 — RDL linter | **Done (CI-enforced)** | Strict unknown props = error (plan deviation, agreed); no pre-commit hook yet |
 | 3 — Strict render mode | **Done** | `LayoutRenderer(strict=True)`, `RENDUX_STRICT=1`, verified-widget prop checks at render |
 | 4 — Grammar spec | **Done** | `docs/rdl-spec-v0.1.md` |
-| 5 — Conformance | **Partial** | Excerpt fixtures + full ops layout from `views.yaml`; collect/render parity test |
+| 5 — Conformance | **Partial** | Ops + components full layouts; excerpt fixtures; collect/render parity |
 | 6 — Agent eval | **Done (fixture-based)** | `scripts/vibe_test.py` — 3 scenarios; LLM integration optional later |
 | 7 — Config precedence | **Done** | `tests/test_config_precedence.py` |
 
-**Test count:** 119 (run `uv run pytest tests/ -q`)
+**Test count:** 128 (run `uv run pytest tests/ -q`)
 
 **CI:** `.github/workflows/ci.yml` — lint + pytest + strict ops smoke on push/PR
 
@@ -45,11 +45,11 @@ Phase 1 (Widget Contract Manifest)  ← partial: ops baseline
   ├─→ Phase 2 (RDL Linter)            ✓
   ├─→ Phase 4 (Grammar Spec Doc)     ✓
   │     └─→ Phase 5 (Conformance)    ← partial
-  │           └─→ Phase 6 (Agent Eval)  ✗
+  │           └─→ Phase 6 (Agent Eval)  ✓
   └─→ Phase 6
 
 Phase 3 (Strict Mode)                 ✓
-Phase 7 (Config Precedence)           ✗
+Phase 7 (Config Precedence)           ✓
 ```
 
 ---
@@ -113,6 +113,7 @@ Phase 7 (Config Precedence)           ✗
 - [x] `tests/conformance/` with structural assertions on resolved params
 - [x] `collect_invocations()` API
 - [x] Full ops layout test from real `config/views.yaml` (12 dispatches)
+- [x] Full components showcase layout (107 invocations, 34 widgets)
 - [x] Collect/render parity test for ops layout
 - [ ] Conformance fixtures linked inline from spec doc (partial — spec references test file only)
 - [ ] Remaining widgets covered as they are verified
@@ -146,7 +147,7 @@ Alternate-language renderer — only after Phase 5 is complete for all targeted 
 
 ```bash
 cd ~/dev/rendux
-uv run pytest tests/ -q                                    # 119 tests
+uv run pytest tests/ -q                                    # 128 tests
 uv run python scripts/lint_rdl.py config/views.yaml        # must exit 0
 uv run python scripts/vibe_test.py                         # agent eval fixtures
 RENDUX_STRICT=1 uv run pytest tests/conformance/ tests/test_layout_strict.py -q

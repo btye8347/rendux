@@ -4,7 +4,7 @@
 **Host:** dev-01 (Linux, Python 3.12)  
 **Path:** `~/dev/rendux` (NFS — `10.10.10.10:/mnt/huron/axym/dev`)  
 **Branch:** `master` — `a1ea2c0` (1 commit ahead of `origin/master`)  
-**Test count:** 121 passing (linter, contracts, conformance, strict mode, precedence, agent eval)
+**Test count:** 128 passing (linter, contracts, conformance, strict mode, precedence, agent eval, ops view_ctx)
 
 **CI:** GitHub Actions runs `lint_rdl.py` + `pytest` + `vibe_test.py` on push/PR.
 
@@ -188,8 +188,9 @@ a292ccd  Add: four core widgets with demo data across all views
 
 ## Possible next directions (no commitment)
 
-1. **Dynamic view_ctx** — poll a live data source (health check endpoints, metrics) and inject via `view_ctx={}` in the route handler. The plumbing is already there.
-2. **Components view via RDL** — replace the hardcoded `components.html` template with a layout that renders the widget showcase declaratively.
-3. **RDL linter** — add `scripts/lint_views.py` to validate layout node trees (unknown widget names, unknown container types, required params).
-4. **Split / drawer layouts** — the `split_pane` and `drawer` widgets exist but no top-level layout uses them yet.
-5. **HTMX partials via RDL** — `each:` list refreshed by a polling HTMX partial (server push pattern).
+1. ~~**Dynamic view_ctx**~~ — **done** — `/ops` injects live-ish KPI/events via `demo/ops_context.py`
+2. ~~**Components view via RDL**~~ — **done** — `config/components_showcase.yaml` via `include:`
+3. **Widget contract audits (Track A)** — verify remaining 32 stubs; enables strict lint on `/components`
+4. **HTMX partial refresh on `/ops`** — poll timeline or KPI row via HTMX partial
+5. **Split / drawer layouts** — top-level RDL containers using `split_pane` / `drawer`
+6. **Live agent eval (Track C)** — extend `vibe_test.py` with LLM prompts
