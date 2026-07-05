@@ -13,7 +13,7 @@ from typing import Any
 from jinja2 import Environment, TemplateNotFound
 from markupsafe import Markup, escape
 
-from rendux.core.contracts import normalize_widget_props
+from rendux.core.contracts import canonical_prop_names, load_widget_registry, normalize_widget_props
 
 # ── constants ────────────────────────────────────────────────────────────────
 
@@ -56,8 +56,9 @@ class WidgetInvocation:
 class LayoutRenderer:
     """Walks an RDL node tree and renders it to an HTML string."""
 
-    def __init__(self, env: Environment) -> None:
+    def __init__(self, env: Environment, *, strict: bool = False) -> None:
         self._env = env
+        self._strict = strict
 
     # ── public ──────────────────────────────────────────────────────────────
 
@@ -174,14 +175,14 @@ class LayoutRenderer:
             if not isinstance(collection, (list, tuple)):
                 collection = []
             for entry in collection:
-                resolved = self._resolve_all(params, ctx, item=entry)
+                resolved = self._resolve_all(params, ctx, item=entry, widget=name)
                 safe = normalize_widget_props(name, {
                     k: v for k, v in resolved.items() if k not in _PROTECTED_CTX
                 })
                 out.append(WidgetInvocation(name, safe))
             return
 
-        resolved = self._resolve_all(params, ctx, item)
+        resolved = self._resolve_all(params, ctx, item, widget=name)
         safe = normalize_widget_props(name, {
             k: v for k, v in resolved.items() if k not in _PROTECTED_CTX
         })
@@ -231,11 +232,11 @@ class LayoutRenderer:
                 collection = []
             parts: list[str] = []
             for entry in collection:
-                resolved = self._resolve_all(params, ctx, item=entry)
+                resolved = self._resolve_all(params, ctx, item=entry, widget=name)
                 parts.append(self._render_template(name, ctx, resolved))
             return "\n".join(parts)
 
-        resolved = self._resolve_all(params, ctx, item)
+        resolved = self._resolve_all(params, ctx, item, widget=name)
         return self._render_template(name, ctx, resolved)
 
     def _render_template(
@@ -248,15 +249,37 @@ class LayoutRenderer:
         safe_extra = normalize_widget_props(widget, {
             k: v for k, v in extra.items() if k not in _PROTECTED_CTX
         })
+        if self._strict:
+            self._strict_check_widget_props(widget, safe_extra)
         try:
             tmpl = self._env.get_template(f"widgets/{widget}.html")
             return tmpl.render({**ctx, **safe_extra})
         except TemplateNotFound:
+            if self._strict:
+                raise LayoutConfigError(f"Unknown widget: {widget!r}") from None
             return (
                 f'<div class="alert alert-error">'
                 f'Unknown widget: {escape(str(widget))}'
                 f'</div>'
             )
+
+    def _strict_check_widget_props(self, widget: str, params: dict[str, Any]) -> None:
+        contract = load_widget_registry().get(widget)
+        if not contract or contract.get("status") != "verified":
+            return
+        alias_map = canonical_prop_names(contract)
+        known = set(contract.get("props", {})) | set(alias_map.keys())
+        for key in params:
+            if key not in known:
+                raise LayoutConfigError(f"Unknown prop {key!r} on widget {widget!r}")
+        for prop, spec in contract.get("props", {}).items():
+            if not spec.get("required"):
+                continue
+            if prop in params:
+                continue
+            if any(alias in params for alias in spec.get("aliases", [])):
+                continue
+            raise LayoutConfigError(f"Widget {widget!r} missing required prop {prop!r}")
 
     # ── containers ───────────────────────────────────────────────────────────
 
@@ -264,6 +287,8 @@ class LayoutRenderer:
         t = node.get("type", "")
 
         if t not in _KNOWN_TYPES:
+            if self._strict:
+                raise LayoutConfigError(f"Unknown container type: {t!r}")
             return f'<!-- rdl: unknown container type "{escape(str(t))}" -->'
 
         if t == "section":
@@ -275,15 +300,23 @@ class LayoutRenderer:
 
         if t == "grid":
             raw_cols = node.get("columns", "auto")
+            if self._strict and raw_cols not in _VALID_COLUMNS:
+                raise LayoutConfigError(f"Invalid grid columns: {raw_cols!r}")
             cols     = raw_cols if raw_cols in _VALID_COLUMNS else "auto"
             css      = f"layout-grid-{cols}"
             gap      = node.get("gap")
+            if gap is not None and gap not in _GAP_MODIFIERS:
+                if self._strict:
+                    raise LayoutConfigError(f"Invalid grid gap: {gap!r}")
             if gap in _GAP_MODIFIERS:
                 return f'<div class="{css}" style="gap:{_GAP_CSS[gap]}">{inner}</div>'
             return f'<div class="{css}">{inner}</div>'
 
         # stack / row
         gap    = node.get("gap", "")
+        if gap and gap not in _GAP_MODIFIERS:
+            if self._strict:
+                raise LayoutConfigError(f"Invalid {t} gap: {gap!r}")
         suffix = f"-{gap}" if gap in _GAP_MODIFIERS else ""
         css    = f"layout-{t}{suffix}"
         return f'<div class="{css}">{inner}</div>'
@@ -325,13 +358,29 @@ class LayoutRenderer:
             return cond
         return bool(self._resolve(cond, ctx, item))
 
-    def _resolve(self, value: Any, ctx: dict[str, Any], item: Any) -> Any:
+    def _resolve(
+        self,
+        value: Any,
+        ctx: dict[str, Any],
+        item: Any,
+        *,
+        param_key: str | None = None,
+        widget: str | None = None,
+    ) -> Any:
         if not isinstance(value, str):
             return value
 
         m = _CTX_RE.match(value)
         if m:
-            return _deep_get(ctx, m.group(1).split("."))
+            keys = m.group(1).split(".")
+            if self._strict and not self._is_optional_prop(widget, param_key):
+                return _deep_get_required(ctx, keys, ref=value)
+            if self._strict:
+                found, result = _deep_get_optional(ctx, keys)
+                if not found:
+                    return None
+                return result
+            return _deep_get(ctx, keys)
 
         # $item.key — only meaningful inside each:
         if item is not None:
@@ -343,32 +392,52 @@ class LayoutRenderer:
                 src  = item if isinstance(item, dict) else (
                     vars(item) if hasattr(item, "__dict__") else {}
                 )
+                if self._strict and not self._is_optional_prop(widget, param_key):
+                    return _deep_get_required(src, keys, ref=value)
+                if self._strict:
+                    found, result = _deep_get_optional(src, keys)
+                    if not found:
+                        return None
+                    return result
                 return _deep_get(src, keys)
 
-        # $item.* outside each: → empty string (not the raw sigil)
+        # $item.* outside each: → empty string (permissive) or error (strict)
         if value.startswith("$item"):
+            if self._strict:
+                raise LayoutConfigError(f"{value!r} used outside each: block")
             return ""
 
         return value
+
+    def _is_optional_prop(self, widget: str | None, param_key: str | None) -> bool:
+        if not widget or not param_key:
+            return False
+        contract = load_widget_registry().get(widget)
+        if not contract:
+            return False
+        spec = contract.get("props", {}).get(param_key)
+        return bool(spec and not spec.get("required"))
 
     def _resolve_all(
         self,
         params: dict[str, Any],
         ctx: dict[str, Any],
         item: Any = None,
+        *,
+        widget: str | None = None,
     ) -> dict[str, Any]:
         out: dict[str, Any] = {}
         for k, v in params.items():
             if isinstance(v, str):
-                out[k] = self._resolve(v, ctx, item)
+                out[k] = self._resolve(v, ctx, item, param_key=k, widget=widget)
             elif isinstance(v, list):
                 out[k] = [
-                    self._resolve_all(i, ctx, item) if isinstance(i, dict)
-                    else self._resolve(i, ctx, item)
+                    self._resolve_all(i, ctx, item, widget=widget) if isinstance(i, dict)
+                    else self._resolve(i, ctx, item, widget=widget)
                     for i in v
                 ]
             elif isinstance(v, dict):
-                out[k] = self._resolve_all(v, ctx, item)
+                out[k] = self._resolve_all(v, ctx, item, widget=widget)
             else:
                 out[k] = v
         return out
@@ -382,3 +451,23 @@ def _deep_get(obj: Any, keys: list[str]) -> Any:
             return None
         obj = obj.get(k) if isinstance(obj, dict) else getattr(obj, k, None)
     return obj
+
+
+def _deep_get_required(obj: Any, keys: list[str], *, ref: str) -> Any:
+    """Like _deep_get but raises when any path segment is missing."""
+    current = obj
+    for k in keys:
+        if not isinstance(current, dict) or k not in current:
+            raise LayoutConfigError(f"Unresolved reference {ref!r}")
+        current = current[k]
+    return current
+
+
+def _deep_get_optional(obj: Any, keys: list[str]) -> tuple[bool, Any]:
+    """Return (found, value). found is False when any segment is missing."""
+    current = obj
+    for k in keys:
+        if not isinstance(current, dict) or k not in current:
+            return False, None
+        current = current[k]
+    return True, current

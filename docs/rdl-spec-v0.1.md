@@ -200,7 +200,7 @@ For each node in order:
 - Container `type` and `columns` are allowlisted; unknown values must not inject raw user text
 - `heading` and `description` text must be HTML-escaped before insertion
 - Pre-rendered HTML in split containers must not be double-escaped
-- Missing widget implementation: visible error placeholder (permissive mode) or raise (strict mode, future)
+- Missing widget implementation: visible error placeholder (permissive) or `LayoutConfigError` (strict)
 
 ---
 
@@ -227,7 +227,10 @@ Portable assertions live in `tests/conformance/`. Fixtures define:
 - input context dict
 - expected widget invocations (name + resolved params)
 
-Conformance tests assert the **grammar layer** (dispatch + resolve), not HTML output. See `tests/conformance/test_ops_baseline.py`.
+Conformance tests assert the **grammar layer** (dispatch + resolve), not HTML output.
+
+- `tests/conformance/test_ops_baseline.py` — excerpt fixtures
+- `tests/conformance/test_ops_full_layout.py` — full ops layout from `config/views.yaml` (12 dispatches; collect/render parity)
 
 ---
 

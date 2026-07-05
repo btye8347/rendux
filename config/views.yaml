@@ -1,3 +1,4 @@
+# RDL grammar version (see docs/rdl-spec-v0.1.md) — not the Python app version in pyproject.toml
 version: 0.1.0
 
 shell:

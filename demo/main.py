@@ -1,5 +1,6 @@
 from __future__ import annotations
 
+import os
 from pathlib import Path
 
 from fastapi import FastAPI, Request
@@ -48,7 +49,10 @@ def create_app() -> FastAPI:
     theme_service = ThemeService.from_yaml(PROJECT_ROOT / "config" / "themes.yaml")
     app.state.services.register("themes", theme_service)
 
-    renderer = LayoutRenderer(templates.env)
+    renderer = LayoutRenderer(
+        templates.env,
+        strict=os.environ.get("RENDUX_STRICT", "").lower() in ("1", "true", "yes"),
+    )
     app.state.services.register("layout_renderer", renderer)
 
     templates.env.globals["theme_list"]       = theme_service.list_themes()
