@@ -33,15 +33,6 @@ jobs:
         run: uv run python scripts/vibe_test.py
 
       - name: Strict render smoke (ops layout)
-        run: RENDUX_STRICT=1 uv run python -c "
-        import os, yaml
-        from pathlib import Path
-        from jinja2 import Environment, FileSystemLoader
-        from rendux.core.layout import LayoutRenderer
-        root = Path('.')
-        ops = yaml.safe_load((root/'config/views.yaml').read_text())['views']['ops']
-        env = Environment(loader=FileSystemLoader(str(root/'rendux/templates')), autoescape=True)
-        LayoutRenderer(env, strict=os.environ.get('RENDUX_STRICT')=='1').render(
-            ops['workspace']['layout'], ops['data'])
-        print('strict ops render OK')
-        "
+        env:
+          RENDUX_STRICT: "1"
+        run: uv run python scripts/smoke_strict_ops.py
