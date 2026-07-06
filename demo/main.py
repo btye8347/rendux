@@ -8,7 +8,7 @@ from fastapi.responses import HTMLResponse, JSONResponse
 from fastapi.staticfiles import StaticFiles
 from fastapi.templating import Jinja2Templates
 
-from rendux.core.layout import LayoutRenderer
+from rendux.core.layout import LayoutConfigError, LayoutRenderer
 from rendux.core.registries import register_core_services
 from rendux.core.themes import ThemeService
 from rendux.views.routes import router as views_router
@@ -84,13 +84,11 @@ def create_app() -> FastAPI:
 
     @app.get("/ops", response_class=HTMLResponse)
     def ops(request: Request) -> HTMLResponse:
-        views: ViewConfigService = request.app.state.services.get("views")
-        static = views.view_data("ops")
         return _render_view(
             request,
             "ops",
             "Operations",
-            view_ctx=build_ops_view_ctx(static),
+            view_ctx=_ops_view_ctx(request),
         )
 
     @app.get("/about", response_class=HTMLResponse)
@@ -98,6 +96,24 @@ def create_app() -> FastAPI:
         return _render_view(request, "about", "About")
 
     # ── partials ─────────────────────────────────────────────────────────────
+
+    @app.get("/partials/ops/{fragment_id}", response_class=HTMLResponse)
+    def ops_partial(request: Request, fragment_id: str) -> HTMLResponse:
+        views: ViewConfigService = request.app.state.services.get("views")
+        renderer: LayoutRenderer = request.app.state.services.get("layout_renderer")
+        ws = views.resolve_workspace("ops")
+        if ws["kind"] != "layout":
+            return HTMLResponse("Not found", status_code=404)
+
+        try:
+            html = renderer.render_fragment(
+                ws["value"],
+                fragment_id,
+                _ops_render_ctx(request),
+            )
+        except LayoutConfigError:
+            return HTMLResponse("Not found", status_code=404)
+        return HTMLResponse(html)
 
     @app.get("/partials/tab/{tab_id}", response_class=HTMLResponse)
     def tab_partial(request: Request, tab_id: str) -> HTMLResponse:
@@ -123,6 +139,21 @@ def create_app() -> FastAPI:
         )
 
     return app
+
+
+def _ops_view_ctx(request: Request) -> dict:
+    views: ViewConfigService = request.app.state.services.get("views")
+    static = views.view_data("ops")
+    return build_ops_view_ctx(static)
+
+
+def _ops_render_ctx(request: Request) -> dict:
+    views: ViewConfigService = request.app.state.services.get("views")
+    return {
+        **dict(templates.env.globals),
+        **views.view_data("ops"),
+        **_ops_view_ctx(request),
+    }
 
 
 def _render_view(

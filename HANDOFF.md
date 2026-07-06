@@ -4,7 +4,7 @@
 **Host:** dev-01 (Linux, Python 3.12)  
 **Path:** `~/dev/rendux` (NFS — `10.10.10.10:/mnt/huron/axym/dev`)  
 **Branch:** `master` — `a1ea2c0` (1 commit ahead of `origin/master`)  
-**Test count:** 128 passing (linter, contracts, conformance, strict mode, precedence, agent eval, ops view_ctx)
+**Test count:** 133 passing (linter, contracts, conformance, strict mode, precedence, agent eval, ops view_ctx + HTMX poll)
 
 **CI:** GitHub Actions runs `lint_rdl.py` + `pytest` + `vibe_test.py` on push/PR.
 
@@ -190,7 +190,7 @@ a292ccd  Add: four core widgets with demo data across all views
 
 1. ~~**Dynamic view_ctx**~~ — **done** — `/ops` injects live-ish KPI/events via `demo/ops_context.py`
 2. ~~**Components view via RDL**~~ — **done** — `config/components_showcase.yaml` via `include:`
-3. **Widget contract audits (Track A)** — verify remaining 32 stubs; enables strict lint on `/components`
-4. **HTMX partial refresh on `/ops`** — poll timeline or KPI row via HTMX partial
+3. ~~**HTMX partial refresh on `/ops`**~~ — **done** — KPI row + timeline poll every 15s via `poll:` on RDL containers
+4. **Widget contract audits (Track A)** — verify remaining 32 stubs; enables strict lint on `/components`
 5. **Split / drawer layouts** — top-level RDL containers using `split_pane` / `drawer`
 6. **Live agent eval (Track C)** — extend `vibe_test.py` with LLM prompts

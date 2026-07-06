@@ -43,6 +43,24 @@ class LayoutConfigError(ValueError):
     """Raised for structural errors in a layout definition."""
 
 
+def find_layout_node(nodes: list[Any] | None, node_id: str) -> dict[str, Any] | None:
+    """Return the first layout node with matching ``id`` (depth-first)."""
+    if not isinstance(nodes, list):
+        return None
+    for node in nodes:
+        if not isinstance(node, dict):
+            continue
+        if node.get("id") == node_id:
+            return node
+        for key in ("children", "primary", "secondary"):
+            child_nodes = node.get(key)
+            if isinstance(child_nodes, list):
+                found = find_layout_node(child_nodes, node_id)
+                if found is not None:
+                    return found
+    return None
+
+
 @dataclass(frozen=True)
 class WidgetInvocation:
     """Resolved widget dispatch — portable conformance assertion unit."""
@@ -80,6 +98,21 @@ class LayoutRenderer:
             if html:
                 parts.append(html)
         return "\n".join(parts)
+
+    def render_fragment(
+        self,
+        layout: list[Any],
+        fragment_id: str,
+        ctx: dict[str, Any],
+    ) -> str:
+        """Render only the children of a container identified by ``id``."""
+        node = find_layout_node(layout, fragment_id)
+        if node is None:
+            raise LayoutConfigError(f"Unknown layout fragment: {fragment_id!r}")
+        children = node.get("children", [])
+        if not isinstance(children, list):
+            children = []
+        return self.render(children, ctx)
 
     def collect_invocations(
         self,
@@ -283,6 +316,26 @@ class LayoutRenderer:
 
     # ── containers ───────────────────────────────────────────────────────────
 
+    def _poll_attrs(self, node: dict[str, Any]) -> str:
+        """HTMX poll attributes when a container declares ``id`` + ``poll``."""
+        node_id = node.get("id")
+        poll = node.get("poll")
+        if not node_id or poll is None:
+            return ""
+        url = node.get("poll_url") or f"/partials/ops/{node_id}"
+        interval = poll
+        if isinstance(poll, dict):
+            interval = poll.get("every", "15s")
+        elif isinstance(poll, int):
+            interval = f"{poll}s"
+        parts = [
+            f'id="{escape(str(node_id))}"',
+            f'hx-get="{escape(str(url))}"',
+            f'hx-trigger="every {escape(str(interval))}"',
+            'hx-swap="innerHTML"',
+        ]
+        return " " + " ".join(parts)
+
     def _container(self, node: dict, ctx: dict[str, Any], depth: int) -> str:
         t = node.get("type", "")
 
@@ -309,8 +362,8 @@ class LayoutRenderer:
                 if self._strict:
                     raise LayoutConfigError(f"Invalid grid gap: {gap!r}")
             if gap in _GAP_MODIFIERS:
-                return f'<div class="{css}" style="gap:{_GAP_CSS[gap]}">{inner}</div>'
-            return f'<div class="{css}">{inner}</div>'
+                return f'<div class="{css}" style="gap:{_GAP_CSS[gap]}"{self._poll_attrs(node)}>{inner}</div>'
+            return f'<div class="{css}"{self._poll_attrs(node)}>{inner}</div>'
 
         # stack / row
         gap    = node.get("gap", "")
@@ -319,13 +372,13 @@ class LayoutRenderer:
                 raise LayoutConfigError(f"Invalid {t} gap: {gap!r}")
         suffix = f"-{gap}" if gap in _GAP_MODIFIERS else ""
         css    = f"layout-{t}{suffix}"
-        return f'<div class="{css}">{inner}</div>'
+        return f'<div class="{css}"{self._poll_attrs(node)}>{inner}</div>'
 
     def _section(self, node: dict, ctx: dict[str, Any], depth: int) -> str:
         heading = escape(str(node.get("heading", "")))
         desc    = escape(str(node.get("description", "")))
         inner   = self.render(node.get("children", []), ctx, _depth=depth + 1)
-        parts   = ['<div class="component-section">']
+        parts   = [f'<div class="component-section"{self._poll_attrs(node)}>']
         if heading:
             parts.append(f'<h2 class="section-label">{heading}</h2>')
         if desc:

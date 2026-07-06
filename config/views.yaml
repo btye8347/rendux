@@ -102,6 +102,8 @@ views:
 
         # ── KPI row — each: + $item.* via $ctx.kpi ────────────────────────
         - type: grid
+          id: ops-kpis
+          poll: 15s
           columns: 4
           children:
             - widget: stat_card
@@ -120,8 +122,12 @@ views:
               title: Service Health
               items: "$ctx.service_health"
 
-            - widget: timeline
-              events: "$ctx.recent_events"
+            - type: stack
+              id: ops-timeline
+              poll: 15s
+              children:
+                - widget: timeline
+                  events: "$ctx.recent_events"
 
         - divider: true
 
