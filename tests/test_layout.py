@@ -314,6 +314,33 @@ def test_split_empty_panes():
     assert "split-pane" in html
 
 
+def test_split_pane_widget_renders_html_panel_content():
+    """primary/secondary accept HTML; must not be double-escaped by Jinja."""
+    from pathlib import Path
+
+    from jinja2 import Environment, FileSystemLoader
+
+    root = Path(__file__).resolve().parent.parent
+    renderer = LayoutRenderer(
+        Environment(
+            loader=FileSystemLoader(str(root / "rendux" / "templates")),
+            autoescape=True,
+        ),
+    )
+    html = renderer.render(
+        [{
+            "widget": "split_pane",
+            "pane_id": "test",
+            "primary": "<h3>Primary Panel</h3><p>Left side</p>",
+            "secondary": "<h3>Secondary Panel</h3>",
+        }],
+        {},
+    )
+    assert "<h3>Primary Panel</h3>" in html
+    assert "<h3>Secondary Panel</h3>" in html
+    assert "&lt;h3" not in html
+
+
 # ── XSS / HTML escaping ───────────────────────────────────────────────────────
 
 def test_heading_shorthand_escapes_html():

@@ -6,12 +6,12 @@
      data-min-primary="{{ _min }}"
      data-max-primary="{{ _max }}">
   <div class="split-primary" style="flex-basis: {{ _init }}">
-    {{ primary|default("") }}
+    {{ primary|default("")|safe }}
     {% block split_primary %}{% endblock %}
   </div>
   <div class="split-handle" title="Drag to resize"></div>
   <div class="split-secondary">
-    {{ secondary|default("") }}
+    {{ secondary|default("")|safe }}
     {% block split_secondary %}{% endblock %}
   </div>
 </div>

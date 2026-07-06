@@ -13,6 +13,6 @@
     {% endfor %}
   </div>
   <div id="{{ target }}" class="tab-content">
-    {{ initial_content|default('') }}
+    {{ initial_content|default('')|safe }}
   </div>
 </div>
