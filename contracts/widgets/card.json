@@ -1,5 +1,10 @@
 {
   "name": "card",
-  "status": "unverified",
-  "interaction": { "profile": "static" }
+  "status": "verified",
+  "interaction": { "profile": "static" },
+  "accepts_each": true,
+  "props": {
+    "title": { "type": "string", "required": false },
+    "body": { "type": "string", "required": false }
+  }
 }

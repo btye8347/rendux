@@ -14,7 +14,7 @@ different stack. Python/FastAPI/Jinja is reference implementation #1, not the mo
 | Phase | Status | Notes |
 |---|---|---|
 | 0 — Decisions | **Done** | JSON canonical + YAML authoring documented; grammar `version:` commented in `views.yaml` |
-| 1 — Widget contracts | **Partial (ops baseline)** | 6 verified, 32 unverified stubs; JSON source of truth (not Python `WidgetContract` dataclass) |
+| 1 — Widget contracts | **Partial (ops + admin)** | 19 verified, 19 unverified stubs; Track A admin set verified for `/services` use case |
 | 2 — RDL linter | **Done (CI-enforced)** | Strict unknown props = error (plan deviation, agreed); no pre-commit hook yet |
 | 3 — Strict render mode | **Done** | `LayoutRenderer(strict=True)`, `RENDUX_STRICT=1`, verified-widget prop checks at render |
 | 4 — Grammar spec | **Done** | `docs/rdl-spec-v0.1.md` |
@@ -22,7 +22,7 @@ different stack. Python/FastAPI/Jinja is reference implementation #1, not the mo
 | 6 — Agent eval | **Done (fixture-based)** | `scripts/vibe_test.py` — 3 scenarios; LLM integration optional later |
 | 7 — Config precedence | **Done** | `tests/test_config_precedence.py` |
 
-**Test count:** 128 (run `uv run pytest tests/ -q`)
+**Test count:** 139 (run `uv run pytest tests/ -q`)
 
 **CI:** `.github/workflows/ci.yml` — lint + pytest + strict ops smoke on push/PR
 
@@ -67,9 +67,11 @@ Phase 7 (Config Precedence)           ✓
 - [x] `contracts/widgets/*.json` — machine-readable registry
 - [x] `rendux/core/contracts.py` — loader (no Jinja import)
 - [x] Registry ↔ template directory sync test
-- [ ] **Remaining:** audit and verify remaining 32 widgets; fix HTMX profile assignments on stubs
+- [x] Track A admin set verified: `button`, `badge`, `status_badge`, `card`, `panel`, `empty_state`, `kv_table`, `divider`, `form`, `data_table`, `modal`, `tabs`, `pagination`
+- [ ] **Remaining:** audit and verify remaining 19 widgets (Tier 3 / niche); fix HTMX profile assignments where needed
 
-**Acceptance (ops baseline):** widgets used in `config/views.yaml` ops layout are verified.
+**Acceptance (ops baseline):** widgets used in `config/views.yaml` ops layout are verified.  
+**Acceptance (admin use case):** widgets used in `/services` (`config/services_admin.yaml`) are verified.
 
 ---
 
@@ -147,7 +149,7 @@ Alternate-language renderer — only after Phase 5 is complete for all targeted 
 
 ```bash
 cd ~/dev/rendux
-uv run pytest tests/ -q                                    # 128 tests
+uv run pytest tests/ -q                                    # 139 tests
 uv run python scripts/lint_rdl.py config/views.yaml        # must exit 0
 uv run python scripts/vibe_test.py                         # agent eval fixtures
 RENDUX_STRICT=1 uv run pytest tests/conformance/ tests/test_layout_strict.py -q

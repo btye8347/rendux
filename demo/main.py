@@ -82,6 +82,10 @@ def create_app() -> FastAPI:
     def components(request: Request) -> HTMLResponse:
         return _render_view(request, "components", "Components")
 
+    @app.get("/services", response_class=HTMLResponse)
+    def services(request: Request) -> HTMLResponse:
+        return _render_view(request, "services", "Services")
+
     @app.get("/ops", response_class=HTMLResponse)
     def ops(request: Request) -> HTMLResponse:
         return _render_view(

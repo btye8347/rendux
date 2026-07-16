@@ -1,5 +1,12 @@
 {
   "name": "pagination",
-  "status": "unverified",
-  "interaction": { "profile": "static" }
+  "status": "verified",
+  "interaction": { "profile": "static" },
+  "accepts_each": false,
+  "props": {
+    "current": { "type": "number", "required": true },
+    "total": { "type": "number", "required": true },
+    "url_pattern": { "type": "string", "required": true },
+    "target": { "type": "string", "required": false }
+  }
 }

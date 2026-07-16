@@ -1,5 +1,16 @@
 {
   "name": "form",
-  "status": "unverified",
-  "interaction": { "profile": "static" }
+  "status": "verified",
+  "interaction": { "profile": "static" },
+  "accepts_each": false,
+  "props": {
+    "fields": { "type": "list", "required": true },
+    "action": { "type": "string", "required": false },
+    "method": { "type": "string", "required": false },
+    "hx_post": { "type": "string", "required": false },
+    "hx_target": { "type": "string", "required": false },
+    "submit_label": { "type": "string", "required": false },
+    "cancel_href": { "type": "string", "required": false },
+    "cancel_label": { "type": "string", "required": false }
+  }
 }

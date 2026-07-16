@@ -1,0 +1,198 @@
+# Application use-case demo: service catalog admin shell.
+# Wired from views.yaml via include:. Demonstrates Track A verified widgets
+# in a realistic ops/admin layout (table + detail + edit form).
+
+data:
+  summary:
+    - label: Services
+      value: "6"
+      status: ok
+    - label: Healthy
+      value: "4"
+      status: ok
+    - label: Degraded
+      value: "1"
+      status: warn
+    - label: Down
+      value: "1"
+      status: error
+
+  services_table:
+    title: Service catalog
+    searchable: true
+    table_id: services-tbl
+    columns:
+      - key: name
+        label: Service
+      - key: owner
+        label: Owner
+      - key: env
+        label: Env
+        badge: true
+        badge_map:
+          prod: error
+          staging: warn
+          dev: info
+      - key: status
+        label: Status
+        badge: true
+        badge_map:
+          healthy: success
+          degraded: warn
+          down: error
+      - key: replicas
+        label: Replicas
+        align: right
+    rows:
+      - name: api-gateway
+        owner: platform
+        env: prod
+        status: healthy
+        replicas: "4"
+      - name: auth-service
+        owner: identity
+        env: prod
+        status: healthy
+        replicas: "3"
+      - name: job-queue
+        owner: platform
+        env: prod
+        status: degraded
+        replicas: "2"
+      - name: mail-relay
+        owner: messaging
+        env: prod
+        status: down
+        replicas: "1"
+      - name: metrics-agent
+        owner: observability
+        env: staging
+        status: healthy
+        replicas: "2"
+      - name: config-api
+        owner: platform
+        env: dev
+        status: healthy
+        replicas: "1"
+
+  selected_service:
+    title: api-gateway
+    rows:
+      - label: Name
+        value: api-gateway
+      - label: Owner
+        value: platform
+      - label: Environment
+        value: prod
+        status: warn
+      - label: Status
+        value: healthy
+        status: ok
+      - label: Endpoint
+        value: https://api.internal/v1
+      - label: Replicas
+        value: "4"
+      - label: Last deploy
+        value: "2026-07-14 09:22 UTC"
+
+  edit_form:
+    action: "#"
+    submit_label: Save changes
+    cancel_href: "/services"
+    fields:
+      - name: replicas
+        label: Desired replicas
+        type: text
+        value: "4"
+        required: true
+        hint: "Rolling update when changed"
+      - name: log_level
+        label: Log level
+        type: select
+        value: INFO
+        options:
+          - value: DEBUG
+            label: DEBUG
+          - value: INFO
+            label: INFO
+          - value: WARN
+            label: WARN
+          - value: ERROR
+            label: ERROR
+      - name: maintenance
+        label: Enable maintenance mode
+        type: checkbox
+        checked: false
+
+workspace:
+  layout:
+    - type: section
+      heading: Services
+      description: Catalog admin demo — verified RDL widgets in an application layout.
+      children:
+        - type: grid
+          columns: 4
+          children:
+            - widget: stat_card
+              each: "$ctx.summary"
+              label: "$item.label"
+              value: "$item.value"
+              status: "$item.status"
+
+        - type: grid
+          columns: 2
+          children:
+            - type: stack
+              children:
+                - widget: data_table
+                  title: "$ctx.services_table.title"
+                  searchable: "$ctx.services_table.searchable"
+                  table_id: "$ctx.services_table.table_id"
+                  columns: "$ctx.services_table.columns"
+                  rows: "$ctx.services_table.rows"
+
+                - widget: pagination
+                  current: 1
+                  total: 1
+                  url_pattern: "/services?page={page}"
+
+            - type: stack
+              children:
+                - widget: panel
+                  title: Selected service
+                  actions:
+                    - label: Restart
+                      href: "#"
+                      variant: secondary
+                    - label: Docs
+                      href: "#"
+                      variant: ghost
+                  body: "Detail and edit form for the selected row (demo uses api-gateway)."
+
+                - widget: kv_table
+                  title: "$ctx.selected_service.title"
+                  rows: "$ctx.selected_service.rows"
+
+                - widget: divider
+                  label: Edit
+
+                - widget: form
+                  action: "$ctx.edit_form.action"
+                  submit_label: "$ctx.edit_form.submit_label"
+                  cancel_href: "$ctx.edit_form.cancel_href"
+                  fields: "$ctx.edit_form.fields"
+
+                - widget: modal
+                  id: restart-confirm
+                  title: Restart api-gateway?
+                  body: "This will roll pods one at a time. Traffic may briefly degrade."
+                  trigger_label: Confirm restart
+                  trigger_variant: destructive
+                  confirm_label: Restart
+                  cancel_label: Cancel
+
+        - widget: empty_state
+          title: No selection filter applied
+          message: "Use the table search to narrow the catalog. Empty-state CTA shown for demo."
+          action_label: Clear filters
+          action_href: "/services"

@@ -1,5 +1,22 @@
 {
   "name": "kv_table",
-  "status": "unverified",
-  "interaction": { "profile": "static" }
+  "status": "verified",
+  "interaction": { "profile": "static" },
+  "accepts_each": false,
+  "props": {
+    "title": { "type": "string", "required": false },
+    "rows": { "type": "list", "required": true }
+  },
+  "item_schema": {
+    "required": {
+      "label": { "type": "string" }
+    },
+    "optional": {
+      "value": { "type": "string" },
+      "status": {
+        "type": "enum",
+        "enum": ["ok", "warn", "error", "info", "default"]
+      }
+    }
+  }
 }

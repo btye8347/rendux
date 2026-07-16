@@ -35,6 +35,18 @@ def test_verified_ops_widgets_are_contracted():
         assert registry[name]["status"] == "verified"
 
 
+def test_track_a_admin_widgets_are_verified():
+    registry = load_widget_registry()
+    admin_widgets = {
+        "badge", "button", "card", "panel", "empty_state", "kv_table",
+        "status_badge", "divider", "form", "data_table", "modal", "tabs",
+        "pagination",
+    }
+    for name in admin_widgets:
+        assert registry[name]["status"] == "verified", name
+        assert "props" in registry[name], name
+
+
 def test_ops_views_yaml_passes_strict_lint():
     issues = lint_views_file(VIEWS_PATH, strict=True)
     errors = [i for i in issues if i.level == "error"]

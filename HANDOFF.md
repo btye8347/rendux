@@ -4,7 +4,7 @@
 **Host:** dev-01 (Linux, Python 3.12)  
 **Path:** `~/dev/rendux` (NFS — `10.10.10.10:/mnt/huron/axym/dev`)  
 **Branch:** `master` — `a1ea2c0` (1 commit ahead of `origin/master`)  
-**Test count:** 133 passing (linter, contracts, conformance, strict mode, precedence, agent eval, ops view_ctx + HTMX poll)
+**Test count:** 139 passing (linter, contracts, conformance, strict mode, precedence, agent eval, ops poll, services admin)
 
 **CI:** GitHub Actions runs `lint_rdl.py` + `pytest` + `vibe_test.py` on push/PR.
 
@@ -151,10 +151,11 @@ Public API: `window.RendUX.setTheme("light"|"dark"|"system")` — updates DOM, f
 |---|---|---|
 | `home` | `/` | template: `workspaces/home.html` |
 | `components` | `/components` | **layout** (RDL — full widget showcase) |
-| `ops` | `/ops` | **layout** (RDL — full declarative) |
+| `services` | `/services` | **layout** (RDL — admin app use case) |
+| `ops` | `/ops` | **layout** (RDL — ops dashboard + live poll) |
 | `about` | `/about` | template: `workspaces/about.html` |
 
-The `ops` view is the primary RDL demo. It has a `data:` block in views.yaml with `kpi`, `service_health`, `recent_events`, `recent_changes`. The layout uses `$ctx.*` and `each: "$ctx.kpi"` / `$item.*` throughout.
+`ops` is the monitoring RDL demo. `services` is the application use-case demo (catalog table + kv detail + edit form + modal) using Track A verified widgets.
 
 ---
 
@@ -191,6 +192,7 @@ a292ccd  Add: four core widgets with demo data across all views
 1. ~~**Dynamic view_ctx**~~ — **done** — `/ops` injects live-ish KPI/events via `demo/ops_context.py`
 2. ~~**Components view via RDL**~~ — **done** — `config/components_showcase.yaml` via `include:`
 3. ~~**HTMX partial refresh on `/ops`**~~ — **done** — KPI row + timeline poll every 15s via `poll:` on RDL containers
-4. **Widget contract audits (Track A)** — verify remaining 32 stubs; enables strict lint on `/components`
-5. **Split / drawer layouts** — top-level RDL containers using `split_pane` / `drawer`
+4. ~~**Widget contract audits (Track A)**~~ — **partial** — 19 verified (ops + admin); `/services` app demo; 19 stubs remain
+5. **Finish Track A** — remaining Tier 3 widgets (`drawer`, `split_pane`, `command_palette`, …)
 6. **Live agent eval (Track C)** — extend `vibe_test.py` with LLM prompts
+7. **Real backend on `/services`** — wire form POST + table selection via HTMX/view_ctx

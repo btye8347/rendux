@@ -1,5 +1,26 @@
 {
   "name": "button",
-  "status": "unverified",
-  "interaction": { "profile": "static" }
+  "status": "verified",
+  "interaction": { "profile": "static" },
+  "accepts_each": true,
+  "props": {
+    "label": { "type": "string", "required": true },
+    "href": { "type": "string", "required": false },
+    "variant": {
+      "type": "enum",
+      "enum": ["primary", "secondary", "ghost", "destructive"],
+      "required": false
+    },
+    "size": {
+      "type": "enum",
+      "enum": ["sm", "md", "lg"],
+      "required": false
+    },
+    "disabled": { "type": "bool", "required": false },
+    "icon": { "type": "string", "required": false },
+    "type": { "type": "string", "required": false },
+    "hx_get": { "type": "string", "required": false },
+    "hx_target": { "type": "string", "required": false },
+    "hx_swap": { "type": "string", "required": false }
+  }
 }

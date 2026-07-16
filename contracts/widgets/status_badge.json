@@ -1,5 +1,14 @@
 {
   "name": "status_badge",
-  "status": "unverified",
-  "interaction": { "profile": "static" }
+  "status": "verified",
+  "interaction": { "profile": "static" },
+  "accepts_each": true,
+  "props": {
+    "status": {
+      "type": "enum",
+      "enum": ["ok", "warn", "error", "unknown", "info", "default"],
+      "required": false
+    },
+    "label": { "type": "string", "required": false }
+  }
 }

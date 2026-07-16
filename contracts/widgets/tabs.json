@@ -1,5 +1,11 @@
 {
   "name": "tabs",
-  "status": "unverified",
-  "interaction": { "profile": "static" }
+  "status": "verified",
+  "interaction": { "profile": "static" },
+  "accepts_each": false,
+  "props": {
+    "tabs": { "type": "list", "required": true },
+    "target": { "type": "string", "required": true },
+    "initial_content": { "type": "string", "required": false }
+  }
 }

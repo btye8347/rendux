@@ -17,6 +17,11 @@ views:
     route: /components
     include: components_showcase.yaml
 
+  services:
+    label: Services
+    route: /services
+    include: services_admin.yaml
+
   ops:
     label: Ops
     route: /ops
