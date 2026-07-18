@@ -29,7 +29,7 @@ Read **[CONSUMING.md](CONSUMING.md)** before wiring a host app.
 - [x] Consumer example under `examples/consumer/`
 - [x] Tests green; packaging smoke in CI
 - [x] Tests + `uv build` (contracts in wheel)
-- [ ] Git tag `v0.1.0b1` pushed
+- [x] Git tag `v0.1.0b1` pushed
 - [ ] Smoke-install into a scratch host app (manual)
 
 ## Upgrade path later
