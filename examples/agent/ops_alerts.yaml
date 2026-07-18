@@ -1,0 +1,47 @@
+# Few-shot: health grid, timeline, alerts, progress
+data:
+  service_health:
+    - label: API Gateway
+      status: ok
+      detail: p99 12ms
+    - label: Job Queue
+      status: warn
+      detail: queue backing up
+    - label: Mail Relay
+      status: error
+      detail: connection refused
+  recent_events:
+    - title: Deployment complete
+      time: "09:22"
+      status: ok
+      body: api-gateway v1.4.2
+    - title: High memory alert
+      time: "08:51"
+      status: warn
+      body: exceeding 85% threshold
+
+workspace:
+  layout:
+    - type: grid
+      columns: 2
+      children:
+        - widget: status_grid
+          title: Service Health
+          items: "$ctx.service_health"
+        - widget: timeline
+          events: "$ctx.recent_events"
+    - divider: true
+    - type: stack
+      children:
+        - widget: alert
+          variant: warn
+          title: Queue depth elevated
+          message: Consider scaling workers.
+        - widget: alert
+          variant: error
+          title: Mail relay unreachable
+          message: SMTP connection refused for 14 minutes.
+        - widget: progress_bar
+          label: Disk usage — /data
+          value: 73
+          variant: warn

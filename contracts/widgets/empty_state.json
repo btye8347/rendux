@@ -1,12 +1,27 @@
 {
   "name": "empty_state",
+  "description": "Zero-data placeholder with optional call-to-action link.",
   "status": "verified",
-  "interaction": { "profile": "static" },
+  "interaction": {
+    "profile": "static"
+  },
   "accepts_each": false,
   "props": {
-    "title": { "type": "string", "required": true },
-    "message": { "type": "string", "required": false },
-    "action_label": { "type": "string", "required": false },
-    "action_href": { "type": "string", "required": false }
+    "title": {
+      "type": "string",
+      "required": true
+    },
+    "message": {
+      "type": "string",
+      "required": false
+    },
+    "action_label": {
+      "type": "string",
+      "required": false
+    },
+    "action_href": {
+      "type": "string",
+      "required": false
+    }
   }
 }

@@ -1,9 +1,15 @@
 {
   "name": "divider",
+  "description": "Horizontal rule; optional centered label.",
   "status": "verified",
-  "interaction": { "profile": "static" },
+  "interaction": {
+    "profile": "static"
+  },
   "accepts_each": false,
   "props": {
-    "label": { "type": "string", "required": false }
+    "label": {
+      "type": "string",
+      "required": false
+    }
   }
 }

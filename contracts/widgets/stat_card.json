@@ -1,21 +1,41 @@
 {
   "name": "stat_card",
+  "description": "KPI tile: label, value, optional status/trend/subtitle; accepts each.",
   "status": "verified",
-  "interaction": { "profile": "static" },
+  "interaction": {
+    "profile": "static"
+  },
   "accepts_each": true,
   "props": {
     "label": {
       "type": "string",
       "required": true,
-      "aliases": ["title"]
+      "aliases": [
+        "title"
+      ]
     },
-    "value": { "type": "string", "required": true },
+    "value": {
+      "type": "string",
+      "required": true
+    },
     "status": {
       "type": "enum",
-      "enum": ["ok", "warn", "error", "info", "default"],
+      "enum": [
+        "ok",
+        "warn",
+        "error",
+        "info",
+        "default"
+      ],
       "required": false
     },
-    "trend": { "type": "string", "required": false },
-    "subtitle": { "type": "string", "required": false }
+    "trend": {
+      "type": "string",
+      "required": false
+    },
+    "subtitle": {
+      "type": "string",
+      "required": false
+    }
   }
 }

@@ -1,12 +1,27 @@
 {
   "name": "pagination",
+  "description": "Page navigation with url_pattern containing {page}.",
   "status": "verified",
-  "interaction": { "profile": "static" },
+  "interaction": {
+    "profile": "static"
+  },
   "accepts_each": false,
   "props": {
-    "current": { "type": "number", "required": true },
-    "total": { "type": "number", "required": true },
-    "url_pattern": { "type": "string", "required": true },
-    "target": { "type": "string", "required": false }
+    "current": {
+      "type": "number",
+      "required": true
+    },
+    "total": {
+      "type": "number",
+      "required": true
+    },
+    "url_pattern": {
+      "type": "string",
+      "required": true
+    },
+    "target": {
+      "type": "string",
+      "required": false
+    }
   }
 }

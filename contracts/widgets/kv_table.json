@@ -1,21 +1,40 @@
 {
   "name": "kv_table",
+  "description": "Key/value detail table for a single entity.",
   "status": "verified",
-  "interaction": { "profile": "static" },
+  "interaction": {
+    "profile": "static"
+  },
   "accepts_each": false,
   "props": {
-    "title": { "type": "string", "required": false },
-    "rows": { "type": "list", "required": true }
+    "title": {
+      "type": "string",
+      "required": false
+    },
+    "rows": {
+      "type": "list",
+      "required": true
+    }
   },
   "item_schema": {
     "required": {
-      "label": { "type": "string" }
+      "label": {
+        "type": "string"
+      }
     },
     "optional": {
-      "value": { "type": "string" },
+      "value": {
+        "type": "string"
+      },
       "status": {
         "type": "enum",
-        "enum": ["ok", "warn", "error", "info", "default"]
+        "enum": [
+          "ok",
+          "warn",
+          "error",
+          "info",
+          "default"
+        ]
       }
     }
   }

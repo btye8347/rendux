@@ -1,11 +1,23 @@
 {
   "name": "tabs",
+  "description": "HTMX tab bar that swaps content into a target element.",
   "status": "verified",
-  "interaction": { "profile": "static" },
+  "interaction": {
+    "profile": "static"
+  },
   "accepts_each": false,
   "props": {
-    "tabs": { "type": "list", "required": true },
-    "target": { "type": "string", "required": true },
-    "initial_content": { "type": "string", "required": false }
+    "tabs": {
+      "type": "list",
+      "required": true
+    },
+    "target": {
+      "type": "string",
+      "required": true
+    },
+    "initial_content": {
+      "type": "string",
+      "required": false
+    }
   }
 }

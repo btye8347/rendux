@@ -1,25 +1,51 @@
 {
   "name": "item_list",
+  "description": "Vertical list of titled items with optional meta and status.",
   "status": "verified",
-  "interaction": { "profile": "static" },
+  "interaction": {
+    "profile": "static"
+  },
   "accepts_each": false,
   "props": {
-    "title": { "type": "string", "required": false },
-    "items": { "type": "list", "required": true },
-    "empty_message": { "type": "string", "required": false }
+    "title": {
+      "type": "string",
+      "required": false
+    },
+    "items": {
+      "type": "list",
+      "required": true
+    },
+    "empty_message": {
+      "type": "string",
+      "required": false
+    }
   },
   "item_schema": {
     "required": {
-      "title": { "type": "string" }
+      "title": {
+        "type": "string"
+      }
     },
     "optional": {
-      "description": { "type": "string" },
-      "meta": { "type": "string" },
+      "description": {
+        "type": "string"
+      },
+      "meta": {
+        "type": "string"
+      },
       "status": {
         "type": "enum",
-        "enum": ["ok", "warn", "error", "info", "default"]
+        "enum": [
+          "ok",
+          "warn",
+          "error",
+          "info",
+          "default"
+        ]
       },
-      "link": { "type": "string" }
+      "link": {
+        "type": "string"
+      }
     }
   }
 }

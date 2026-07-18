@@ -1,15 +1,30 @@
 {
   "name": "badge",
+  "description": "Compact colored label chip; optional leading status dot.",
   "status": "verified",
-  "interaction": { "profile": "static" },
+  "interaction": {
+    "profile": "static"
+  },
   "accepts_each": true,
   "props": {
-    "label": { "type": "string", "required": true },
+    "label": {
+      "type": "string",
+      "required": true
+    },
     "variant": {
       "type": "enum",
-      "enum": ["default", "info", "success", "warn", "error"],
+      "enum": [
+        "default",
+        "info",
+        "success",
+        "warn",
+        "error"
+      ],
       "required": false
     },
-    "dot": { "type": "bool", "required": false }
+    "dot": {
+      "type": "bool",
+      "required": false
+    }
   }
 }

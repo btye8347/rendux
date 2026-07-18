@@ -1,10 +1,19 @@
 {
   "name": "card",
+  "description": "Simple titled content block for grouped text.",
   "status": "verified",
-  "interaction": { "profile": "static" },
+  "interaction": {
+    "profile": "static"
+  },
   "accepts_each": true,
   "props": {
-    "title": { "type": "string", "required": false },
-    "body": { "type": "string", "required": false }
+    "title": {
+      "type": "string",
+      "required": false
+    },
+    "body": {
+      "type": "string",
+      "required": false
+    }
   }
 }

@@ -1,22 +1,43 @@
 {
   "name": "panel",
+  "description": "Titled section with optional header action buttons and body.",
   "status": "verified",
-  "interaction": { "profile": "static" },
+  "interaction": {
+    "profile": "static"
+  },
   "accepts_each": false,
   "props": {
-    "title": { "type": "string", "required": true },
-    "body": { "type": "string", "required": false },
-    "actions": { "type": "list", "required": false }
+    "title": {
+      "type": "string",
+      "required": true
+    },
+    "body": {
+      "type": "string",
+      "required": false
+    },
+    "actions": {
+      "type": "list",
+      "required": false
+    }
   },
   "item_schema": {
     "required": {
-      "label": { "type": "string" }
+      "label": {
+        "type": "string"
+      }
     },
     "optional": {
-      "href": { "type": "string" },
+      "href": {
+        "type": "string"
+      },
       "variant": {
         "type": "enum",
-        "enum": ["primary", "secondary", "ghost", "destructive"]
+        "enum": [
+          "primary",
+          "secondary",
+          "ghost",
+          "destructive"
+        ]
       }
     }
   }

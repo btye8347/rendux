@@ -1,16 +1,43 @@
 {
   "name": "data_table",
+  "description": "Searchable tabular list with columns, rows, and optional badges.",
   "status": "verified",
-  "interaction": { "profile": "static" },
+  "interaction": {
+    "profile": "static"
+  },
   "accepts_each": false,
   "props": {
-    "columns": { "type": "list", "required": true },
-    "rows": { "type": "list", "required": false },
-    "title": { "type": "string", "required": false },
-    "table_id": { "type": "string", "required": false },
-    "searchable": { "type": "bool", "required": false },
-    "sort_col": { "type": "string", "required": false },
-    "sort_dir": { "type": "string", "required": false },
-    "sort_url": { "type": "string", "required": false }
+    "columns": {
+      "type": "list",
+      "required": true
+    },
+    "rows": {
+      "type": "list",
+      "required": false
+    },
+    "title": {
+      "type": "string",
+      "required": false
+    },
+    "table_id": {
+      "type": "string",
+      "required": false
+    },
+    "searchable": {
+      "type": "bool",
+      "required": false
+    },
+    "sort_col": {
+      "type": "string",
+      "required": false
+    },
+    "sort_dir": {
+      "type": "string",
+      "required": false
+    },
+    "sort_url": {
+      "type": "string",
+      "required": false
+    }
   }
 }

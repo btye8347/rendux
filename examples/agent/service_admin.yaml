@@ -1,0 +1,75 @@
+# Few-shot: trimmed services admin (table + detail + form + modal)
+data:
+  summary:
+    - {label: Services, value: "3", status: ok}
+    - {label: Healthy, value: "2", status: ok}
+    - {label: Down, value: "1", status: error}
+  services_table:
+    title: Service catalog
+    searchable: true
+    table_id: services-tbl
+    columns:
+      - {key: name, label: Service}
+      - {key: status, label: Status, badge: true, badge_map: {healthy: success, down: error}}
+      - {key: replicas, label: Replicas, align: right}
+    rows:
+      - {name: api-gateway, status: healthy, replicas: "4"}
+      - {name: auth-service, status: healthy, replicas: "3"}
+      - {name: mail-relay, status: down, replicas: "1"}
+  selected_service:
+    title: api-gateway
+    rows:
+      - {label: Name, value: api-gateway}
+      - {label: Status, value: healthy, status: ok}
+      - {label: Replicas, value: "4"}
+  edit_form:
+    action: "#"
+    submit_label: Save changes
+    cancel_href: /services
+    fields:
+      - name: replicas
+        label: Desired replicas
+        type: text
+        value: "4"
+        required: true
+
+workspace:
+  layout:
+    - type: grid
+      columns: 4
+      children:
+        - widget: stat_card
+          each: "$ctx.summary"
+          label: "$item.label"
+          value: "$item.value"
+          status: "$item.status"
+    - type: grid
+      columns: 2
+      children:
+        - widget: data_table
+          title: "$ctx.services_table.title"
+          searchable: "$ctx.services_table.searchable"
+          table_id: "$ctx.services_table.table_id"
+          columns: "$ctx.services_table.columns"
+          rows: "$ctx.services_table.rows"
+        - type: stack
+          children:
+            - widget: panel
+              title: Selected service
+              body: Detail and edit form for the selected row.
+            - widget: kv_table
+              title: "$ctx.selected_service.title"
+              rows: "$ctx.selected_service.rows"
+            - widget: form
+              action: "$ctx.edit_form.action"
+              submit_label: "$ctx.edit_form.submit_label"
+              cancel_href: "$ctx.edit_form.cancel_href"
+              fields: "$ctx.edit_form.fields"
+            - widget: modal
+              id: restart-confirm
+              title: Restart api-gateway?
+              body: Pods will roll one at a time.
+              trigger_label: Confirm restart
+              trigger_variant: destructive
+              confirm_label: Restart
+              cancel_label: Cancel

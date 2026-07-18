@@ -1,19 +1,45 @@
 {
   "name": "modal",
+  "description": "Native dialog opened from a trigger button (dom-dialog profile).",
   "status": "verified",
-  "interaction": { "profile": "dom-dialog" },
+  "interaction": {
+    "profile": "dom-dialog"
+  },
   "accepts_each": false,
   "props": {
-    "id": { "type": "string", "required": true },
-    "title": { "type": "string", "required": true },
-    "body": { "type": "string", "required": false },
-    "trigger_label": { "type": "string", "required": false },
-    "trigger_variant": {
-      "type": "enum",
-      "enum": ["primary", "secondary", "ghost", "destructive"],
+    "id": {
+      "type": "string",
+      "required": true
+    },
+    "title": {
+      "type": "string",
+      "required": true
+    },
+    "body": {
+      "type": "string",
       "required": false
     },
-    "cancel_label": { "type": "string", "required": false },
-    "confirm_label": { "type": "string", "required": false }
+    "trigger_label": {
+      "type": "string",
+      "required": false
+    },
+    "trigger_variant": {
+      "type": "enum",
+      "enum": [
+        "primary",
+        "secondary",
+        "ghost",
+        "destructive"
+      ],
+      "required": false
+    },
+    "cancel_label": {
+      "type": "string",
+      "required": false
+    },
+    "confirm_label": {
+      "type": "string",
+      "required": false
+    }
   }
 }

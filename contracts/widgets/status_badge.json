@@ -1,14 +1,27 @@
 {
   "name": "status_badge",
+  "description": "Status pill with colored dot (ok/warn/error/unknown).",
   "status": "verified",
-  "interaction": { "profile": "static" },
+  "interaction": {
+    "profile": "static"
+  },
   "accepts_each": true,
   "props": {
     "status": {
       "type": "enum",
-      "enum": ["ok", "warn", "error", "unknown", "info", "default"],
+      "enum": [
+        "ok",
+        "warn",
+        "error",
+        "unknown",
+        "info",
+        "default"
+      ],
       "required": false
     },
-    "label": { "type": "string", "required": false }
+    "label": {
+      "type": "string",
+      "required": false
+    }
   }
 }

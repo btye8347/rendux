@@ -19,10 +19,12 @@ different stack. Python/FastAPI/Jinja is reference implementation #1, not the mo
 | 3 — Strict render mode | **Done** | `LayoutRenderer(strict=True)`, `RENDUX_STRICT=1`, verified-widget prop checks at render |
 | 4 — Grammar spec | **Done** | `docs/rdl-spec-v0.1.md` |
 | 5 — Conformance | **Partial** | Ops + components full layouts; excerpt fixtures; collect/render parity |
-| 6 — Agent eval | **Done (fixture-based)** | `scripts/vibe_test.py` — 3 scenarios; LLM integration optional later |
+| 6 — Agent eval | **Done (fixture + agent pack)** | `vibe_test.py` fixtures; LLM pack in `LLM Agent Compatibility Plan.md` (live eval pending) |
 | 7 — Config precedence | **Done** | `tests/test_config_precedence.py` |
 
-**Test count:** 139 (run `uv run pytest tests/ -q`)
+**Test count:** 147 (run `uv run pytest tests/ -q`)
+
+**Related plan:** `LLM Agent Compatibility Plan.md` — agent prompt pack, verified catalog, compile loop.
 
 **CI:** `.github/workflows/ci.yml` — lint + pytest + strict ops smoke on push/PR
 

@@ -1,22 +1,42 @@
 {
   "name": "timeline",
+  "description": "Vertical event timeline with title, time, body, and status.",
   "status": "verified",
-  "interaction": { "profile": "static" },
+  "interaction": {
+    "profile": "static"
+  },
   "accepts_each": false,
   "props": {
-    "events": { "type": "list", "required": true }
+    "events": {
+      "type": "list",
+      "required": true
+    }
   },
   "item_schema": {
     "required": {
-      "title": { "type": "string" }
+      "title": {
+        "type": "string"
+      }
     },
     "optional": {
-      "time": { "type": "string" },
-      "body": { "type": "string" },
-      "tags": { "type": "list" },
+      "time": {
+        "type": "string"
+      },
+      "body": {
+        "type": "string"
+      },
+      "tags": {
+        "type": "list"
+      },
       "status": {
         "type": "enum",
-        "enum": ["ok", "warn", "error", "info", "default"]
+        "enum": [
+          "ok",
+          "warn",
+          "error",
+          "info",
+          "default"
+        ]
       }
     }
   }

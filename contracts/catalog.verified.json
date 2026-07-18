@@ -1,0 +1,715 @@
+{
+  "version": "0.1.0",
+  "description": "Closed vocabulary for LLM RDL authoring. Only these verified widgets may be emitted.",
+  "widget_count": 19,
+  "widgets": [
+    {
+      "name": "alert",
+      "description": "Inline notice banner for info, success, warn, or error messages.",
+      "accepts_each": false,
+      "interaction": {
+        "profile": "static"
+      },
+      "props": {
+        "message": {
+          "type": "string",
+          "required": true
+        },
+        "title": {
+          "type": "string",
+          "required": false
+        },
+        "variant": {
+          "type": "enum",
+          "enum": [
+            "info",
+            "success",
+            "warn",
+            "error"
+          ],
+          "required": false
+        }
+      },
+      "example": {
+        "widget": "alert",
+        "variant": "warn",
+        "title": "Attention",
+        "message": "Something needs review."
+      }
+    },
+    {
+      "name": "badge",
+      "description": "Compact colored label chip; optional leading status dot.",
+      "accepts_each": true,
+      "interaction": {
+        "profile": "static"
+      },
+      "props": {
+        "label": {
+          "type": "string",
+          "required": true
+        },
+        "variant": {
+          "type": "enum",
+          "enum": [
+            "default",
+            "info",
+            "success",
+            "warn",
+            "error"
+          ],
+          "required": false
+        },
+        "dot": {
+          "type": "bool",
+          "required": false
+        }
+      }
+    },
+    {
+      "name": "button",
+      "description": "Action control as button or link; supports HTMX get/target/swap.",
+      "accepts_each": true,
+      "interaction": {
+        "profile": "static"
+      },
+      "props": {
+        "label": {
+          "type": "string",
+          "required": true
+        },
+        "href": {
+          "type": "string",
+          "required": false
+        },
+        "variant": {
+          "type": "enum",
+          "enum": [
+            "primary",
+            "secondary",
+            "ghost",
+            "destructive"
+          ],
+          "required": false
+        },
+        "size": {
+          "type": "enum",
+          "enum": [
+            "sm",
+            "md",
+            "lg"
+          ],
+          "required": false
+        },
+        "disabled": {
+          "type": "bool",
+          "required": false
+        },
+        "icon": {
+          "type": "string",
+          "required": false
+        },
+        "type": {
+          "type": "string",
+          "required": false
+        },
+        "hx_get": {
+          "type": "string",
+          "required": false
+        },
+        "hx_target": {
+          "type": "string",
+          "required": false
+        },
+        "hx_swap": {
+          "type": "string",
+          "required": false
+        }
+      }
+    },
+    {
+      "name": "card",
+      "description": "Simple titled content block for grouped text.",
+      "accepts_each": true,
+      "interaction": {
+        "profile": "static"
+      },
+      "props": {
+        "title": {
+          "type": "string",
+          "required": false
+        },
+        "body": {
+          "type": "string",
+          "required": false
+        }
+      }
+    },
+    {
+      "name": "data_table",
+      "description": "Searchable tabular list with columns, rows, and optional badges.",
+      "accepts_each": false,
+      "interaction": {
+        "profile": "static"
+      },
+      "props": {
+        "columns": {
+          "type": "list",
+          "required": true
+        },
+        "rows": {
+          "type": "list",
+          "required": false
+        },
+        "title": {
+          "type": "string",
+          "required": false
+        },
+        "table_id": {
+          "type": "string",
+          "required": false
+        },
+        "searchable": {
+          "type": "bool",
+          "required": false
+        },
+        "sort_col": {
+          "type": "string",
+          "required": false
+        },
+        "sort_dir": {
+          "type": "string",
+          "required": false
+        },
+        "sort_url": {
+          "type": "string",
+          "required": false
+        }
+      },
+      "example": {
+        "widget": "data_table",
+        "title": "$ctx.table.title",
+        "columns": "$ctx.table.columns",
+        "rows": "$ctx.table.rows",
+        "searchable": true
+      }
+    },
+    {
+      "name": "divider",
+      "description": "Horizontal rule; optional centered label.",
+      "accepts_each": false,
+      "interaction": {
+        "profile": "static"
+      },
+      "props": {
+        "label": {
+          "type": "string",
+          "required": false
+        }
+      }
+    },
+    {
+      "name": "empty_state",
+      "description": "Zero-data placeholder with optional call-to-action link.",
+      "accepts_each": false,
+      "interaction": {
+        "profile": "static"
+      },
+      "props": {
+        "title": {
+          "type": "string",
+          "required": true
+        },
+        "message": {
+          "type": "string",
+          "required": false
+        },
+        "action_label": {
+          "type": "string",
+          "required": false
+        },
+        "action_href": {
+          "type": "string",
+          "required": false
+        }
+      }
+    },
+    {
+      "name": "form",
+      "description": "Labeled field group with submit/cancel; optional hx_post.",
+      "accepts_each": false,
+      "interaction": {
+        "profile": "static"
+      },
+      "props": {
+        "fields": {
+          "type": "list",
+          "required": true
+        },
+        "action": {
+          "type": "string",
+          "required": false
+        },
+        "method": {
+          "type": "string",
+          "required": false
+        },
+        "hx_post": {
+          "type": "string",
+          "required": false
+        },
+        "hx_target": {
+          "type": "string",
+          "required": false
+        },
+        "submit_label": {
+          "type": "string",
+          "required": false
+        },
+        "cancel_href": {
+          "type": "string",
+          "required": false
+        },
+        "cancel_label": {
+          "type": "string",
+          "required": false
+        }
+      },
+      "example": {
+        "widget": "form",
+        "fields": "$ctx.edit_form.fields",
+        "submit_label": "Save",
+        "cancel_href": "/"
+      }
+    },
+    {
+      "name": "item_list",
+      "description": "Vertical list of titled items with optional meta and status.",
+      "accepts_each": false,
+      "interaction": {
+        "profile": "static"
+      },
+      "props": {
+        "title": {
+          "type": "string",
+          "required": false
+        },
+        "items": {
+          "type": "list",
+          "required": true
+        },
+        "empty_message": {
+          "type": "string",
+          "required": false
+        }
+      },
+      "item_schema": {
+        "required": {
+          "title": {
+            "type": "string"
+          }
+        },
+        "optional": {
+          "description": {
+            "type": "string"
+          },
+          "meta": {
+            "type": "string"
+          },
+          "status": {
+            "type": "enum",
+            "enum": [
+              "ok",
+              "warn",
+              "error",
+              "info",
+              "default"
+            ]
+          },
+          "link": {
+            "type": "string"
+          }
+        }
+      }
+    },
+    {
+      "name": "kv_table",
+      "description": "Key/value detail table for a single entity.",
+      "accepts_each": false,
+      "interaction": {
+        "profile": "static"
+      },
+      "props": {
+        "title": {
+          "type": "string",
+          "required": false
+        },
+        "rows": {
+          "type": "list",
+          "required": true
+        }
+      },
+      "item_schema": {
+        "required": {
+          "label": {
+            "type": "string"
+          }
+        },
+        "optional": {
+          "value": {
+            "type": "string"
+          },
+          "status": {
+            "type": "enum",
+            "enum": [
+              "ok",
+              "warn",
+              "error",
+              "info",
+              "default"
+            ]
+          }
+        }
+      },
+      "example": {
+        "widget": "kv_table",
+        "title": "$ctx.detail.title",
+        "rows": "$ctx.detail.rows"
+      }
+    },
+    {
+      "name": "modal",
+      "description": "Native dialog opened from a trigger button (dom-dialog profile).",
+      "accepts_each": false,
+      "interaction": {
+        "profile": "dom-dialog"
+      },
+      "props": {
+        "id": {
+          "type": "string",
+          "required": true
+        },
+        "title": {
+          "type": "string",
+          "required": true
+        },
+        "body": {
+          "type": "string",
+          "required": false
+        },
+        "trigger_label": {
+          "type": "string",
+          "required": false
+        },
+        "trigger_variant": {
+          "type": "enum",
+          "enum": [
+            "primary",
+            "secondary",
+            "ghost",
+            "destructive"
+          ],
+          "required": false
+        },
+        "cancel_label": {
+          "type": "string",
+          "required": false
+        },
+        "confirm_label": {
+          "type": "string",
+          "required": false
+        }
+      },
+      "example": {
+        "widget": "modal",
+        "id": "confirm",
+        "title": "Confirm?",
+        "body": "This action cannot be undone.",
+        "trigger_label": "Confirm"
+      }
+    },
+    {
+      "name": "pagination",
+      "description": "Page navigation with url_pattern containing {page}.",
+      "accepts_each": false,
+      "interaction": {
+        "profile": "static"
+      },
+      "props": {
+        "current": {
+          "type": "number",
+          "required": true
+        },
+        "total": {
+          "type": "number",
+          "required": true
+        },
+        "url_pattern": {
+          "type": "string",
+          "required": true
+        },
+        "target": {
+          "type": "string",
+          "required": false
+        }
+      }
+    },
+    {
+      "name": "panel",
+      "description": "Titled section with optional header action buttons and body.",
+      "accepts_each": false,
+      "interaction": {
+        "profile": "static"
+      },
+      "props": {
+        "title": {
+          "type": "string",
+          "required": true
+        },
+        "body": {
+          "type": "string",
+          "required": false
+        },
+        "actions": {
+          "type": "list",
+          "required": false
+        }
+      },
+      "item_schema": {
+        "required": {
+          "label": {
+            "type": "string"
+          }
+        },
+        "optional": {
+          "href": {
+            "type": "string"
+          },
+          "variant": {
+            "type": "enum",
+            "enum": [
+              "primary",
+              "secondary",
+              "ghost",
+              "destructive"
+            ]
+          }
+        }
+      }
+    },
+    {
+      "name": "progress_bar",
+      "description": "Numeric progress meter with optional label and variant.",
+      "accepts_each": false,
+      "interaction": {
+        "profile": "static"
+      },
+      "props": {
+        "label": {
+          "type": "string",
+          "required": false
+        },
+        "value": {
+          "type": "number",
+          "required": true
+        },
+        "max": {
+          "type": "number",
+          "required": false
+        },
+        "variant": {
+          "type": "enum",
+          "enum": [
+            "default",
+            "ok",
+            "warn",
+            "error"
+          ],
+          "required": false
+        },
+        "show_value": {
+          "type": "bool",
+          "required": false
+        }
+      }
+    },
+    {
+      "name": "stat_card",
+      "description": "KPI tile: label, value, optional status/trend/subtitle; accepts each.",
+      "accepts_each": true,
+      "interaction": {
+        "profile": "static"
+      },
+      "props": {
+        "label": {
+          "type": "string",
+          "required": true,
+          "aliases": [
+            "title"
+          ]
+        },
+        "value": {
+          "type": "string",
+          "required": true
+        },
+        "status": {
+          "type": "enum",
+          "enum": [
+            "ok",
+            "warn",
+            "error",
+            "info",
+            "default"
+          ],
+          "required": false
+        },
+        "trend": {
+          "type": "string",
+          "required": false
+        },
+        "subtitle": {
+          "type": "string",
+          "required": false
+        }
+      },
+      "example": {
+        "widget": "stat_card",
+        "each": "$ctx.kpi",
+        "label": "$item.label",
+        "value": "$item.value",
+        "status": "$item.status"
+      }
+    },
+    {
+      "name": "status_badge",
+      "description": "Status pill with colored dot (ok/warn/error/unknown).",
+      "accepts_each": true,
+      "interaction": {
+        "profile": "static"
+      },
+      "props": {
+        "status": {
+          "type": "enum",
+          "enum": [
+            "ok",
+            "warn",
+            "error",
+            "unknown",
+            "info",
+            "default"
+          ],
+          "required": false
+        },
+        "label": {
+          "type": "string",
+          "required": false
+        }
+      }
+    },
+    {
+      "name": "status_grid",
+      "description": "Grid of labeled service/health items with status dots.",
+      "accepts_each": false,
+      "interaction": {
+        "profile": "static"
+      },
+      "props": {
+        "title": {
+          "type": "string",
+          "required": false
+        },
+        "items": {
+          "type": "list",
+          "required": true
+        }
+      },
+      "item_schema": {
+        "required": {
+          "label": {
+            "type": "string"
+          },
+          "status": {
+            "type": "enum",
+            "enum": [
+              "ok",
+              "warn",
+              "error",
+              "info",
+              "default",
+              "unknown"
+            ]
+          }
+        },
+        "optional": {
+          "detail": {
+            "type": "string"
+          }
+        }
+      }
+    },
+    {
+      "name": "tabs",
+      "description": "HTMX tab bar that swaps content into a target element.",
+      "accepts_each": false,
+      "interaction": {
+        "profile": "static"
+      },
+      "props": {
+        "tabs": {
+          "type": "list",
+          "required": true
+        },
+        "target": {
+          "type": "string",
+          "required": true
+        },
+        "initial_content": {
+          "type": "string",
+          "required": false
+        }
+      }
+    },
+    {
+      "name": "timeline",
+      "description": "Vertical event timeline with title, time, body, and status.",
+      "accepts_each": false,
+      "interaction": {
+        "profile": "static"
+      },
+      "props": {
+        "events": {
+          "type": "list",
+          "required": true
+        }
+      },
+      "item_schema": {
+        "required": {
+          "title": {
+            "type": "string"
+          }
+        },
+        "optional": {
+          "time": {
+            "type": "string"
+          },
+          "body": {
+            "type": "string"
+          },
+          "tags": {
+            "type": "list"
+          },
+          "status": {
+            "type": "enum",
+            "enum": [
+              "ok",
+              "warn",
+              "error",
+              "info",
+              "default"
+            ]
+          }
+        }
+      }
+    }
+  ]
+}

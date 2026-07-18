@@ -1,14 +1,28 @@
 {
   "name": "alert",
+  "description": "Inline notice banner for info, success, warn, or error messages.",
   "status": "verified",
-  "interaction": { "profile": "static" },
+  "interaction": {
+    "profile": "static"
+  },
   "accepts_each": false,
   "props": {
-    "message": { "type": "string", "required": true },
-    "title": { "type": "string", "required": false },
+    "message": {
+      "type": "string",
+      "required": true
+    },
+    "title": {
+      "type": "string",
+      "required": false
+    },
     "variant": {
       "type": "enum",
-      "enum": ["info", "success", "warn", "error"],
+      "enum": [
+        "info",
+        "success",
+        "warn",
+        "error"
+      ],
       "required": false
     }
   }

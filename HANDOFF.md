@@ -4,7 +4,9 @@
 **Host:** dev-01 (Linux, Python 3.12)  
 **Path:** `~/dev/rendux` (NFS — `10.10.10.10:/mnt/huron/axym/dev`)  
 **Branch:** `master` — `a1ea2c0` (1 commit ahead of `origin/master`)  
-**Test count:** 139 passing (linter, contracts, conformance, strict mode, precedence, agent eval, ops poll, services admin)
+**Test count:** 147 passing (linter, contracts, conformance, agent pack/compile, ops poll, services admin)
+
+**LLM agent pack:** see `LLM Agent Compatibility Plan.md` — `docs/agent/`, `contracts/catalog.verified.json`, `scripts/agent_compile.py`
 
 **CI:** GitHub Actions runs `lint_rdl.py` + `pytest` + `vibe_test.py` on push/PR.
 
@@ -192,7 +194,8 @@ a292ccd  Add: four core widgets with demo data across all views
 1. ~~**Dynamic view_ctx**~~ — **done** — `/ops` injects live-ish KPI/events via `demo/ops_context.py`
 2. ~~**Components view via RDL**~~ — **done** — `config/components_showcase.yaml` via `include:`
 3. ~~**HTMX partial refresh on `/ops`**~~ — **done** — KPI row + timeline poll every 15s via `poll:` on RDL containers
-4. ~~**Widget contract audits (Track A)**~~ — **partial** — 19 verified (ops + admin); `/services` app demo; 19 stubs remain
-5. **Finish Track A** — remaining Tier 3 widgets (`drawer`, `split_pane`, `command_palette`, …)
-6. **Live agent eval (Track C)** — extend `vibe_test.py` with LLM prompts
-7. **Real backend on `/services`** — wire form POST + table selection via HTMX/view_ctx
+4. ~~**Widget contract audits (Track A)**~~ — **partial** — 19 verified; `/services` app demo; 19 stubs remain
+5. ~~**LLM agent pack (A1–A5)**~~ — **done** — see `LLM Agent Compatibility Plan.md`
+6. **Live LLM eval (A6)** — extend `vibe_test.py` with real model prompts
+7. **Finish Track A stubs** — remaining Tier 3 widgets as needed
+8. **Real backend on `/services`** — wire form POST + table selection via HTMX/view_ctx

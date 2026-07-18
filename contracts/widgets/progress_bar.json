@@ -1,17 +1,37 @@
 {
   "name": "progress_bar",
+  "description": "Numeric progress meter with optional label and variant.",
   "status": "verified",
-  "interaction": { "profile": "static" },
+  "interaction": {
+    "profile": "static"
+  },
   "accepts_each": false,
   "props": {
-    "label": { "type": "string", "required": false },
-    "value": { "type": "number", "required": true },
-    "max": { "type": "number", "required": false },
-    "variant": {
-      "type": "enum",
-      "enum": ["default", "ok", "warn", "error"],
+    "label": {
+      "type": "string",
       "required": false
     },
-    "show_value": { "type": "bool", "required": false }
+    "value": {
+      "type": "number",
+      "required": true
+    },
+    "max": {
+      "type": "number",
+      "required": false
+    },
+    "variant": {
+      "type": "enum",
+      "enum": [
+        "default",
+        "ok",
+        "warn",
+        "error"
+      ],
+      "required": false
+    },
+    "show_value": {
+      "type": "bool",
+      "required": false
+    }
   }
 }

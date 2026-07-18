@@ -1,0 +1,35 @@
+# Few-shot: KPI row from context
+data:
+  kpi:
+    - label: Active Services
+      value: "24"
+      status: ok
+      trend: "+2 today"
+    - label: Open Alerts
+      value: "3"
+      status: warn
+      trend: "↑1 this hour"
+    - label: Deployments
+      value: "7"
+      trend: "+3 vs yesterday"
+    - label: Uptime
+      value: "99.9%"
+      status: ok
+      subtitle: 30-day rolling
+
+workspace:
+  layout:
+    - type: section
+      heading: Overview
+      description: KPI tiles bound from $ctx.kpi
+      children:
+        - type: grid
+          columns: 4
+          children:
+            - widget: stat_card
+              each: "$ctx.kpi"
+              label: "$item.label"
+              value: "$item.value"
+              status: "$item.status"
+              trend: "$item.trend"
+              subtitle: "$item.subtitle"
