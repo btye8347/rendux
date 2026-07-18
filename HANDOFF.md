@@ -196,6 +196,6 @@ a292ccd  Add: four core widgets with demo data across all views
 3. ~~**HTMX partial refresh on `/ops`**~~ — **done** — KPI row + timeline poll every 15s via `poll:` on RDL containers
 4. ~~**Widget contract audits (Track A)**~~ — **partial** — 19 verified; `/services` app demo; 19 stubs remain
 5. ~~**LLM agent pack (A1–A5)**~~ — **done** — see `LLM Agent Compatibility Plan.md`
-6. **Live LLM eval (A6)** — extend `vibe_test.py` with real model prompts
+6. **Live LLM eval (A6)** — run `docs/agent/ADVERSARIAL_TEST_PLAN.md` in a fresh session; file scorecard under `docs/agent/eval/`
 7. **Finish Track A stubs** — remaining Tier 3 widgets as needed
 8. **Real backend on `/services`** — wire form POST + table selection via HTMX/view_ctx

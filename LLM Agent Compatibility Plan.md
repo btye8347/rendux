@@ -34,7 +34,7 @@ Do **not** invent a second DSL. RDL YAML + JSON contracts **are** the agent lang
 | A3 — Compile loop | **Done** | `rendux/core/agent_compile.py` + `scripts/agent_compile.py` + tests |
 | A4 — Few-shot examples | **Done** | `examples/agent/{kpi_dashboard,ops_alerts,service_admin}.yaml` |
 | A5 — Context schema convention | **Done** | `docs/agent/CONTEXT_SCHEMA.md` |
-| A6 — Live LLM eval | Pending | extend `vibe_test.py` (API key optional) |
+| A6 — Live LLM eval | **Manual plan ready** | `docs/agent/ADVERSARIAL_TEST_PLAN.md` (run in separate session); automated live harness still pending |
 | A7 — Agent tools / MCP | Deferred | `lint_rdl`, `list_widgets`, `compile_view` tools |
 
 **Definition of done (LLM-compatible):**
@@ -179,7 +179,9 @@ Defer until A1–A3 are stable.
 - [x] A3 `agent_compile.py`
 - [x] A4 examples
 - [x] A5 context schema doc
-- [ ] A6 live eval (optional)
+- [x] A6 adversarial manual test plan (`docs/agent/ADVERSARIAL_TEST_PLAN.md`)
+- [ ] A6 executed + scorecard filed under `docs/agent/eval/`
+- [ ] A6 automated live harness (optional)
 - [ ] A7 tools (deferred)
 
 ---
@@ -192,3 +194,6 @@ uv run python scripts/build_agent_catalog.py
 uv run python scripts/agent_compile.py examples/agent/service_admin.yaml
 uv run pytest tests/test_agent_compile.py tests/test_agent_catalog.py -q
 ```
+
+**Cold-start / adversarial validation (separate session):** follow  
+[`docs/agent/ADVERSARIAL_TEST_PLAN.md`](docs/agent/ADVERSARIAL_TEST_PLAN.md) — do not skip; fixture tests do not prove the prompt pack.
