@@ -7,11 +7,14 @@ from functools import lru_cache
 from pathlib import Path
 from typing import Any
 
-CONTRACTS_ROOT = Path(__file__).resolve().parent.parent.parent / "contracts"
+from rendux.paths import contracts_dir, templates_dir
+
+# Resolved at import for backward-compatible module constants.
+CONTRACTS_ROOT = contracts_dir()
 WIDGETS_DIR = CONTRACTS_ROOT / "widgets"
 PROFILES_DIR = CONTRACTS_ROOT / "profiles"
 GRAMMAR_PATH = CONTRACTS_ROOT / "rdl-grammar.json"
-WIDGETS_TEMPLATE_DIR = Path(__file__).resolve().parent.parent / "templates" / "widgets"
+WIDGETS_TEMPLATE_DIR = templates_dir() / "widgets"
 
 
 def _load_json(path: Path) -> dict[str, Any]:

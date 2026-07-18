@@ -1,0 +1,27 @@
+data:
+  kpi:
+    - label: Widgets verified
+      value: "19"
+      status: ok
+    - label: Release
+      value: 0.1.0b1
+      status: info
+
+workspace:
+  layout:
+    - type: section
+      heading: Consumer app
+      description: Host-owned YAML rendered by the RendUX package.
+      children:
+        - type: grid
+          columns: 2
+          children:
+            - widget: stat_card
+              each: "$ctx.kpi"
+              label: "$item.label"
+              value: "$item.value"
+              status: "$item.status"
+        - widget: alert
+          variant: info
+          title: Private dependency
+          message: This page is declared in the host app; RendUX only renders it.

@@ -4,7 +4,8 @@
 **Host:** dev-01 (Linux, Python 3.12)  
 **Path:** `~/dev/rendux` (NFS — `10.10.10.10:/mnt/huron/axym/dev`)  
 **Branch:** `master` — `a1ea2c0` (1 commit ahead of `origin/master`)  
-**Test count:** 147 passing (linter, contracts, conformance, agent pack/compile, ops poll, services admin)
+**Test count:** see pytest (packaging + agent pack + views)  
+**Release:** **0.1.0b1** — private git dependency; see `README.md`, `docs/CONSUMING.md`, `docs/RELEASE_0.1.md`
 
 **LLM agent pack:** see `LLM Agent Compatibility Plan.md` — `docs/agent/`, `contracts/catalog.verified.json`, `scripts/agent_compile.py`
 

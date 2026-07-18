@@ -1,0 +1,11 @@
+version: 0.1.0
+
+shell:
+  id: default
+  template: chrome/shells/default.html
+
+views:
+  home:
+    label: Home
+    route: /
+    include: home_layout.yaml

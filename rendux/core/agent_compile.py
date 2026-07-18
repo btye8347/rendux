@@ -2,16 +2,13 @@
 
 from __future__ import annotations
 
-from pathlib import Path
 from typing import Any
 
 from jinja2 import Environment, FileSystemLoader
 
 from rendux.core.layout import LayoutConfigError, LayoutRenderer
 from rendux.core.lint_rdl import RdlLinter
-
-_PACKAGE_ROOT = Path(__file__).resolve().parent.parent.parent
-_TEMPLATES = _PACKAGE_ROOT / "rendux" / "templates"
+from rendux.paths import templates_dir
 
 
 def compile_fragment(fragment: dict[str, Any]) -> dict[str, Any]:
@@ -61,7 +58,10 @@ def compile_fragment(fragment: dict[str, Any]) -> dict[str, Any]:
     render_ok = False
     if not errors:
         try:
-            env = Environment(loader=FileSystemLoader(str(_TEMPLATES)), autoescape=True)
+            env = Environment(
+                loader=FileSystemLoader(str(templates_dir())),
+                autoescape=True,
+            )
             LayoutRenderer(env, strict=True).render(layout, data_block)
             render_ok = True
         except LayoutConfigError as exc:

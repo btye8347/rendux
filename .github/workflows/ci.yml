@@ -36,3 +36,18 @@ jobs:
         env:
           RENDUX_STRICT: "1"
         run: uv run python scripts/smoke_strict_ops.py
+
+      - name: Build wheel (contracts bundled)
+        run: uv build
+
+      - name: Verify wheel contains contracts
+        run: |
+          python - <<'PY'
+          from pathlib import Path
+          import zipfile
+          wheels = sorted(Path("dist").glob("rendux-*.whl"))
+          assert wheels, "no wheel"
+          names = zipfile.ZipFile(wheels[-1]).namelist()
+          assert any("rendux/contracts/widgets/stat_card.json" in n for n in names)
+          print("wheel ok:", wheels[-1].name)
+          PY
