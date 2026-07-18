@@ -1,21 +1,46 @@
 # RendUX
 
-**Version:** 0.1.0b1 (beta)  
-**Status:** Private package — usable as a dependency in your own apps; not published to PyPI.
+**Config-driven UI shell for ops/admin apps** — declare layouts in YAML (RDL), render with FastAPI + Jinja2 + HTMX.
 
-RendUX is a **config-driven UI shell** for internal ops/admin applications:
+| | |
+|---|---|
+| **Version** | `0.1.0b1` (beta) |
+| **Python** | ≥ 3.12 |
+| **Install** | Private git dependency (not on PyPI) |
+| **License** | Proprietary — see [LICENSE](LICENSE) |
 
-- **RDL** — YAML declarative layouts (`workspace.layout`)
-- **Widget contracts** — JSON schemas + linter + strict render
-- **Reference stack** — FastAPI + Jinja2 + HTMX
-
-The moat is the **grammar and contracts**, not the Python runtime. Agents and humans author RDL; the library compiles and renders it.
+```bash
+uv add "rendux @ git+ssh://git@github.com/btye8347/rendux.git@v0.1.0b1"
+```
 
 ---
 
-## Install (private git dependency)
+## Why RendUX
 
-Requires GitHub access to `btye8347/rendux` (SSH key or token).
+Internal tools keep re-implementing the same dashboards, tables, and forms. RendUX separates:
+
+1. **RDL** — a portable layout grammar humans and LLMs can author
+2. **Widget contracts** — machine-checkable props (lint + strict render)
+3. **Reference runtime** — Python/FastAPI/Jinja today; not the long-term moat
+
+You keep domain logic and routes. RendUX renders the shell and widgets from config.
+
+---
+
+## Features (0.1 beta)
+
+- **RDL layouts** — `grid` / `stack` / `section` / `split`, `$ctx` / `$item`, `each:`
+- **19 verified widgets** — ops + admin set (`stat_card`, `data_table`, `form`, `modal`, …)
+- **Strict compile loop** — linter + strict renderer; agent-friendly JSON errors
+- **Host integration API** — `configure_app` / `render_view`
+- **Themes** — light/dark/system + YAML custom themes
+- **LLM pack** — system prompt, verified catalog, recipes, adversarial eval (passed)
+
+---
+
+## Install in your application
+
+Requires SSH (or HTTPS token) access to this private repo. **Pin the tag.**
 
 ### uv
 
@@ -23,13 +48,7 @@ Requires GitHub access to `btye8347/rendux` (SSH key or token).
 uv add "rendux @ git+ssh://git@github.com/btye8347/rendux.git@v0.1.0b1"
 ```
 
-### pip
-
-```bash
-pip install "rendux @ git+ssh://git@github.com/btye8347/rendux.git@v0.1.0b1"
-```
-
-### pyproject.toml
+### pip / pyproject.toml
 
 ```toml
 dependencies = [
@@ -37,7 +56,18 @@ dependencies = [
 ]
 ```
 
-Pin a tag (`v0.1.0b1`) or commit SHA for reproducible builds. Track `master` only if you accept breakage.
+```bash
+pip install "rendux @ git+ssh://git@github.com/btye8347/rendux.git@v0.1.0b1"
+```
+
+Verify:
+
+```bash
+python -c "import rendux; print(rendux.__version__, rendux.contracts_dir())"
+```
+
+**Full host-app guide → [docs/CONSUMING.md](docs/CONSUMING.md)**  
+**Copy-paste skeleton → [examples/consumer/](examples/consumer/)**
 
 ---
 
@@ -50,84 +80,146 @@ from fastapi.responses import HTMLResponse
 
 from rendux.integration import configure_app, render_view
 
-app = FastAPI()
+app = FastAPI(title="My Ops App")
 configure_app(
     app,
     views_yaml=Path("config/views.yaml"),
     themes_yaml=Path("config/themes.yaml"),  # optional
 )
 
-@app.get("/dashboard", response_class=HTMLResponse)
-def dashboard(request: Request):
-    return render_view(request, "dashboard", "Dashboard")
+@app.get("/", response_class=HTMLResponse)
+def home(request: Request):
+    return render_view(request, "home", "Home")
 ```
 
-Your `config/views.yaml` declares views and RDL layouts (or `include:` fragments).  
-Full guide: **[docs/CONSUMING.md](docs/CONSUMING.md)**.
+Example `config/views.yaml`:
+
+```yaml
+version: 0.1.0
+shell:
+  id: default
+  template: chrome/shells/default.html
+views:
+  home:
+    label: Home
+    route: /
+    include: home_layout.yaml   # data: + workspace.layout:
+```
 
 ---
 
-## What ships in the package
+## What the package provides
 
-| Asset | Location |
+| API / path | Purpose |
 |---|---|
-| Python API | `rendux.*` |
-| Jinja widgets / chrome | `rendux.templates_dir()` |
-| Static CSS/JS | `rendux.static_dir()` |
-| Widget contracts | `rendux.contracts_dir()` |
-| LLM catalog | `rendux.catalog_verified_path()` |
+| `rendux.integration.configure_app` | Wire services, static, views API |
+| `rendux.integration.render_view` | Render a view (layout or template) |
+| `rendux.templates_dir()` | Packaged Jinja templates |
+| `rendux.static_dir()` | CSS / JS / HTMX vendor |
+| `rendux.contracts_dir()` | Widget JSON contracts + grammar |
+| `rendux.catalog_verified_path()` | Closed vocabulary for LLMs |
+| `rendux.core.agent_compile.compile_fragment` | Lint + strict-render a YAML fragment |
 
-Host apps supply **their own** `views.yaml`, `themes.yaml`, and domain data (`view_ctx`).
+**You supply:** `views.yaml`, optional themes, routes, auth, and `view_ctx` data.
 
 ---
 
-## Demo (this repo)
+## Demo (this repository)
 
 ```bash
-cd ~/dev/rendux
+git clone git@github.com:btye8347/rendux.git
+cd rendux
 uv sync --group dev
 uv run uvicorn demo.main:app --reload --host 0.0.0.0 --port 8001
 ```
 
-| Route | Purpose |
+| Route | What it shows |
 |---|---|
-| `/ops` | Live ops dashboard (RDL + polling) |
-| `/services` | Admin app use-case demo |
+| `/` | Home |
+| `/ops` | Ops dashboard — RDL + live HTMX poll |
+| `/services` | Admin catalog use case |
 | `/components` | Widget showcase |
+| `/about` | About |
 
 ---
 
-## Agent / LLM authoring
+## Documentation
 
-Cold-start prompt pack and compile loop:
-
-- `docs/agent/SYSTEM.md`
-- `contracts/catalog.verified.json` (19 verified widgets)
-- `uv run python scripts/agent_compile.py path/to/fragment.yaml`
-
-Plans: `LLM Agent Compatibility Plan.md`, `docs/agent/ADVERSARIAL_TEST_PLAN.md`.
+| Doc | Audience |
+|---|---|
+| [docs/CONSUMING.md](docs/CONSUMING.md) | **Using RendUX as a dependency** |
+| [docs/rdl-spec-v0.1.md](docs/rdl-spec-v0.1.md) | RDL grammar |
+| [docs/agent/SYSTEM.md](docs/agent/SYSTEM.md) | LLM system prompt |
+| [docs/agent/CHEATSHEET.md](docs/agent/CHEATSHEET.md) | Agent quick reference |
+| [docs/agent/RECIPES.md](docs/agent/RECIPES.md) | Copyable layout patterns |
+| [docs/agent/ADVERSARIAL_TEST_PLAN.md](docs/agent/ADVERSARIAL_TEST_PLAN.md) | Cold-start validation |
+| [docs/RELEASE_0.1.md](docs/RELEASE_0.1.md) | 0.1 beta release notes |
+| [CHANGELOG.md](CHANGELOG.md) | Version history |
+| [LLM Agent Compatibility Plan.md](LLM%20Agent%20Compatibility%20Plan.md) | Agent pack roadmap |
+| [RDL Portability & Governance Plan.md](RDL%20Portability%20%26%20Governance%20Plan.md) | Grammar / contracts roadmap |
+| [HANDOFF.md](HANDOFF.md) | Dev environment notes |
 
 ---
 
-## Develop
+## LLM / agent authoring
+
+RendUX is designed so an LLM can emit RDL without reading Jinja:
+
+1. Give the model `docs/agent/SYSTEM.md` + `contracts/catalog.verified.json`
+2. Optionally add a recipe from `examples/agent/`
+3. Validate output:
+
+```bash
+uv run python scripts/agent_compile.py path/to/fragment.yaml --pretty
+```
+
+Cold-start adversarial suite scored **18/18** — see `docs/agent/eval/`.
+
+---
+
+## Develop (contributors)
 
 ```bash
 uv sync --group dev
 uv run pytest tests/ -q
 uv run python scripts/lint_rdl.py config/views.yaml
-uv build   # produces dist/*.whl with bundled contracts
+uv run python scripts/vibe_test.py
+uv build   # wheel includes bundled contracts
+```
+
+CI runs lint, pytest, vibe fixtures, strict ops smoke, and wheel build.
+
+### Repository layout
+
+```
+rendux/                 # Installable package
+  integration.py        # configure_app / render_view
+  paths.py              # templates / static / contracts locations
+  core/                 # RDL engine, contracts, lint, agent_compile
+  templates/            # Widgets + chrome
+  static/               # CSS / JS
+contracts/              # Widget JSON (bundled into wheel)
+config/                 # Demo views + themes
+demo/                   # Reference FastAPI app
+docs/                   # Spec, consuming guide, agent pack
+examples/
+  agent/                # Few-shot RDL fragments
+  consumer/             # Minimal host-app skeleton
+scripts/                # lint_rdl, agent_compile, catalog builder
+tests/
 ```
 
 ---
 
-## Versioning
+## Versioning & status
 
-- **0.1.0b1** — first beta for private consumption
-- Semver-ish: breaking RDL/contract changes bump minor while in beta when practical
-- See [CHANGELOG.md](CHANGELOG.md)
+- **`0.1.0b1`** — first private beta; API may still shift before `0.1.0`
+- Pin **`v0.1.0b1`** (or a commit SHA) in host apps — do not float on `master` unless you accept breakage
+- **19 / 38** widgets verified; unverified stubs are skipped by prop lint until audited
+- Not published to PyPI (`Private :: Do Not Upload`)
 
 ---
 
 ## License
 
-Proprietary — see [LICENSE](LICENSE). Private repository; do not republish.
+Proprietary and confidential. See [LICENSE](LICENSE). Do not redistribute outside authorized use.
