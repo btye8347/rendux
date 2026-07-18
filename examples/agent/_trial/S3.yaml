@@ -1,0 +1,113 @@
+data:
+  summary:
+    - label: Total Services
+      value: "12"
+      status: ok
+    - label: Healthy
+      value: "9"
+      status: ok
+    - label: Degraded
+      value: "2"
+      status: warn
+    - label: Down
+      value: "1"
+      status: error
+  services_table:
+    title: Services
+    searchable: true
+    table_id: services
+    columns:
+      - key: name
+        label: Name
+        sortable: true
+      - key: status
+        label: Status
+        badge: true
+        badge_map:
+          ok: success
+          warn: warn
+          error: error
+      - key: owner
+        label: Owner
+      - key: region
+        label: Region
+    rows:
+      - name: api-gateway
+        status: ok
+        owner: platform
+        region: us-east-1
+      - name: job-worker
+        status: warn
+        owner: data
+        region: us-west-2
+      - name: mail-relay
+        status: error
+        owner: platform
+        region: eu-west-1
+  selected_service:
+    title: api-gateway
+    rows:
+      - label: Name
+        value: api-gateway
+      - label: Status
+        value: Healthy
+        status: ok
+      - label: Owner
+        value: platform
+      - label: Region
+        value: us-east-1
+      - label: Endpoint
+        value: https://api.example.com
+  edit_form:
+    action: /services/api-gateway
+    submit_label: Save
+    cancel_href: /services
+    fields:
+      - name: name
+        label: Name
+        type: text
+        value: api-gateway
+        required: true
+      - name: owner
+        label: Owner
+        type: text
+        value: platform
+      - name: region
+        label: Region
+        type: select
+        value: us-east-1
+        options:
+          - us-east-1
+          - us-west-2
+          - eu-west-1
+
+workspace:
+  layout:
+    - type: section
+      heading: Services Admin
+      children:
+        - type: grid
+          columns: 4
+          children:
+            - widget: stat_card
+              each: "$ctx.summary"
+              label: "$item.label"
+              value: "$item.value"
+              status: "$item.status"
+        - widget: data_table
+          title: "$ctx.services_table.title"
+          columns: "$ctx.services_table.columns"
+          rows: "$ctx.services_table.rows"
+          searchable: true
+          table_id: "$ctx.services_table.table_id"
+        - type: grid
+          columns: 2
+          children:
+            - widget: kv_table
+              title: "$ctx.selected_service.title"
+              rows: "$ctx.selected_service.rows"
+            - widget: form
+              fields: "$ctx.edit_form.fields"
+              action: "$ctx.edit_form.action"
+              submit_label: "$ctx.edit_form.submit_label"
+              cancel_href: "$ctx.edit_form.cancel_href"

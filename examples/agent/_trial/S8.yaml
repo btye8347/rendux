@@ -1,0 +1,18 @@
+data:
+  cards:
+    - title: Requests
+      body: 1.2M requests in the last 24 hours.
+    - title: Error rate
+      body: 0.4% of requests returned 5xx.
+    - title: Latency
+      body: p99 latency is 48ms across regions.
+
+workspace:
+  layout:
+    - type: grid
+      columns: 3
+      children:
+        - widget: card
+          each: "$ctx.cards"
+          title: "$item.title"
+          body: "$item.body"

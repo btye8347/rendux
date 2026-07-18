@@ -1,0 +1,34 @@
+data:
+  kpi:
+    - label: Active Jobs
+      value: "42"
+      status: ok
+      trend: "+5 today"
+    - label: Failed Jobs
+      value: "3"
+      status: error
+      trend: "↑1 this hour"
+    - label: Queue Depth
+      value: "128"
+      status: warn
+      subtitle: pending tasks
+    - label: Workers Online
+      value: "16"
+      status: ok
+      subtitle: of 18 capacity
+
+workspace:
+  layout:
+    - type: section
+      heading: Ops Overview
+      children:
+        - type: grid
+          columns: 4
+          children:
+            - widget: stat_card
+              each: "$ctx.kpi"
+              label: "$item.label"
+              value: "$item.value"
+              status: "$item.status"
+              trend: "$item.trend"
+              subtitle: "$item.subtitle"

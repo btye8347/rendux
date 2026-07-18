@@ -1,0 +1,23 @@
+data:
+  actions:
+    - label: New deployment
+      variant: primary
+      href: "#/new"
+    - label: Docs
+      variant: ghost
+      href: "#/docs"
+
+workspace:
+  layout:
+    - type: stack
+      children:
+        - widget: empty_state
+          title: No deployments
+          message: Create a deployment to get started.
+        - type: row
+          children:
+            - widget: button
+              each: "$ctx.actions"
+              label: "$item.label"
+              variant: "$item.variant"
+              href: "$item.href"

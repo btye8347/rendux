@@ -1,0 +1,30 @@
+data:
+  disk:
+    label: Disk
+    value: 80
+    variant: warn
+  cpu:
+    label: CPU
+    value: 35
+    variant: default
+
+workspace:
+  layout:
+    - type: stack
+      children:
+        - widget: alert
+          variant: warn
+          title: Elevated load
+          message: Disk usage is approaching capacity.
+        - widget: alert
+          variant: error
+          title: Critical failure
+          message: A dependent service is unreachable.
+        - widget: progress_bar
+          label: "$ctx.disk.label"
+          value: "$ctx.disk.value"
+          variant: "$ctx.disk.variant"
+        - widget: progress_bar
+          label: "$ctx.cpu.label"
+          value: "$ctx.cpu.value"
+          variant: "$ctx.cpu.variant"

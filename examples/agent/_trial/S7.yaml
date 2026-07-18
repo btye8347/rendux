@@ -1,0 +1,48 @@
+data:
+  nav:
+    - label: Overview
+      href: "#/overview"
+      variant: ghost
+    - label: Latency
+      href: "#/latency"
+      variant: primary
+    - label: Alerts
+      href: "#/alerts"
+      variant: ghost
+  latency_table:
+    title: Request latency over time
+    columns:
+      - key: time
+        label: Time
+      - key: p50
+        label: p50
+      - key: p99
+        label: p99
+    rows:
+      - time: "10:00"
+        p50: "12ms"
+        p99: "48ms"
+      - time: "10:05"
+        p50: "14ms"
+        p99: "52ms"
+      - time: "10:10"
+        p50: "11ms"
+        p99: "45ms"
+
+workspace:
+  layout:
+    - type: split
+      primary:
+        - widget: data_table
+          title: "$ctx.latency_table.title"
+          columns: "$ctx.latency_table.columns"
+          rows: "$ctx.latency_table.rows"
+      secondary:
+        - type: stack
+          children:
+            - heading: Navigation
+            - widget: button
+              each: "$ctx.nav"
+              label: "$item.label"
+              href: "$item.href"
+              variant: "$item.variant"

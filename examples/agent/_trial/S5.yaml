@@ -1,0 +1,10 @@
+data:
+  kpi:
+    - label: CPU
+      value: "72%"
+workspace:
+  layout:
+    - widget: stat_card
+      each: "$ctx.kpi"
+      label: "$item.label"
+      value: "$item.value"

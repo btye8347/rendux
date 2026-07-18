@@ -1,0 +1,14 @@
+data: {}
+
+workspace:
+  layout:
+    - type: stack
+      children:
+        - widget: modal
+          id: restart-api-gateway
+          title: Restart api-gateway?
+          body: This will briefly interrupt traffic to api-gateway.
+          trigger_label: Restart
+          trigger_variant: destructive
+          cancel_label: Cancel
+          confirm_label: Confirm

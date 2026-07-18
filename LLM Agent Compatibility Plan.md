@@ -34,7 +34,7 @@ Do **not** invent a second DSL. RDL YAML + JSON contracts **are** the agent lang
 | A3 — Compile loop | **Done** | `rendux/core/agent_compile.py` + `scripts/agent_compile.py` + tests |
 | A4 — Few-shot examples | **Done** | `examples/agent/{kpi_dashboard,ops_alerts,service_admin}.yaml` |
 | A5 — Context schema convention | **Done** | `docs/agent/CONTEXT_SCHEMA.md` |
-| A6 — Live LLM eval | **Manual plan ready** | `docs/agent/ADVERSARIAL_TEST_PLAN.md` (run in separate session); automated live harness still pending |
+| A6 — Live LLM eval | **Executed (manual)** | Scorecard `docs/agent/eval/2026-07-18-adversarial.md` — S1–S9 **18/18**; automated live harness still pending |
 | A7 — Agent tools / MCP | Deferred | `lint_rdl`, `list_widgets`, `compile_view` tools |
 
 **Definition of done (LLM-compatible):**
@@ -180,7 +180,7 @@ Defer until A1–A3 are stable.
 - [x] A4 examples
 - [x] A5 context schema doc
 - [x] A6 adversarial manual test plan (`docs/agent/ADVERSARIAL_TEST_PLAN.md`)
-- [ ] A6 executed + scorecard filed under `docs/agent/eval/`
+- [x] A6 executed + scorecard filed under `docs/agent/eval/` (`2026-07-18-adversarial.md`)
 - [ ] A6 automated live harness (optional)
 - [ ] A7 tools (deferred)
 
