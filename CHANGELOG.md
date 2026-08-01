@@ -1,5 +1,13 @@
 # Changelog
 
+## Unreleased
+
+### Added
+
+- **Layout spacing scale** — CSS tokens `--rx-space-*` with RDL `gap` / `space` on
+  containers (`none|xs|sm|md|lg|xl`). Inward gap + outward block rhythm; section
+  defaults via `--rx-section-gap` / `--rx-section-space`.
+
 ## 0.1.0b1 — 2026-07-18
 
 First **beta** release for private consumption as a git dependency.

@@ -32,11 +32,16 @@ workspace:
 
 | type | Notes |
 |---|---|
-| `stack` | vertical; optional `gap: sm\|lg` |
-| `row` | horizontal; optional `gap` |
-| `grid` | `columns: 1\|2\|3\|4\|auto`; optional `gap` |
-| `section` | `heading`, `description`, `children` |
+| `stack` | vertical; optional `gap` / `space` |
+| `row` | horizontal; optional `gap` / `space` |
+| `grid` | `columns: 1\|2\|3\|4\|auto`; optional `gap` / `space` |
+| `section` | `heading`, `description`, `children`; optional `gap` / `space` |
 | `split` | `primary`, `secondary` lists; optional `initial`, `min`, `id` |
+
+**Spacing tokens:** `none | xs | sm | md | lg | xl`  
+- `gap` = inward (between children)  
+- `space` = outward (block rhythm after this node)  
+Defaults are CSS vars (`--rx-gap-default`, `--rx-section-space`, …).
 
 Polling (optional): on a container, `id: ops-kpis` + `poll: 15s` → HTMX refresh of children.
 

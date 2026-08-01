@@ -14,6 +14,7 @@
 | Emit Python / Jinja | Wrong layer | YAML fragment only |
 | `modal` without `id` | dom-dialog profile requires it | Always set `id` + `title` |
 | Pagination `url_pattern` without `{page}` | Broken links | Include `{page}` placeholder |
+| `gap: 12px` or inventing sizes | Not in spacing scale | Use `none\|xs\|sm\|md\|lg\|xl` |
 
 ## Repair loop
 

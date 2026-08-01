@@ -129,9 +129,13 @@ workspace:
     - type: section
       heading: Services
       description: Catalog admin demo — verified RDL widgets in an application layout.
+      gap: lg
+      space: xl
       children:
         - type: grid
           columns: 4
+          gap: md
+          space: lg
           children:
             - widget: stat_card
               each: "$ctx.summary"
@@ -141,8 +145,11 @@ workspace:
 
         - type: grid
           columns: 2
+          gap: lg
+          space: lg
           children:
             - type: stack
+              gap: md
               children:
                 - widget: data_table
                   title: "$ctx.services_table.title"
@@ -157,6 +164,7 @@ workspace:
                   url_pattern: "/services?page={page}"
 
             - type: stack
+              gap: md
               children:
                 - widget: panel
                   title: Selected service

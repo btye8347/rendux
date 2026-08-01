@@ -44,17 +44,28 @@ when: <cond>                # optional
 children: [<node>, ...]      # stack, row, grid, section
 ```
 
+**Spacing (all containers that wrap children):**
+
+```yaml
+gap: none | xs | sm | md | lg | xl    # inward — CSS gap between children
+space: none | xs | sm | md | lg | xl  # outward — margin-block-end vs siblings
+```
+
+Defaults come from CSS tokens (`--rx-gap-default`, `--rx-stack-gap`, `--rx-section-gap`, `--rx-section-space`). Host themes may override the scale.
+
 **Grid extras:**
 
 ```yaml
 columns: 1 | 2 | 3 | 4 | auto   # default: auto
-gap: sm | lg                      # optional
+gap: …                            # optional (see spacing)
+space: …                          # optional
 ```
 
 **Stack / row extras:**
 
 ```yaml
-gap: sm | lg                      # optional — CSS modifier
+gap: …                            # optional
+space: …                          # optional
 ```
 
 **Section extras:**
@@ -62,6 +73,8 @@ gap: sm | lg                      # optional — CSS modifier
 ```yaml
 heading: "Section title"
 description: "Subtitle text"
+gap: …                            # between heading/desc/children
+space: …                          # after the section
 children: [<node>, ...]
 ```
 

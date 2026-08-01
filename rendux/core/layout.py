@@ -27,8 +27,10 @@ _RESERVED = frozenset({"widget", "when", "each"})
 
 _KNOWN_TYPES    = frozenset({"stack", "row", "grid", "section", "split"})
 _VALID_COLUMNS  = frozenset({1, 2, 3, 4, "auto"})
-_GAP_MODIFIERS  = frozenset({"sm", "lg"})
-_GAP_CSS        = {"sm": "0.5rem", "lg": "1.5rem"}
+# Named spacing scale — maps to --rx-space-* / .rx-gap-* / .rx-space-*
+_SPACE_SCALE    = frozenset({"none", "xs", "sm", "md", "lg", "xl"})
+# Backward-compat aliases still accepted for gap:
+_GAP_MODIFIERS  = _SPACE_SCALE
 
 # Keys that widget params must never overwrite
 _PROTECTED_CTX = frozenset({
@@ -336,6 +338,25 @@ class LayoutRenderer:
         ]
         return " " + " ".join(parts)
 
+    def _spacing_classes(self, node: dict[str, Any], *, kind: str) -> str:
+        """Build ``rx-gap-*`` / ``rx-space-*`` classes from container props."""
+        classes: list[str] = []
+        gap = node.get("gap")
+        if gap is not None:
+            if gap not in _SPACE_SCALE:
+                if self._strict:
+                    raise LayoutConfigError(f"Invalid {kind} gap: {gap!r}")
+            else:
+                classes.append(f"rx-gap-{gap}")
+        space = node.get("space")
+        if space is not None:
+            if space not in _SPACE_SCALE:
+                if self._strict:
+                    raise LayoutConfigError(f"Invalid {kind} space: {space!r}")
+            else:
+                classes.append(f"rx-space-{space}")
+        return (" " + " ".join(classes)) if classes else ""
+
     def _container(self, node: dict, ctx: dict[str, Any], depth: int) -> str:
         t = node.get("type", "")
 
@@ -350,35 +371,26 @@ class LayoutRenderer:
             return self._split(node, ctx, depth)
 
         inner = self.render(node.get("children", []), ctx, _depth=depth + 1)
+        spacing = self._spacing_classes(node, kind=t)
 
         if t == "grid":
             raw_cols = node.get("columns", "auto")
             if self._strict and raw_cols not in _VALID_COLUMNS:
                 raise LayoutConfigError(f"Invalid grid columns: {raw_cols!r}")
-            cols     = raw_cols if raw_cols in _VALID_COLUMNS else "auto"
-            css      = f"layout-grid-{cols}"
-            gap      = node.get("gap")
-            if gap is not None and gap not in _GAP_MODIFIERS:
-                if self._strict:
-                    raise LayoutConfigError(f"Invalid grid gap: {gap!r}")
-            if gap in _GAP_MODIFIERS:
-                return f'<div class="{css}" style="gap:{_GAP_CSS[gap]}"{self._poll_attrs(node)}>{inner}</div>'
+            cols = raw_cols if raw_cols in _VALID_COLUMNS else "auto"
+            css = f"layout-grid-{cols}{spacing}"
             return f'<div class="{css}"{self._poll_attrs(node)}>{inner}</div>'
 
         # stack / row
-        gap    = node.get("gap", "")
-        if gap and gap not in _GAP_MODIFIERS:
-            if self._strict:
-                raise LayoutConfigError(f"Invalid {t} gap: {gap!r}")
-        suffix = f"-{gap}" if gap in _GAP_MODIFIERS else ""
-        css    = f"layout-{t}{suffix}"
+        css = f"layout-{t}{spacing}"
         return f'<div class="{css}"{self._poll_attrs(node)}>{inner}</div>'
 
     def _section(self, node: dict, ctx: dict[str, Any], depth: int) -> str:
         heading = escape(str(node.get("heading", "")))
-        desc    = escape(str(node.get("description", "")))
-        inner   = self.render(node.get("children", []), ctx, _depth=depth + 1)
-        parts   = [f'<div class="component-section"{self._poll_attrs(node)}>']
+        desc = escape(str(node.get("description", "")))
+        inner = self.render(node.get("children", []), ctx, _depth=depth + 1)
+        spacing = self._spacing_classes(node, kind="section")
+        parts = [f'<div class="component-section{spacing}"{self._poll_attrs(node)}>']
         if heading:
             parts.append(f'<h2 class="section-label">{heading}</h2>')
         if desc:

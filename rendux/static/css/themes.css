@@ -66,6 +66,20 @@ html[data-theme="light"] {
   --rx-shadow-sm:        0 1px 3px rgba(0, 0, 0, 0.08);
   --rx-shadow-md:        0 4px 12px rgba(0, 0, 0, 0.12);
   --rx-backdrop:         rgba(0, 0, 0, 0.45);
+
+  /* Spacing scale — global defaults; override in themes or host CSS */
+  --rx-space-none:       0;
+  --rx-space-xs:         0.25rem;
+  --rx-space-sm:         0.5rem;
+  --rx-space-md:         1rem;
+  --rx-space-lg:         1.5rem;
+  --rx-space-xl:         2.5rem;
+
+  --rx-gap-default:      var(--rx-space-md);   /* grid / default container gap */
+  --rx-stack-gap:        var(--rx-space-sm);   /* stack default */
+  --rx-row-gap:          var(--rx-space-sm);   /* row default */
+  --rx-section-gap:      var(--rx-space-md);   /* inside section */
+  --rx-section-space:    var(--rx-space-lg);   /* between sections */
 }
 
 html[data-theme="dark"] {

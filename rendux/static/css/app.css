@@ -86,16 +86,31 @@ body {
 }
 
 /* ── Layout helpers ─────────────────────────────────────── */
+/* Gap/space tokens: --rx-space-* in themes.css; override via .rx-gap-* / .rx-space-* */
 
-.layout-grid-1    { display: grid; grid-template-columns: 1fr; gap: 1rem; }
-.layout-grid-2    { display: grid; grid-template-columns: repeat(2, 1fr); gap: 1rem; }
-.layout-grid-3    { display: grid; grid-template-columns: repeat(3, 1fr); gap: 1rem; }
-.layout-grid-4    { display: grid; grid-template-columns: repeat(4, 1fr); gap: 1rem; }
-.layout-grid-auto { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 1rem; }
-.layout-stack     { display: flex; flex-direction: column; gap: 0.75rem; }
-.layout-stack-sm  { display: flex; flex-direction: column; gap: 0.4rem; }
-.layout-stack-lg  { display: flex; flex-direction: column; gap: 1.5rem; }
-.layout-row       { display: flex; flex-direction: row; gap: 0.5rem; align-items: center; flex-wrap: wrap; }
+.layout-grid-1    { display: grid; grid-template-columns: 1fr; gap: var(--rx-gap-default); }
+.layout-grid-2    { display: grid; grid-template-columns: repeat(2, 1fr); gap: var(--rx-gap-default); }
+.layout-grid-3    { display: grid; grid-template-columns: repeat(3, 1fr); gap: var(--rx-gap-default); }
+.layout-grid-4    { display: grid; grid-template-columns: repeat(4, 1fr); gap: var(--rx-gap-default); }
+.layout-grid-auto { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: var(--rx-gap-default); }
+.layout-stack     { display: flex; flex-direction: column; gap: var(--rx-stack-gap); }
+.layout-row       { display: flex; flex-direction: row; gap: var(--rx-row-gap); align-items: center; flex-wrap: wrap; }
+
+/* Inward gap (between children) */
+.rx-gap-none { gap: var(--rx-space-none) !important; }
+.rx-gap-xs   { gap: var(--rx-space-xs) !important; }
+.rx-gap-sm   { gap: var(--rx-space-sm) !important; }
+.rx-gap-md   { gap: var(--rx-space-md) !important; }
+.rx-gap-lg   { gap: var(--rx-space-lg) !important; }
+.rx-gap-xl   { gap: var(--rx-space-xl) !important; }
+
+/* Outward space (block rhythm vs siblings) */
+.rx-space-none { margin-block-end: var(--rx-space-none) !important; }
+.rx-space-xs   { margin-block-end: var(--rx-space-xs) !important; }
+.rx-space-sm   { margin-block-end: var(--rx-space-sm) !important; }
+.rx-space-md   { margin-block-end: var(--rx-space-md) !important; }
+.rx-space-lg   { margin-block-end: var(--rx-space-lg) !important; }
+.rx-space-xl   { margin-block-end: var(--rx-space-xl) !important; }
 
 .workspace-heading { font-size: 1.35rem; margin: 0 0 1rem; }
 
@@ -827,9 +842,14 @@ a.item-title:hover { color: var(--rx-accent); }
 .component-item p    { color: var(--rx-text-2); font-size: 0.85rem; margin: 0 0 0.5rem; }
 .component-item code { font-size: 0.8rem; color: var(--rx-text-3); }
 
-.component-section { margin-bottom: 1.5rem; }
-.section-label { font-family: monospace; font-size: 0.9rem; font-weight: 600; color: var(--rx-accent); margin: 0 0 0.25rem; }
-.section-desc  { font-size: 0.85rem; color: var(--rx-text-3); margin: 0 0 0.75rem; }
+.component-section {
+  display: flex;
+  flex-direction: column;
+  gap: var(--rx-section-gap);
+  margin-block-end: var(--rx-section-space);
+}
+.section-label { font-family: monospace; font-size: 0.9rem; font-weight: 600; color: var(--rx-accent); margin: 0; }
+.section-desc  { font-size: 0.85rem; color: var(--rx-text-3); margin: 0; }
 
 .about-list { margin: 0; padding-left: 1.5rem; color: var(--rx-text-2); }
 .about-list li { margin-bottom: 0.4rem; font-size: 0.95rem; }

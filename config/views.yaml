@@ -110,6 +110,8 @@ views:
           id: ops-kpis
           poll: 15s
           columns: 4
+          gap: md
+          space: lg
           children:
             - widget: stat_card
               each: "$ctx.kpi"
@@ -122,6 +124,8 @@ views:
         # ── Health + Activity ──────────────────────────────────────────────
         - type: grid
           columns: 2
+          gap: md
+          space: lg
           children:
             - widget: status_grid
               title: Service Health
@@ -130,6 +134,7 @@ views:
             - type: stack
               id: ops-timeline
               poll: 15s
+              gap: sm
               children:
                 - widget: timeline
                   events: "$ctx.recent_events"
@@ -139,12 +144,15 @@ views:
         # ── Recent changes + system alerts ────────────────────────────────
         - type: grid
           columns: 2
+          gap: md
+          space: lg
           children:
             - widget: item_list
               title: Recent Changes
               items: "$ctx.recent_changes"
 
             - type: stack
+              gap: md
               children:
                 - widget: alert
                   variant: warn

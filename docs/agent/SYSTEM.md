@@ -30,7 +30,8 @@ Do not invent widget names or props. Do not use unverified showcase widgets.
 5. Unknown props on verified widgets are **errors** (e.g. `labl` instead of `label`).
 6. Naming: section/collection heading → `title`; scalar descriptor → `label`; scalar → `value`.
 7. Nesting depth must stay reasonable (max 50; prefer shallow trees).
-8. Success criteria: fragment must pass `uv run python scripts/agent_compile.py <file>`.
+8. Spacing: optional `gap` / `space` on containers — tokens `none|xs|sm|md|lg|xl` only (`gap` = inward, `space` = outward rhythm). Prefer defaults unless density needs change.
+9. Success criteria: fragment must pass `uv run python scripts/agent_compile.py <file>`.
 
 ## Layout patterns (prefer these)
 

@@ -341,6 +341,10 @@ class RdlLinter:
       if gap is not None and gap not in self.grammar.get("gap_values", []):
           self._add("error", f"{path}.gap", f"invalid gap {gap!r}")
 
+      space = node.get("space")
+      if space is not None and space not in self.grammar.get("space_values", self.grammar.get("gap_values", [])):
+          self._add("error", f"{path}.space", f"invalid space {space!r}")
+
       if ctype == "split":
           for slot in ("primary", "secondary"):
               children = node.get(slot, [])

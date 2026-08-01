@@ -181,7 +181,8 @@ def test_grid_auto():
 def test_stack_gap_sm():
     r = _renderer()
     html = r.render([{"type": "stack", "gap": "sm", "children": []}], {})
-    assert 'class="layout-stack-sm"' in html
+    assert 'layout-stack' in html
+    assert 'rx-gap-sm' in html
 
 
 def test_section_container():
@@ -498,18 +499,48 @@ def test_protected_key_url_for_not_overwritten():
     assert ctx["url_for"] is sentinel  # original untouched
 
 
-# ── grid gap emits inline style ───────────────────────────────────────────────
+# ── spacing tokens (gap / space) ──────────────────────────────────────────────
 
-def test_grid_gap_sm_emits_inline_style():
+def test_grid_gap_sm_emits_token_class():
     r = _renderer()
     html = r.render([{"type": "grid", "gap": "sm", "children": []}], {})
-    assert "0.5rem" in html
+    assert "rx-gap-sm" in html
+    assert "style=" not in html
 
 
-def test_grid_gap_lg_emits_inline_style():
+def test_grid_gap_lg_emits_token_class():
     r = _renderer()
     html = r.render([{"type": "grid", "gap": "lg", "children": []}], {})
-    assert "1.5rem" in html
+    assert "rx-gap-lg" in html
+
+
+def test_section_space_and_gap():
+    r = _renderer()
+    html = r.render([{
+        "type": "section",
+        "heading": "Demo",
+        "gap": "lg",
+        "space": "xl",
+        "children": [{"widget": "badge", "label": "x"}],
+    }], {})
+    assert "component-section" in html
+    assert "rx-gap-lg" in html
+    assert "rx-space-xl" in html
+
+
+def test_strict_invalid_space_raises():
+    from jinja2 import DictLoader, Environment
+    from rendux.core.layout import LayoutConfigError, LayoutRenderer
+
+    env = Environment(loader=DictLoader({
+        "widgets/badge.html": "{{ label }}",
+    }), autoescape=True)
+    r = LayoutRenderer(env, strict=True)
+    try:
+        r.render([{"type": "stack", "space": "huge", "children": []}], {})
+        raise AssertionError("expected LayoutConfigError")
+    except LayoutConfigError as exc:
+        assert "space" in str(exc)
 
 
 def test_grid_invalid_columns_falls_back_to_auto():
