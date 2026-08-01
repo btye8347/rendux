@@ -330,10 +330,11 @@ class LayoutRenderer:
             interval = poll.get("every", "15s")
         elif isinstance(poll, int):
             interval = f"{poll}s"
+        # `load` so first paint does not wait a full poll interval for live data.
         parts = [
             f'id="{escape(str(node_id))}"',
             f'hx-get="{escape(str(url))}"',
-            f'hx-trigger="every {escape(str(interval))}"',
+            f'hx-trigger="load, every {escape(str(interval))}"',
             'hx-swap="innerHTML"',
         ]
         return " " + " ".join(parts)

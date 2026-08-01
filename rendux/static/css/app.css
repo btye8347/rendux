@@ -1808,6 +1808,7 @@ a.item-title:hover { color: var(--rx-accent); }
 }
 
 .chat-composer {
+  flex-shrink: 0;
   display: flex;
   flex-direction: column;
   gap: var(--rx-space-xs);

@@ -22,7 +22,7 @@ def test_ops_layout_has_poll_attributes():
     html = response.text
     assert 'id="ops-kpis"' in html
     assert 'hx-get="/partials/ops/ops-kpis"' in html
-    assert 'hx-trigger="every 15s"' in html
+    assert 'hx-trigger="load, every 15s"' in html
     assert 'id="ops-timeline"' in html
     assert 'hx-get="/partials/ops/ops-timeline"' in html
 
