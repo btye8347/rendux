@@ -1,0 +1,71 @@
+{% set _chat_id = chat_id|default("chat") %}
+{% set _thread_id = thread_id|default(_chat_id ~ "-thread") %}
+{% set _height = height|default("28rem") %}
+{% set _placeholder = placeholder|default("Ask anything…") %}
+{% set _submit = submit_label|default("Send") %}
+{% set _empty_title = empty_title|default("No messages yet") %}
+{% set _empty_message = empty_message|default("Start the conversation.") %}
+
+<section class="widget-chat"
+         id="{{ _chat_id }}"
+         style="--chat-height: {{ _height }}"
+         data-chat-id="{{ _chat_id }}">
+  {% if title %}
+  <header class="chat-header">
+    <h2 class="chat-title">{{ title }}</h2>
+    {% if subtitle %}<p class="chat-subtitle">{{ subtitle }}</p>{% endif %}
+  </header>
+  {% endif %}
+
+  <div class="chat-thread"
+       id="{{ _thread_id }}"
+       role="log"
+       aria-live="polite"
+       aria-relevant="additions"
+       aria-label="{{ title|default('Chat messages') }}">
+    {% if messages %}
+      {% for msg in messages %}
+      {% with
+          id=msg.id,
+          role=msg.role,
+          content=msg.content,
+          status=msg.status,
+          time=msg.time,
+          meta=msg.meta
+      %}
+        {% include "widgets/chat_message.html" %}
+      {% endwith %}
+      {% endfor %}
+    {% else %}
+      <div class="chat-empty">
+        <p class="chat-empty-title">{{ _empty_title }}</p>
+        {% if _empty_message %}<p class="chat-empty-message">{{ _empty_message }}</p>{% endif %}
+      </div>
+    {% endif %}
+  </div>
+
+  <form class="chat-composer"
+        action="{{ action|default('#') }}"
+        method="{{ method|default('post') }}"
+        {% if hx_post %}hx-post="{{ hx_post }}"{% endif %}
+        {% if hx_target %}hx-target="{{ hx_target }}"{% elif hx_post %}hx-target="#{{ _thread_id }}"{% endif %}
+        {% if hx_swap %}hx-swap="{{ hx_swap }}"{% elif hx_post %}hx-swap="beforeend"{% endif %}
+        {% if hx_post %}hx-disabled-elt="find button[type=submit]"{% endif %}
+        hx-on::after-request="if(event.detail.successful){this.reset(); this.querySelector('textarea')?.focus(); this.closest('.widget-chat')?.querySelector('.chat-thread')?.scrollTo({top:1e9,behavior:'smooth'});}">
+    <label class="sr-only" for="{{ _chat_id }}-input">Message</label>
+    <textarea id="{{ _chat_id }}-input"
+              class="chat-input"
+              name="{{ input_name|default('message') }}"
+              rows="{{ rows|default(2) }}"
+              placeholder="{{ _placeholder }}"
+              {% if disabled %}disabled{% endif %}
+              required
+              hx-on:keydown="if(event.key==='Enter'&&!event.shiftKey){event.preventDefault(); this.form?.requestSubmit();}"></textarea>
+    <div class="chat-composer-actions">
+      <span class="chat-composer-hint">Enter to send · Shift+Enter for newline</span>
+      <button type="submit"
+              class="btn btn-primary btn-sm"
+              {% if disabled %}disabled{% endif %}>{{ _submit }}</button>
+    </div>
+  </form>
+</section>

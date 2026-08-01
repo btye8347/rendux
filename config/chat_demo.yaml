@@ -1,0 +1,75 @@
+# Chat widget demo — host owns send/stream endpoints; RendUX owns the shell.
+data:
+  chat_messages:
+    - id: "1"
+      role: system
+      content: "You are connected to the RendUX chat demo. The host app handles LLM calls."
+      status: complete
+    - id: "2"
+      role: user
+      content: "What widgets are verified for admin UIs?"
+      time: "09:41"
+      status: complete
+    - id: "3"
+      role: assistant
+      content: "Ops and admin sets include stat_card, data_table, form, modal, kv_table, and now chat."
+      time: "09:41"
+      meta: assistant
+      status: complete
+    - id: "4"
+      role: assistant
+      content: "Streaming replies can update a single bubble by id…"
+      time: "09:42"
+      meta: assistant
+      status: streaming
+
+workspace:
+  layout:
+    - type: section
+      heading: Chat
+      description: Composite chat panel — thread + composer. HTMX appends messages via host /partials/chat/send.
+      gap: md
+      space: lg
+      children:
+        - type: grid
+          columns: 2
+          gap: lg
+          children:
+            - widget: chat
+              title: Assistant
+              subtitle: Demo conversation (mock send)
+              chat_id: demo-chat
+              height: 32rem
+              messages: "$ctx.chat_messages"
+              hx_post: /partials/chat/send
+              placeholder: Ask the assistant…
+              submit_label: Send
+              empty_title: No messages yet
+              empty_message: Send a message to start.
+
+            - type: stack
+              gap: md
+              children:
+                - widget: alert
+                  variant: info
+                  title: Host integration
+                  message: "Composer POSTs to your endpoint. Return chat_message HTML fragments (beforeend) or stream updates into #msg-<id>."
+                - widget: kv_table
+                  title: Message fields
+                  rows:
+                    - {label: id, value: "stable id for streaming swaps"}
+                    - {label: role, value: "user | assistant | system | tool"}
+                    - {label: content, value: "message text"}
+                    - {label: status, value: "complete | streaming | error | pending"}
+                    - {label: time / meta, value: "optional display fields"}
+                - widget: chat_message
+                  id: sample-user
+                  role: user
+                  content: Standalone chat_message widget
+                  time: now
+                - widget: chat_message
+                  id: sample-asst
+                  role: assistant
+                  content: Useful when HTMX returns a single bubble fragment.
+                  status: complete
+                  meta: assistant

@@ -51,6 +51,19 @@ SNIPPETS: dict[str, dict] = {
         "title": "$ctx.detail.title",
         "rows": "$ctx.detail.rows",
     },
+    "chat": {
+        "widget": "chat",
+        "title": "Assistant",
+        "messages": "$ctx.messages",
+        "hx_post": "/chat/send",
+        "placeholder": "Ask anything…",
+    },
+    "chat_message": {
+        "widget": "chat_message",
+        "role": "assistant",
+        "content": "Hello.",
+        "status": "complete",
+    },
 }
 
 

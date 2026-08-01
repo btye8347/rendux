@@ -47,6 +47,7 @@ Do not invent widget names or props. Do not use unverified showcase widgets.
 - `button` may use `hx_get` / `hx_target` / `hx_swap` for partials.
 - `form` may use `hx_post` / `hx_target`; static `action` is fine for demos.
 - Live polling: container `id` + `poll: 15s` (advanced; optional).
+- Chat: use `chat` for thread+composer; message list under `data` with `id`/`role`/`content`/`status`. Host owns send/stream endpoints.
 
 ## On failure
 

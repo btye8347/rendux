@@ -30,7 +30,7 @@ You keep domain logic and routes. RendUX renders the shell and widgets from conf
 ## Features (0.1 beta)
 
 - **RDL layouts** — `grid` / `stack` / `section` / `split`, `$ctx` / `$item`, `each:`
-- **19 verified widgets** — ops + admin set (`stat_card`, `data_table`, `form`, `modal`, …)
+- **21 verified widgets** — ops + admin + chat (`stat_card`, `data_table`, `form`, `modal`, `chat`, …)
 - **Strict compile loop** — linter + strict renderer; agent-friendly JSON errors
 - **Host integration API** — `configure_app` / `render_view`
 - **Themes** — light/dark/system + YAML custom themes
@@ -138,6 +138,7 @@ uv run uvicorn demo.main:app --reload --host 0.0.0.0 --port 8001
 | `/` | Home |
 | `/ops` | Ops dashboard — RDL + live HTMX poll |
 | `/services` | Admin catalog use case |
+| `/chat` | Chat panel demo (HTMX mock send) |
 | `/components` | Widget showcase |
 | `/about` | About |
 

@@ -22,6 +22,11 @@ views:
     route: /services
     include: services_admin.yaml
 
+  chat:
+    label: Chat
+    route: /chat
+    include: chat_demo.yaml
+
   ops:
     label: Ops
     route: /ops

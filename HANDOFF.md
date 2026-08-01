@@ -155,10 +155,11 @@ Public API: `window.RendUX.setTheme("light"|"dark"|"system")` — updates DOM, f
 | `home` | `/` | template: `workspaces/home.html` |
 | `components` | `/components` | **layout** (RDL — full widget showcase) |
 | `services` | `/services` | **layout** (RDL — admin app use case) |
+| `chat` | `/chat` | **layout** (RDL — chat panel + HTMX mock send) |
 | `ops` | `/ops` | **layout** (RDL — ops dashboard + live poll) |
 | `about` | `/about` | template: `workspaces/about.html` |
 
-`ops` is the monitoring RDL demo. `services` is the application use-case demo (catalog table + kv detail + edit form + modal) using Track A verified widgets.
+`ops` is the monitoring RDL demo. `services` is the admin catalog use case. `chat` demos the `chat` / `chat_message` widgets.
 
 ---
 

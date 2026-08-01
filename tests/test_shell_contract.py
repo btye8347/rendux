@@ -29,12 +29,13 @@ def test_home_view_renders_nav():
     assert "Home" in response.text
     assert "Components" in response.text
     assert "Services" in response.text
+    assert "Chat" in response.text
     assert "About" in response.text
 
 
 def test_all_views_render_shell():
     client = _client()
-    for path in ("/", "/components", "/services", "/ops", "/about"):
+    for path in ("/", "/components", "/services", "/chat", "/ops", "/about"):
         response = client.get(path)
         assert response.status_code == 200
         assert 'class="app-shell"' in response.text, path
@@ -46,6 +47,7 @@ def test_all_views_set_active_view_attribute():
         ("/", "home"),
         ("/components", "components"),
         ("/services", "services"),
+        ("/chat", "chat"),
         ("/ops", "ops"),
         ("/about", "about"),
     ]
@@ -56,7 +58,7 @@ def test_all_views_set_active_view_attribute():
 
 def test_all_views_set_shell_attribute():
     client = _client()
-    for path in ("/", "/components", "/services", "/ops", "/about"):
+    for path in ("/", "/components", "/services", "/chat", "/ops", "/about"):
         response = client.get(path)
         assert 'data-shell="default"' in response.text, path
 

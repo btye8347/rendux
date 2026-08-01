@@ -1,0 +1,45 @@
+{
+  "name": "chat",
+  "description": "Chat panel with scrollable thread and composer; HTMX-ready append via hx_post.",
+  "status": "verified",
+  "interaction": { "profile": "static" },
+  "accepts_each": false,
+  "props": {
+    "messages": { "type": "list", "required": false },
+    "title": { "type": "string", "required": false },
+    "subtitle": { "type": "string", "required": false },
+    "chat_id": { "type": "string", "required": false },
+    "thread_id": { "type": "string", "required": false },
+    "height": { "type": "string", "required": false },
+    "placeholder": { "type": "string", "required": false },
+    "submit_label": { "type": "string", "required": false },
+    "input_name": { "type": "string", "required": false },
+    "rows": { "type": "number", "required": false },
+    "action": { "type": "string", "required": false },
+    "method": { "type": "string", "required": false },
+    "hx_post": { "type": "string", "required": false },
+    "hx_target": { "type": "string", "required": false },
+    "hx_swap": { "type": "string", "required": false },
+    "empty_title": { "type": "string", "required": false },
+    "empty_message": { "type": "string", "required": false },
+    "disabled": { "type": "bool", "required": false }
+  },
+  "item_schema": {
+    "required": {
+      "content": { "type": "string" }
+    },
+    "optional": {
+      "id": { "type": "string" },
+      "role": {
+        "type": "enum",
+        "enum": ["user", "assistant", "system", "tool"]
+      },
+      "status": {
+        "type": "enum",
+        "enum": ["complete", "streaming", "error", "pending"]
+      },
+      "time": { "type": "string" },
+      "meta": { "type": "string" }
+    }
+  }
+}

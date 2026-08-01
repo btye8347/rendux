@@ -1,0 +1,23 @@
+{
+  "name": "chat_message",
+  "description": "Single chat bubble with role, content, and optional streaming/error status.",
+  "status": "verified",
+  "interaction": { "profile": "static" },
+  "accepts_each": true,
+  "props": {
+    "content": { "type": "string", "required": true },
+    "role": {
+      "type": "enum",
+      "enum": ["user", "assistant", "system", "tool"],
+      "required": false
+    },
+    "id": { "type": "string", "required": false },
+    "status": {
+      "type": "enum",
+      "enum": ["complete", "streaming", "error", "pending"],
+      "required": false
+    },
+    "time": { "type": "string", "required": false },
+    "meta": { "type": "string", "required": false }
+  }
+}

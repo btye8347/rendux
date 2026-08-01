@@ -40,7 +40,7 @@ def test_track_a_admin_widgets_are_verified():
     admin_widgets = {
         "badge", "button", "card", "panel", "empty_state", "kv_table",
         "status_badge", "divider", "form", "data_table", "modal", "tabs",
-        "pagination",
+        "pagination", "chat", "chat_message",
     }
     for name in admin_widgets:
         assert registry[name]["status"] == "verified", name

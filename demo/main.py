@@ -1,5 +1,7 @@
 from __future__ import annotations
 
+import uuid
+from datetime import datetime
 from pathlib import Path
 
 from fastapi import FastAPI, Request
@@ -48,6 +50,10 @@ def create_app() -> FastAPI:
     @app.get("/services", response_class=HTMLResponse)
     def services(request: Request) -> HTMLResponse:
         return render_view(request, "services", "Services", templates=templates)
+
+    @app.get("/chat", response_class=HTMLResponse)
+    def chat(request: Request) -> HTMLResponse:
+        return render_view(request, "chat", "Chat", templates=templates)
 
     @app.get("/ops", response_class=HTMLResponse)
     def ops(request: Request) -> HTMLResponse:
@@ -104,6 +110,34 @@ def create_app() -> FastAPI:
                 "title": request.query_params.get("title", ""),
             },
         )
+
+    @app.post("/partials/chat/send", response_class=HTMLResponse)
+    async def chat_send(request: Request) -> HTMLResponse:
+        """Demo host endpoint — append user + mock assistant bubbles."""
+        form = await request.form()
+        text = str(form.get("message") or "").strip()
+        if not text:
+            return HTMLResponse("", status_code=204)
+
+        now = datetime.now().strftime("%H:%M")
+        user_id = uuid.uuid4().hex[:8]
+        asst_id = uuid.uuid4().hex[:8]
+        user_html = templates.env.get_template("widgets/chat_message.html").render(
+            id=user_id,
+            role="user",
+            content=text,
+            time=now,
+            status="complete",
+        )
+        asst_html = templates.env.get_template("widgets/chat_message.html").render(
+            id=asst_id,
+            role="assistant",
+            content=f"Echo (demo): {text}",
+            time=now,
+            meta="assistant",
+            status="complete",
+        )
+        return HTMLResponse(user_html + asst_html)
 
     return app
 

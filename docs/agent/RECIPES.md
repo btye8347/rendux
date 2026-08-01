@@ -87,3 +87,17 @@ See `examples/agent/service_admin.yaml` — `data_table` | `kv_table` | `form` |
       variant: "$item.variant"
       href: "$item.href"
 ```
+
+## 8. Chat panel
+
+```yaml
+- widget: chat
+  title: Assistant
+  messages: "$ctx.messages"
+  hx_post: /chat/send
+  placeholder: Ask anything…
+  height: 28rem
+```
+
+Message items: `{id, role, content, status?, time?, meta?}`.  
+Host returns `chat_message` HTML fragments for HTMX `beforeend` swaps.

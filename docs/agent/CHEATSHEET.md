@@ -53,9 +53,9 @@ Polling (optional): on a container, `id: ops-kpis` + `poll: 15s` → HTMX refres
 | `$item.key` | current `each:` item |
 | literals | strings, numbers, bools, lists, maps |
 
-## Verified widgets (19)
+## Verified widgets (21)
 
-`alert` · `badge` · `button` · `card` · `data_table` · `divider` · `empty_state` · `form` · `item_list` · `kv_table` · `modal` · `pagination` · `panel` · `progress_bar` · `stat_card` · `status_badge` · `status_grid` · `tabs` · `timeline`
+`alert` · `badge` · `button` · `card` · `chat` · `chat_message` · `data_table` · `divider` · `empty_state` · `form` · `item_list` · `kv_table` · `modal` · `pagination` · `panel` · `progress_bar` · `stat_card` · `status_badge` · `status_grid` · `tabs` · `timeline`
 
 ## Naming
 

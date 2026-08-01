@@ -1,0 +1,21 @@
+{# Single chat bubble — also included from widgets/chat.html #}
+{% set _role = role|default("assistant") %}
+{% set _status = status|default("complete") %}
+{% set _id = id|default("") %}
+<article class="chat-message chat-message-{{ _role }}{% if _status != 'complete' %} chat-message-{{ _status }}{% endif %}"
+         {% if _id %}id="msg-{{ _id }}" data-msg-id="{{ _id }}"{% endif %}
+         data-role="{{ _role }}"
+         data-status="{{ _status }}">
+  <div class="chat-bubble">
+    {% if meta %}
+    <div class="chat-meta">{{ meta }}</div>
+    {% endif %}
+    <div class="chat-content">{{ content|default("") }}{% if _status == "streaming" %}<span class="chat-cursor" aria-hidden="true"></span>{% endif %}</div>
+    {% if time %}
+    <div class="chat-time">{{ time }}</div>
+    {% endif %}
+    {% if _status == "error" %}
+    <div class="chat-error">Message failed.</div>
+    {% endif %}
+  </div>
+</article>
