@@ -216,7 +216,7 @@ tests/
 
 - **`0.1.0b1`** — first private beta; API may still shift before `0.1.0`
 - Pin **`v0.1.0b1`** (or a commit SHA) in host apps — do not float on `master` unless you accept breakage
-- **19 / 38** widgets verified; unverified stubs are skipped by prop lint until audited
+- **21 / 40** widgets verified; unverified stubs are skipped by prop lint until audited
 - Not published to PyPI (`Private :: Do Not Upload`)
 
 ---

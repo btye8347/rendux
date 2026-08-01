@@ -142,7 +142,7 @@ workspace:
 
 **Rules for 0.1:**
 
-- Prefer widgets in `contracts/catalog.verified.json` (19 verified)
+- Prefer widgets in `contracts/catalog.verified.json` (21 verified)
 - Unknown props on verified widgets fail under strict lint/render
 - Containers: `stack | row | grid | section | split`
 
@@ -227,6 +227,6 @@ See `examples/consumer/` in this repository for a tiny host app layout you can c
 - PyPI publish
 - Stable public semver guarantees across minors
 - Alternate renderers (React, etc.)
-- Full 38-widget verified surface (19 verified in 0.1)
+- Full widget verified surface (21 verified in 0.1+)
 
 Report issues in the private GitHub repo.

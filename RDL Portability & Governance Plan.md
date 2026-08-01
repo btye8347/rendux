@@ -14,7 +14,7 @@ different stack. Python/FastAPI/Jinja is reference implementation #1, not the mo
 | Phase | Status | Notes |
 |---|---|---|
 | 0 — Decisions | **Done** | JSON canonical + YAML authoring documented; grammar `version:` commented in `views.yaml` |
-| 1 — Widget contracts | **Partial (ops + admin)** | 19 verified, 19 unverified stubs; Track A admin set verified for `/services` use case |
+| 1 — Widget contracts | **Partial (ops + admin + chat)** | 21 verified, remaining stubs; `/services` + `/chat` use cases |
 | 2 — RDL linter | **Done (CI-enforced)** | Strict unknown props = error (plan deviation, agreed); no pre-commit hook yet |
 | 3 — Strict render mode | **Done** | `LayoutRenderer(strict=True)`, `RENDUX_STRICT=1`, verified-widget prop checks at render |
 | 4 — Grammar spec | **Done** | `docs/rdl-spec-v0.1.md` |

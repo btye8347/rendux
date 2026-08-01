@@ -196,7 +196,7 @@ a292ccd  Add: four core widgets with demo data across all views
 1. ~~**Dynamic view_ctx**~~ — **done** — `/ops` injects live-ish KPI/events via `demo/ops_context.py`
 2. ~~**Components view via RDL**~~ — **done** — `config/components_showcase.yaml` via `include:`
 3. ~~**HTMX partial refresh on `/ops`**~~ — **done** — KPI row + timeline poll every 15s via `poll:` on RDL containers
-4. ~~**Widget contract audits (Track A)**~~ — **partial** — 19 verified; `/services` app demo; 19 stubs remain
+4. ~~**Widget contract audits (Track A)**~~ — **partial** — 21 verified (incl. chat); stubs remain
 5. ~~**LLM agent pack (A1–A5)**~~ — **done** — see `LLM Agent Compatibility Plan.md`
 6. **Live LLM eval (A6)** — run `docs/agent/ADVERSARIAL_TEST_PLAN.md` in a fresh session; file scorecard under `docs/agent/eval/`
 7. **Finish Track A stubs** — remaining Tier 3 widgets as needed
