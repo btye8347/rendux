@@ -1,0 +1,112 @@
+# Camera / stream_tile demo — host supplies browser-playable URLs (proxy Frigate, etc.).
+data:
+  cameras:
+    - id: driveway
+      title: Driveway
+      kind: snapshot
+      status: ok
+      src: https://picsum.photos/seed/rendux-driveway/640/360
+      aspect: "16/9"
+      refresh_seconds: 8
+      href: https://picsum.photos/seed/rendux-driveway/1280/720
+      badges:
+        - {label: person, variant: warn}
+        - {label: car, variant: info}
+      actions:
+        - label: Events
+          href: /cameras
+          variant: ghost
+        - label: Snapshot
+          hx_get: /partials/toast?message=Snapshot+queued&variant=success&title=Driveway
+          hx_swap: none
+          variant: secondary
+
+    - id: garage
+      title: Garage
+      kind: video
+      status: ok
+      src: https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/ForBiggerBlazes.mp4
+      poster: https://picsum.photos/seed/rendux-garage/640/360
+      aspect: "16/9"
+      badges:
+        - {label: live, variant: success}
+      actions:
+        - label: Open
+          href: https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/ForBiggerBlazes.mp4
+          variant: ghost
+
+    - id: porch
+      title: Front porch
+      kind: iframe
+      status: ok
+      src: /static/demo/camera_embed.html
+      aspect: "16/9"
+      badges:
+        - {label: embed, variant: default}
+      actions:
+        - label: Open
+          href: /static/demo/camera_embed.html
+          variant: ghost
+
+    - id: alley
+      title: Alley
+      kind: snapshot
+      status: offline
+      src: ""
+      aspect: "16/9"
+      empty_title: Camera offline
+      empty_message: Last seen 14m ago — check Frigate / go2rtc.
+      badges:
+        - {label: offline, variant: error}
+      actions:
+        - label: Diagnose
+          hx_get: /partials/toast?message=Diagnostics+queued&variant=warn&title=Alley
+          hx_swap: none
+          variant: ghost
+
+workspace:
+  layout:
+    - type: section
+      heading: Cameras
+      description: stream_tile — one feed per tile. Multi-camera walls use grid + each. Host owns Frigate/go2rtc URLs and PTZ/talk endpoints.
+      gap: md
+      space: lg
+      children:
+        - type: grid
+          columns: 2
+          gap: md
+          space: lg
+          children:
+            - widget: stream_tile
+              each: "$ctx.cameras"
+              id: "$item.id"
+              title: "$item.title"
+              kind: "$item.kind"
+              src: "$item.src"
+              status: "$item.status"
+              poster: "$item.poster"
+              aspect: "$item.aspect"
+              refresh_seconds: "$item.refresh_seconds"
+              href: "$item.href"
+              badges: "$item.badges"
+              actions: "$item.actions"
+              empty_title: "$item.empty_title"
+              empty_message: "$item.empty_message"
+
+        - type: grid
+          columns: 2
+          gap: md
+          children:
+            - widget: alert
+              variant: info
+              title: Host integration
+              message: "Build cameras[] in view_ctx from Frigate/API. Prefer same-origin proxied snapshot/HLS URLs. Actions are declarative (href / hx_get) — PTZ and talk stay in the host."
+
+            - widget: kv_table
+              title: Tile fields
+              rows:
+                - {label: kind, value: "snapshot | mjpeg | video | iframe"}
+                - {label: src, value: "browser-playable URL (never raw RTSP)"}
+                - {label: refresh_seconds, value: "snapshot cache-bust interval"}
+                - {label: status, value: "ok | warn | error | offline | …"}
+                - {label: actions / badges, value: "optional operator chrome"}

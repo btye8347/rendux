@@ -1,0 +1,101 @@
+{% set _kind = kind|default("snapshot") %}
+{% set _status = status|default("ok") %}
+{% set _aspect = aspect|default("16/9") %}
+{% set _id = id|default("") %}
+{% set _empty_title = empty_title|default("No signal") %}
+{% set _empty_message = empty_message|default("Stream unavailable.") %}
+{% set _has_media = src is defined and src %}
+{% set _show_offline = _status == "offline" or not _has_media %}
+{% set _muted = muted if muted is defined else true %}
+{% set _controls = controls if controls is defined else true %}
+{% set _autoplay = autoplay if autoplay is defined else true %}
+
+<article class="widget-stream-tile status-{{ _status }}"
+         {% if _id %}id="stream-{{ _id }}" data-stream-id="{{ _id }}"{% endif %}
+         data-kind="{{ _kind }}"
+         data-status="{{ _status }}"
+         style="--stream-aspect: {{ _aspect }}">
+  <header class="stream-tile-header">
+    <div class="stream-tile-heading">
+      <span class="status-dot" aria-hidden="true"></span>
+      <h3 class="stream-tile-title">{{ title }}</h3>
+    </div>
+    {% if actions %}
+    <div class="stream-tile-actions">
+      {% for action in actions %}
+      {% with
+          label=action.label,
+          href=action.href,
+          variant=action.variant|default('ghost'),
+          size='sm',
+          hx_get=action.hx_get,
+          hx_target=action.hx_target,
+          hx_swap=action.hx_swap
+      %}
+        {% include "widgets/button.html" %}
+      {% endwith %}
+      {% endfor %}
+    </div>
+    {% endif %}
+  </header>
+
+  <div class="stream-tile-media">
+    {% if _show_offline %}
+      <div class="stream-tile-empty">
+        <p class="stream-tile-empty-title">{{ _empty_title }}</p>
+        {% if _empty_message %}<p class="stream-tile-empty-message">{{ _empty_message }}</p>{% endif %}
+      </div>
+    {% elif _kind == "video" %}
+      <video class="stream-tile-video"
+             src="{{ src }}"
+             {% if poster %}poster="{{ poster }}"{% endif %}
+             {% if _controls %}controls{% endif %}
+             {% if _muted %}muted{% endif %}
+             {% if _autoplay %}autoplay{% endif %}
+             playsinline
+             loop></video>
+    {% elif _kind == "iframe" %}
+      <iframe class="stream-tile-iframe"
+              src="{{ src }}"
+              title="{{ title }}"
+              loading="lazy"
+              referrerpolicy="no-referrer"
+              sandbox="allow-scripts allow-same-origin allow-presentation"></iframe>
+    {% else %}
+      {# snapshot | mjpeg #}
+      {% if href %}
+      <a class="stream-tile-link" href="{{ href }}">
+        <img class="stream-tile-img"
+             src="{{ src }}"
+             alt="{{ title }}"
+             loading="lazy"
+             {% if _kind == "snapshot" and refresh_seconds %}data-rx-stream-refresh="{{ refresh_seconds }}"{% endif %}>
+      </a>
+      {% else %}
+      <img class="stream-tile-img"
+           src="{{ src }}"
+           alt="{{ title }}"
+           loading="lazy"
+           {% if _kind == "snapshot" and refresh_seconds %}data-rx-stream-refresh="{{ refresh_seconds }}"{% endif %}>
+      {% endif %}
+    {% endif %}
+  </div>
+
+  {% if badges %}
+  <footer class="stream-tile-footer">
+    <div class="stream-tile-badges">
+      {% for badge in badges %}
+        {% if badge is mapping %}
+          {% with label=badge.label, variant=badge.variant|default('default'), dot=badge.dot|default(false) %}
+            {% include "widgets/badge.html" %}
+          {% endwith %}
+        {% else %}
+          {% with label=badge, variant='default', dot=false %}
+            {% include "widgets/badge.html" %}
+          {% endwith %}
+        {% endif %}
+      {% endfor %}
+    </div>
+  </footer>
+  {% endif %}
+</article>

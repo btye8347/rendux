@@ -1,7 +1,7 @@
 {
   "version": "0.1.0",
   "description": "Closed vocabulary for LLM RDL authoring. Only these verified widgets may be emitted.",
-  "widget_count": 21,
+  "widget_count": 22,
   "widgets": [
     {
       "name": "alert",
@@ -822,6 +822,133 @@
             "type": "string"
           }
         }
+      }
+    },
+    {
+      "name": "stream_tile",
+      "description": "Camera/stream tile for snapshot, MJPEG, video, or iframe embeds; optional status, badges, and host actions.",
+      "accepts_each": true,
+      "interaction": {
+        "profile": "static"
+      },
+      "props": {
+        "title": {
+          "type": "string",
+          "required": true
+        },
+        "kind": {
+          "type": "enum",
+          "enum": [
+            "snapshot",
+            "mjpeg",
+            "video",
+            "iframe"
+          ],
+          "required": true
+        },
+        "src": {
+          "type": "string",
+          "required": false
+        },
+        "id": {
+          "type": "string",
+          "required": false
+        },
+        "status": {
+          "type": "enum",
+          "enum": [
+            "ok",
+            "warn",
+            "error",
+            "offline",
+            "unknown",
+            "info",
+            "default"
+          ],
+          "required": false
+        },
+        "poster": {
+          "type": "string",
+          "required": false
+        },
+        "aspect": {
+          "type": "string",
+          "required": false
+        },
+        "refresh_seconds": {
+          "type": "number",
+          "required": false
+        },
+        "href": {
+          "type": "string",
+          "required": false
+        },
+        "badges": {
+          "type": "list",
+          "required": false
+        },
+        "actions": {
+          "type": "list",
+          "required": false
+        },
+        "empty_title": {
+          "type": "string",
+          "required": false
+        },
+        "empty_message": {
+          "type": "string",
+          "required": false
+        },
+        "muted": {
+          "type": "bool",
+          "required": false
+        },
+        "controls": {
+          "type": "bool",
+          "required": false
+        },
+        "autoplay": {
+          "type": "bool",
+          "required": false
+        }
+      },
+      "item_schema": {
+        "required": {
+          "label": {
+            "type": "string"
+          }
+        },
+        "optional": {
+          "href": {
+            "type": "string"
+          },
+          "variant": {
+            "type": "enum",
+            "enum": [
+              "primary",
+              "secondary",
+              "ghost",
+              "destructive"
+            ]
+          },
+          "hx_get": {
+            "type": "string"
+          },
+          "hx_target": {
+            "type": "string"
+          },
+          "hx_swap": {
+            "type": "string"
+          }
+        }
+      },
+      "example": {
+        "widget": "stream_tile",
+        "each": "$ctx.cameras",
+        "title": "$item.title",
+        "kind": "$item.kind",
+        "src": "$item.src",
+        "status": "$item.status"
       }
     },
     {

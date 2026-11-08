@@ -9,6 +9,9 @@
   defaults via `--rx-section-gap` / `--rx-section-space`.
 - **`chat` / `chat_message` widgets** — verified chat panel (thread + composer) with
   HTMX append hooks; demo at `/chat` with mock `/partials/chat/send`.
+- **`stream_tile` widget** — camera/stream tile (`snapshot` | `mjpeg` | `video` |
+  `iframe`) with status, badges, actions, and optional snapshot refresh; demo at
+  `/cameras`.
 
 ## 0.1.0b1 — 2026-07-18
 

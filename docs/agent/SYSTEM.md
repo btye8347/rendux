@@ -48,6 +48,7 @@ Do not invent widget names or props. Do not use unverified showcase widgets.
 - `form` may use `hx_post` / `hx_target`; static `action` is fine for demos.
 - Live polling: container `id` + `poll: 15s` (advanced; optional).
 - Chat: use `chat` for thread+composer; message list under `data` with `id`/`role`/`content`/`status`. Host owns send/stream endpoints.
+- Cameras: use `stream_tile` (+ `grid`/`each`) for one or more feeds. `kind` is `snapshot|mjpeg|video|iframe`; host supplies browser-playable `src` (never raw RTSP).
 
 ## On failure
 

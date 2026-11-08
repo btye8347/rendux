@@ -27,6 +27,11 @@ views:
     route: /chat
     include: chat_demo.yaml
 
+  cameras:
+    label: Cameras
+    route: /cameras
+    include: cameras_demo.yaml
+
   ops:
     label: Ops
     route: /ops

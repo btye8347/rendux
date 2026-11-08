@@ -156,10 +156,11 @@ Public API: `window.RendUX.setTheme("light"|"dark"|"system")` — updates DOM, f
 | `components` | `/components` | **layout** (RDL — full widget showcase) |
 | `services` | `/services` | **layout** (RDL — admin app use case) |
 | `chat` | `/chat` | **layout** (RDL — chat panel + HTMX mock send) |
+| `cameras` | `/cameras` | **layout** (RDL — stream_tile camera wall) |
 | `ops` | `/ops` | **layout** (RDL — ops dashboard + live poll) |
 | `about` | `/about` | template: `workspaces/about.html` |
 
-`ops` is the monitoring RDL demo. `services` is the admin catalog use case. `chat` demos the `chat` / `chat_message` widgets.
+`ops` is the monitoring RDL demo. `services` is the admin catalog use case. `chat` demos the `chat` / `chat_message` widgets. `cameras` demos `stream_tile`.
 
 ---
 
@@ -196,7 +197,7 @@ a292ccd  Add: four core widgets with demo data across all views
 1. ~~**Dynamic view_ctx**~~ — **done** — `/ops` injects live-ish KPI/events via `demo/ops_context.py`
 2. ~~**Components view via RDL**~~ — **done** — `config/components_showcase.yaml` via `include:`
 3. ~~**HTMX partial refresh on `/ops`**~~ — **done** — KPI row + timeline poll every 15s via `poll:` on RDL containers
-4. ~~**Widget contract audits (Track A)**~~ — **partial** — 21 verified (incl. chat); stubs remain
+4. ~~**Widget contract audits (Track A)**~~ — **partial** — 22 verified (incl. chat + stream_tile); stubs remain
 5. ~~**LLM agent pack (A1–A5)**~~ — **done** — see `LLM Agent Compatibility Plan.md`
 6. **Live LLM eval (A6)** — run `docs/agent/ADVERSARIAL_TEST_PLAN.md` in a fresh session; file scorecard under `docs/agent/eval/`
 7. **Finish Track A stubs** — remaining Tier 3 widgets as needed

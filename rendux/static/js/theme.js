@@ -38,9 +38,43 @@
     return localStorage.getItem(STORAGE_KEY) || 'system';
   };
 
+  /* Snapshot tiles: cache-bust src on an interval (data-rx-stream-refresh=seconds). */
+  var streamTimers = new WeakMap();
+
+  function bindStreamRefresh(root) {
+    var scope = root || document;
+    scope.querySelectorAll('img[data-rx-stream-refresh]').forEach(function (img) {
+      if (streamTimers.has(img)) return;
+      var seconds = Number(img.getAttribute('data-rx-stream-refresh'));
+      if (!seconds || seconds < 1) return;
+      var timer = setInterval(function () {
+        if (!img.isConnected) {
+          clearInterval(timer);
+          streamTimers.delete(img);
+          return;
+        }
+        try {
+          var url = new URL(img.getAttribute('src') || img.src, window.location.href);
+          url.searchParams.set('_', String(Date.now()));
+          img.src = url.toString();
+        } catch (e) {
+          /* ignore invalid absolute URLs in constrained embeds */
+        }
+      }, seconds * 1000);
+      streamTimers.set(img, timer);
+    });
+  }
+
+  window.RendUX.bindStreamRefresh = bindStreamRefresh;
+
   /* Sync UI once DOM is ready */
   document.addEventListener('DOMContentLoaded', function () {
     updateSwitcherUI(window.RendUX.getTheme());
+    bindStreamRefresh(document);
+  });
+
+  document.body && document.body.addEventListener('htmx:afterSettle', function (evt) {
+    bindStreamRefresh(evt.target || document);
   });
 
   /* Follow system changes when preference is "system" */

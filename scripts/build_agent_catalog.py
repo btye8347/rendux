@@ -64,6 +64,14 @@ SNIPPETS: dict[str, dict] = {
         "content": "Hello.",
         "status": "complete",
     },
+    "stream_tile": {
+        "widget": "stream_tile",
+        "each": "$ctx.cameras",
+        "title": "$item.title",
+        "kind": "$item.kind",
+        "src": "$item.src",
+        "status": "$item.status",
+    },
 }
 
 

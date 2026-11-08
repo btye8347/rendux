@@ -1849,3 +1849,116 @@ a.item-title:hover { color: var(--rx-accent); }
   font-size: 0.72rem;
   color: var(--rx-text-3);
 }
+
+/* ── stream_tile ─────────────────────────────────────────────────────────── */
+
+.widget-stream-tile {
+  display: flex;
+  flex-direction: column;
+  background: var(--rx-surface);
+  border: 1px solid var(--rx-border);
+  border-radius: 0.5rem;
+  overflow: hidden;
+  min-width: 0;
+}
+
+.stream-tile-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--rx-space-sm);
+  padding: 0.55rem 0.75rem;
+  border-bottom: 1px solid var(--rx-border-subtle);
+  background: var(--rx-surface-elevated);
+}
+
+.stream-tile-heading {
+  display: flex;
+  align-items: center;
+  gap: 0.45rem;
+  min-width: 0;
+}
+
+.stream-tile-title {
+  margin: 0;
+  font-size: 0.9rem;
+  font-weight: 600;
+  color: var(--rx-text);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.widget-stream-tile.status-ok .status-dot { background: var(--rx-ok); }
+.widget-stream-tile.status-warn .status-dot { background: var(--rx-warn); }
+.widget-stream-tile.status-error .status-dot,
+.widget-stream-tile.status-offline .status-dot { background: var(--rx-error); }
+.widget-stream-tile.status-info .status-dot { background: var(--rx-accent); }
+.widget-stream-tile.status-unknown .status-dot,
+.widget-stream-tile.status-default .status-dot { background: var(--rx-text-3); }
+
+.stream-tile-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.35rem;
+  justify-content: flex-end;
+  flex-shrink: 0;
+}
+
+.stream-tile-media {
+  position: relative;
+  aspect-ratio: var(--stream-aspect, 16 / 9);
+  background: #05080f;
+  overflow: hidden;
+}
+
+.stream-tile-img,
+.stream-tile-video,
+.stream-tile-iframe {
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+  border: 0;
+  background: #05080f;
+}
+
+.stream-tile-link {
+  display: block;
+  width: 100%;
+  height: 100%;
+}
+
+.stream-tile-empty {
+  position: absolute;
+  inset: 0;
+  display: grid;
+  place-content: center;
+  text-align: center;
+  padding: 1rem;
+  color: var(--rx-text-3);
+}
+
+.stream-tile-empty-title {
+  margin: 0 0 0.25rem;
+  font-size: 0.95rem;
+  font-weight: 600;
+  color: var(--rx-text-2);
+}
+
+.stream-tile-empty-message {
+  margin: 0;
+  font-size: 0.8rem;
+  max-width: 18rem;
+}
+
+.stream-tile-footer {
+  padding: 0.45rem 0.75rem 0.55rem;
+  border-top: 1px solid var(--rx-border-subtle);
+}
+
+.stream-tile-badges {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.35rem;
+}

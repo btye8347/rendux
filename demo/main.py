@@ -55,6 +55,10 @@ def create_app() -> FastAPI:
     def chat(request: Request) -> HTMLResponse:
         return render_view(request, "chat", "Chat", templates=templates)
 
+    @app.get("/cameras", response_class=HTMLResponse)
+    def cameras(request: Request) -> HTMLResponse:
+        return render_view(request, "cameras", "Cameras", templates=templates)
+
     @app.get("/ops", response_class=HTMLResponse)
     def ops(request: Request) -> HTMLResponse:
         return render_view(

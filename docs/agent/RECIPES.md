@@ -101,3 +101,23 @@ See `examples/agent/service_admin.yaml` — `data_table` | `kv_table` | `form` |
 
 Message items: `{id, role, content, status?, time?, meta?}`.  
 Host returns `chat_message` HTML fragments for HTMX `beforeend` swaps.
+
+## 9. Camera / stream wall
+
+```yaml
+- type: grid
+  columns: 2
+  gap: md
+  children:
+    - widget: stream_tile
+      each: "$ctx.cameras"
+      title: "$item.title"
+      kind: "$item.kind"
+      src: "$item.src"
+      status: "$item.status"
+      refresh_seconds: "$item.refresh_seconds"
+      actions: "$item.actions"
+```
+
+Tile fields: `{title, kind, src, status?, aspect?, refresh_seconds?, badges?, actions?}`.  
+`kind`: `snapshot` | `mjpeg` | `video` | `iframe`. Host proxies Frigate/go2rtc URLs.

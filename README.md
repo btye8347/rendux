@@ -30,7 +30,7 @@ You keep domain logic and routes. RendUX renders the shell and widgets from conf
 ## Features (0.1 beta)
 
 - **RDL layouts** — `grid` / `stack` / `section` / `split`, `$ctx` / `$item`, `each:`
-- **21 verified widgets** — ops + admin + chat (`stat_card`, `data_table`, `form`, `modal`, `chat`, …)
+- **22 verified widgets** — ops + admin + chat + cameras (`stat_card`, `data_table`, `form`, `modal`, `chat`, `stream_tile`, …)
 - **Strict compile loop** — linter + strict renderer; agent-friendly JSON errors
 - **Host integration API** — `configure_app` / `render_view`
 - **Themes** — light/dark/system + YAML custom themes
@@ -139,6 +139,7 @@ uv run uvicorn demo.main:app --reload --host 0.0.0.0 --port 8001
 | `/ops` | Ops dashboard — RDL + live HTMX poll |
 | `/services` | Admin catalog use case |
 | `/chat` | Chat panel demo (HTMX mock send) |
+| `/cameras` | Camera / stream_tile wall demo |
 | `/components` | Widget showcase |
 | `/about` | About |
 
@@ -216,7 +217,7 @@ tests/
 
 - **`0.1.0b1`** — first private beta; API may still shift before `0.1.0`
 - Pin **`v0.1.0b1`** (or a commit SHA) in host apps — do not float on `master` unless you accept breakage
-- **21 / 40** widgets verified; unverified stubs are skipped by prop lint until audited
+- **22 / 40** widgets verified; unverified stubs are skipped by prop lint until audited
 - Not published to PyPI (`Private :: Do Not Upload`)
 
 ---

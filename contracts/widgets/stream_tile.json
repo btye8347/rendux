@@ -1,0 +1,48 @@
+{
+  "name": "stream_tile",
+  "description": "Camera/stream tile for snapshot, MJPEG, video, or iframe embeds; optional status, badges, and host actions.",
+  "status": "verified",
+  "interaction": { "profile": "static" },
+  "accepts_each": true,
+  "props": {
+    "title": { "type": "string", "required": true },
+    "kind": {
+      "type": "enum",
+      "enum": ["snapshot", "mjpeg", "video", "iframe"],
+      "required": true
+    },
+    "src": { "type": "string", "required": false },
+    "id": { "type": "string", "required": false },
+    "status": {
+      "type": "enum",
+      "enum": ["ok", "warn", "error", "offline", "unknown", "info", "default"],
+      "required": false
+    },
+    "poster": { "type": "string", "required": false },
+    "aspect": { "type": "string", "required": false },
+    "refresh_seconds": { "type": "number", "required": false },
+    "href": { "type": "string", "required": false },
+    "badges": { "type": "list", "required": false },
+    "actions": { "type": "list", "required": false },
+    "empty_title": { "type": "string", "required": false },
+    "empty_message": { "type": "string", "required": false },
+    "muted": { "type": "bool", "required": false },
+    "controls": { "type": "bool", "required": false },
+    "autoplay": { "type": "bool", "required": false }
+  },
+  "item_schema": {
+    "required": {
+      "label": { "type": "string" }
+    },
+    "optional": {
+      "href": { "type": "string" },
+      "variant": {
+        "type": "enum",
+        "enum": ["primary", "secondary", "ghost", "destructive"]
+      },
+      "hx_get": { "type": "string" },
+      "hx_target": { "type": "string" },
+      "hx_swap": { "type": "string" }
+    }
+  }
+}
